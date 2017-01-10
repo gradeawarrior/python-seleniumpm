@@ -25,3 +25,4 @@ wheel==0.29.0
 requests>=2.7.0
 requestests>=1.2.0
 jsonstruct>=0.2a1
+selenium~=2.53.6

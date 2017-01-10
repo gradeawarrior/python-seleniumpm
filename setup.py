@@ -35,7 +35,7 @@ if sys.argv[-1] == 'publish':
 
 packages = ['seleniumpm']
 
-requires = ['requestests>=1.2.2']
+requires = ['selenium~=2.53.6', 'requestests>=1.2.2']
 test_requirements = ['pytest>=2.8.0', 'pytest-httpbin==0.0.7', 'pytest-cov']
 
 with open('seleniumpm/__init__.py', 'r') as fd:
@@ -60,7 +60,7 @@ setup(
     long_description=readme + '\n\n' + history,
     author='Peter Salas',
     author_email='selenium-pagemodel@googlegroups.com',
-    url='http://python-requests.org',
+    url='https://github.com/gradeawarrior/python-seleniumpm',
     packages=packages,
     package_data={'': ['LICENSE', 'NOTICE'], 'seleniumpm': ['*.pem']},
     package_dir={'seleniumpm': 'seleniumpm'},
