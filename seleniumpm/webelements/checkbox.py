@@ -1,6 +1,6 @@
 from seleniumpm.webelements.clickable import Clickable
 
-class Button(Clickable):
+class Checkbox(Clickable):
 
     def __init__(self, driver, locator):
-        super(Button, self).__init__(driver, locator)
+        super(Checkbox, self).__init__(driver, locator)

@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
 
-#   __
-#  /__)  _  _     _   _ _/   _
-# / (   (- (/ (/ (- _)  /  _)
-#          /
-
 """
 Selenium PageModel library
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -14,7 +9,7 @@ Selenium PageModel library
 """
 
 __title__ = 'seleniumpm'
-__version__ = '2.0.0'
+__version__ = '2.3.0'
 __build__ = 0x021000
 __author__ = 'Peter Salas'
 __license__ = 'Apache 2.0'
