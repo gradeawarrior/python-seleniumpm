@@ -2,6 +2,13 @@ Release History
 ===============
 
 
+### 2.4.0 (UN-RELEASED)
+
+**New Features**
+
+- Support for dynamic WebElements when there are large lists/tables to enumerate and interact with
+- A more thoroughly thought out and implementation of a Table object
+
 ### 2.3.0 (2017-02-06)
 
 **New Features**
