@@ -80,7 +80,11 @@ You'll need to uprev the `__version__` attribute in `seleniumpm/__init__.py`:
 	
 Commit and push your changes to Github!
 
-### 2. Upload your package to PyPI Test
+### 2. Update HISTORY.md
+
+You should update the Release Notes with the high-level changes contained within the release. If not ready to publish in Step 4 below, then put `UN-RELEASED` to denote that the feature is still under development has not been published to Pypi.
+
+### 3. Upload your package to PyPI Test
 
 Run:
 
@@ -88,7 +92,7 @@ Run:
 	
 You should get no errors, and should also now be able to see your library in the test PyPI repository.
 
-### 3. Upload to PyPI Live
+### 4. Upload to PyPI Live
 
 Once you've successfully uploaded to PyPI Test, publish your changes to Live:
 

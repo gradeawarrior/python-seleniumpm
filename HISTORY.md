@@ -2,7 +2,7 @@ Release History
 ===============
 
 
-### 2.3.0 (UN-RELEASED)
+### 2.3.0 (2017-02-06)
 
 **New Features**
 
