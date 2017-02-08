@@ -30,13 +30,6 @@ class TestTable(object):
         assert table1 == table2
         assert not (table1 != table2)
 
-    def test_two_table_are_not_equal_by_by(self):
-        xpath = "//foo"
-        table1 = Table(self.driver, Locator(By.XPATH, xpath))
-        table2 = Table(self.driver, Locator(By.CLASS_NAME, xpath))
-        assert table1 != table2
-        assert not (table1 == table2)
-
     def test_two_table_are_not_equal_by_value(self):
         xpath = "//foo"
         xpath2 = "//foo/bar"
@@ -45,14 +38,6 @@ class TestTable(object):
         assert table1 != table2
         assert not (table1 == table2)
 
-    def test_get_rows_with_locator_not_an_xpath(self):
-        xpath = "//foo"
-        table = Table(self.driver, Locator(By.CLASS_NAME, xpath))
-        try:
-            table.get_rows()
-            assert False, "Expected there to be an AttributeError"
-        except AttributeError:
-            pass
 
     def test_get_rows_with_xpath_locator(self):
         xpath = "//foo"
@@ -60,11 +45,10 @@ class TestTable(object):
         rows = table.get_rows()
         assert len(rows) == 0
 
-    def test_count_rows_with_locator_not_an_xpath(self):
+    def test_error_if_specify_table_with_non_xpath_locator(self):
         xpath = "//foo"
-        table = Table(self.driver, Locator(By.CLASS_NAME, xpath))
         try:
-            table.count_rows()
+            Table(self.driver, Locator(By.CLASS_NAME, xpath))
             assert False, "Expected there to be an AttributeError"
         except AttributeError:
             pass
