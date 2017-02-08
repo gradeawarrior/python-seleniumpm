@@ -1,5 +1,5 @@
 from seleniumpm.webpage import Webpage
-from seleniumpm.webelements.text_field import TextField
+from seleniumpm.webelements.textfield import TextField
 from seleniumpm.locator import Locator
 from selenium.webdriver.common.by import By
 

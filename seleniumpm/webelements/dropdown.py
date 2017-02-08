@@ -1,9 +1,10 @@
 from selenium.webdriver.support.select import Select
+from seleniumpm.webelements.clickable import Clickable
 
 from seleniumpm.webelements.element import Element
 
-class Dropdown(Element):
 
+class Dropdown(Clickable):
     def __init__(self, driver, locator):
         super(Dropdown, self).__init__(driver, locator)
         self.select = None

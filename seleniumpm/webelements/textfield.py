@@ -2,7 +2,6 @@ from seleniumpm.webelements.textelement import TextElement
 
 
 class TextField(TextElement):
-
     def __init__(self, driver, locator):
         super(TextField, self).__init__(driver, locator)
 

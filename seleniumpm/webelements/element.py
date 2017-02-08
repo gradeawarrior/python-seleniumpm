@@ -1,12 +1,11 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-class Element(object):
 
+class Element(object):
     def __init__(self, driver, locator):
         self.driver = driver
         self.locator = locator
-
 
     def is_displayed(self):
         return self.driver.find_element(self.locator.by, self.locator.value).is_displayed()
@@ -53,3 +52,16 @@ class Element(object):
         self.wait_for_present(timeout)
         self.wait_for_visible(0)
         return self
+
+    def __eq__(self, other):
+        if isinstance(other, self.__class__):
+            return self.__dict__ == other.__dict__
+        return NotImplemented
+
+    def __ne__(self, other):
+        if isinstance(other, self.__class__):
+            return not self.__eq__(other)
+        return NotImplemented
+
+    def __hash__(self):
+        return hash(tuple(sorted(self.__dict__.items())))

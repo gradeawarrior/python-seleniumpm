@@ -6,8 +6,16 @@ Release History
 
 **New Features**
 
-- Support for dynamic WebElements when there are large lists/tables to enumerate and interact with
-- A more thoroughly thought out and implementation of a Table object
+- Better support for Table type and interacting with them on a page. This includes support for 'search' operations and
+  enumerating over rows and columns
+- Additional methods to Locator object to assist in managing them
+- Implementation of object equality for all Selenium Page Model classes
+- UnitTests are now using PhantomJS (Headless) target
+
+**Fixed**
+
+- The Widget type was missing in 2.3.0 release
+- Expanding of the UnitTest coverage to ensure libraries are working correctly
 
 ### 2.3.0 (2017-02-06)
 
