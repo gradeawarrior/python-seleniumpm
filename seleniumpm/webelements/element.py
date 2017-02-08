@@ -7,6 +7,9 @@ class Element(object):
         self.driver = driver
         self.locator = locator
 
+    def get_text(self):
+        self.driver.find_element(self.locator.by, self.locator.value).get_text()
+
     def is_displayed(self):
         return self.driver.find_element(self.locator.by, self.locator.value).is_displayed()
 
