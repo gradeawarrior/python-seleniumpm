@@ -1,5 +1,6 @@
 from selenium import webdriver
-from testlib.google_page import GooglePage
+
+from seleniumpm.examples.google_page import GooglePage
 
 
 class TestGoogle():
@@ -41,7 +42,12 @@ class TestGoogle():
         search_term = 'Cheese!'
 
         # And now use this to visit Google
-        self.google_page.open()
+        self.google_page.open().wait_for_page_load().validate()
+
+        # Check the title of the page
+        title = self.google_page.get_title()
+        print "Page title is: {}".format(title)
+        # Should see: "cheese! - Google Search"
 
         # Enter something to search for
         self.google_page.search_field.type(search_term)
@@ -50,9 +56,6 @@ class TestGoogle():
         self.google_page.search_field.submit()
 
         # Check the title of the page
-        title = self.google_page.get_title()
-        print "Page title is: {}".format(title)
-        # Should see: "cheese! - Google Search"
         title = self.google_page.wait_for_title(search_term).get_title()
         print "Page title is: {}".format(title)
         assert search_term in title, "Expected '{}' in '{}'".format(search_term, title)
