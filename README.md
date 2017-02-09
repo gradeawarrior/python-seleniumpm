@@ -84,7 +84,15 @@ Commit and push your changes to Github!
 
 You should update the Release Notes with the high-level changes contained within the release. If not ready to publish in Step 4 below, then put `UN-RELEASED` to denote that the feature is still under development has not been published to Pypi.
 
-### 3. Upload your package to PyPI Test
+### 3. Test your code!
+
+For goodness' sake! You should always be writing and running the UnitTests:
+
+    make test
+
+At this moment, it requires a `standalone-selenium-server` running locally. If you are running on a Mac, I recommend installing [selenium-server-runner](https://github.com/gradeawarrior/selenium-server-runner) to get your system up-and-running in no time!
+
+### 4. Upload your package to PyPI Test
 
 Run:
 
@@ -92,7 +100,7 @@ Run:
 	
 You should get no errors, and should also now be able to see your library in the test PyPI repository.
 
-### 4. Upload to PyPI Live
+### 5. Upload to PyPI Live
 
 Once you've successfully uploaded to PyPI Test, publish your changes to Live:
 
@@ -102,9 +110,17 @@ Once you've successfully uploaded to PyPI Test, publish your changes to Live:
 
 A huge shoutout to Peter Downs for his very easy-to-follow instructions for submitting a Python package to the community. See [first time with pypi](http://peterdowns.com/posts/first-time-with-pypi.html) for his instructions.
 
+Also see the following:
+
+- [selenium-server-runner](https://github.com/gradeawarrior/selenium-server-runner) - If you're running on a Mac, this project helps you setup and run the `standalone-selenium-server` on your laptop
+- [requestests](https://github.com/gradeawarrior/requestests) - The API testing library that is imported
+
 ## Package Dependencies:
 
-TODO
+`seleniumpm` installs the following upstream packages:
+
+- [requestest>=1.2.2](https://pypi.python.org/pypi/requestests/)
+- [selenium~=2.53.6](https://pypi.python.org/pypi/selenium/2.53.6)
 
 # Copyright
 
