@@ -19,42 +19,53 @@ class TestTable(object):
             self.driver.quit()
 
     def test_instantiate_table(self):
-        xpath = "//foo"
+        xpath = "//table"
         table = Table(self.driver, Locator(By.XPATH, xpath))
         assert table != None
 
     def test_two_table_are_equal(self):
-        xpath = "//foo"
+        xpath = "//table"
         table1 = Table(self.driver, Locator(By.XPATH, xpath))
         table2 = Table(self.driver, Locator(By.XPATH, xpath))
         assert table1 == table2
         assert not (table1 != table2)
 
     def test_two_table_are_not_equal_by_value(self):
-        xpath = "//foo"
-        xpath2 = "//foo/bar"
+        xpath = "//table"
+        xpath2 = "//table/bar"
         table1 = Table(self.driver, Locator(By.XPATH, xpath))
         table2 = Table(self.driver, Locator(By.XPATH, xpath2))
         assert table1 != table2
         assert not (table1 == table2)
 
+    def test_get_locator(self):
+        xpath = "//table"
+        table = Table(self.driver, Locator(By.XPATH, xpath))
+        # Get 2nd row 4th column
+        assert table.get_locator(1, 3) == Locator(By.XPATH, "{}{}".format(xpath, "/tbody/tr[1]/td[3]"))
+        # Get 1st row 2nd column
+        assert table.get_locator(0, 1) == Locator(By.XPATH, "{}{}".format(xpath, "/tbody/tr[0]/td[1]"))
+        # Get 30th row 5th column
+        assert table.get_locator(29, 4) == Locator(By.XPATH, "{}{}".format(xpath, "/tbody/tr[29]/td[4]"))
 
-    def test_get_rows_with_xpath_locator(self):
-        xpath = "//foo"
+
+    def test_get_rows(self):
+        xpath = "//table"
         table = Table(self.driver, Locator(By.XPATH, xpath))
         rows = table.get_rows()
+        assert isinstance(rows, list)
         assert len(rows) == 0
 
+    def test_count_rows(self):
+        xpath = "//table"
+        table = Table(self.driver, Locator(By.XPATH, xpath))
+        count = table.count_rows()
+        assert count == 0
+
     def test_error_if_specify_table_with_non_xpath_locator(self):
-        xpath = "//foo"
+        xpath = "//table"
         try:
             Table(self.driver, Locator(By.CLASS_NAME, xpath))
             assert False, "Expected there to be an AttributeError"
         except AttributeError:
             pass
-
-    def test_count_rows_with_xpath_locator(self):
-        xpath = "//foo"
-        table = Table(self.driver, Locator(By.XPATH, xpath))
-        count = table.count_rows()
-        assert count == 0

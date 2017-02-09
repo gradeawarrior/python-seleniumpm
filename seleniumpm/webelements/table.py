@@ -1,6 +1,7 @@
 import re
 from selenium.webdriver.common.by import By
 from seleniumpm.webelements.element import Element
+from seleniumpm.locator import Locator
 
 
 class Table(Element):
@@ -23,7 +24,8 @@ class Table(Element):
         :param regex_flag: These are the re flags (e.g. re.IGNORECASE) - Default: 0
         :return: The row index that contains the pattern, otherwise returns -1 if not found
         """
-        elements = self.driver.find_elements(By.XPATH, "{}{}".format(self.locator.value, "/tbody/tr/td[{}]".format(column_index)))
+        elements = self.driver.find_elements(By.XPATH, "{}{}".format(
+            self.locator.value, "/tbody/tr/td[{}]".format(column_index)))
         row_index = 0
         for field in elements:
             if re.search(pattern=pattern, string=field.get_text(), flags=regex_flag):
@@ -54,7 +56,18 @@ class Table(Element):
         :return:
         :raises NoSuchElementError: if the element doesn't exist
         """
-        return self.driver.find_element(By.XPATH, "{}{}".format(self.locator.value, "/tbody/tr[{}]/td[{}]".format(row_index, column_index)))
+        return self.driver.find_element(By.XPATH, "{}{}".format(
+            self.locator.value, "/tbody/tr[{}]/td[{}]".format(row_index, column_index)))
+
+    def get_locator(self, row_index, column_index):
+        """
+        Returns a Locator object to the specified row + column
+        :param row_index: The row number (starting at 0)
+        :param column_index: The column number (starting at 0)
+        :return:
+        """
+        return Locator(By.XPATH, "{}{}".format(
+            self.locator.value, "/tbody/tr[{}]/td[{}]".format(row_index, column_index)))
 
     def get_rows(self):
         """
