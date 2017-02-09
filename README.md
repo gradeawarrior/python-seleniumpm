@@ -45,17 +45,17 @@ The library can be installed via:
 Here is the ever so popular Google example using `seleniumpm`:
 
 	from selenium import webdriver
-	from seleniumpm.examples.googe_page import GooglePage
+	from seleniumpm.examples.google_page import GooglePage
 	
 	"""
 	Setup for Remote execution against a local standalone-selenium-server
 	and using the PhantomJS driver. This can be changed of course to using 
 	the driver of your choice (e.g. Chrome or Firefox)
 	"""
-	driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub", webdriver.DesiredCapabilities.PHANTOMJS)
+	driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub", desired_capabilities=webdriver.DesiredCapabilities.PHANTOMJS)
 	
 	# Instantiate Google Page
-	google = GooglePage(driver, url="https://www.google.com"
+	google = GooglePage(driver, url="https://www.google.com")
 	
 	# Open + wait for page load + validate Google
 	google.open().wait_for_page_load().validate()
