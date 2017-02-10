@@ -9,6 +9,8 @@ Release History
 - Better support for Table type and interacting with them on a page. This includes support for 'search' operations and
   enumerating over rows and columns
 - Additional methods to Locator object to assist in managing them
+- implemented get_webelement() and get_webelements() for all Elements. This will return the Selenium WebElement
+  object(s).
 - Implementation of object equality for all Selenium Page Model classes
 - UnitTests are now using PhantomJS (Headless) target
 
@@ -16,6 +18,7 @@ Release History
 
 - The Widget type was missing in 2.3.0 release
 - Expanding of the UnitTest coverage to ensure libraries are working correctly
+- Fixing issue with get_text() in Python Selenium. Apparently, this call in Python (versus Java) is simply called 'text'
 
 ### 2.3.0 (2017-02-06)
 
