@@ -7,17 +7,26 @@ class Element(object):
         self.driver = driver
         self.locator = locator
 
+    def get_webelement(self):
+        return self.driver.find_element(self.locator.by, self.locator.value)
+
+    def get_webelements(self):
+        return self.driver.find_elements(self.locator.by, self.locator.value)
+
     def get_text(self):
-        self.driver.find_element(self.locator.by, self.locator.value).get_text()
+        return self.get_webelement().text
+
+    def get_attribute(self, name):
+        self.get_webelement().get_attribute(name)
 
     def is_displayed(self):
-        return self.driver.find_element(self.locator.by, self.locator.value).is_displayed()
+        return self.get_webelement().is_displayed()
 
     def is_enabled(self):
-        return self.driver.find_element(self.locator.by, self.locator.value).is_enabled()
+        return self.get_webelement().is_enabled()
 
     def is_selected(self):
-        return self.driver.find_element(self.locator.by, self.locator.value).is_selected()
+        return self.get_webelement().is_selected()
 
     def is_present(self, timeout=10):
         try:
