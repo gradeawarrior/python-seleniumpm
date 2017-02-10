@@ -144,9 +144,8 @@ Also see the following:
 
 ## Package Dependencies:
 
-`seleniumpm` installs the following upstream packages:
+`seleniumpm` installs the following upstream packages as of the latest release:
 
-- [requestest>=1.2.2](https://pypi.python.org/pypi/requestests/)
 - [selenium~=2.53.6](https://pypi.python.org/pypi/selenium/2.53.6)
 
 # Copyright

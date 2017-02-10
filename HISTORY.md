@@ -13,6 +13,7 @@ Release History
   object(s).
 - Implementation of object equality for all Selenium Page Model classes
 - UnitTests are now using PhantomJS (Headless) target
+- Removal of requestest dependency to keep the project simple
 
 **Fixed**
 
