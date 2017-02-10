@@ -86,8 +86,7 @@ class TestGoogle():
         assert len(links) > 5
         print "found {} links".format(len(links))
         for link in links:
-            print "- '{}'".format(link.get_attribute("href"))
-            # print "- '{}'".format(link.text)
+            print "- '{}'".format(link)
 
     def test_search_for_10_words_from_wikipedia(self):
         """
@@ -119,4 +118,4 @@ class TestGoogle():
             links = self.google.get_result_links()
             assert len(links) >= 5
             for i, link in enumerate(links[0:5]):
-                print "[{}] '{}' - {}".format(i, search_term, link.get_attribute("href"))
+                print "[{}] '{}' - {}".format(i, search_term, link)

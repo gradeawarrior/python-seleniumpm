@@ -4,6 +4,10 @@ from seleniumpm.webelements.textelement import TextElement
 from selenium.webdriver.common.by import By
 
 class Wikipedia(Webpage):
+    """
+    This is a basic Wikipedia page. For the constructor, the URL path will be used as the Webpage path
+    """
+
     def __init__(self, driver, url):
         super(Wikipedia, self).__init__(driver, url)
         self.path = self.url.path
@@ -12,6 +16,8 @@ class Wikipedia(Webpage):
         self.bodyTexts = TextElement(driver, Locator(By.XPATH, "//div[@id='bodyContent']/div/p"))
 
     def get_text(self):
+        """Retrieves all the words in the body
+        """
         txt = ""
         paragraphs = self.bodyTexts.get_webelements()
         for paragraph in paragraphs:

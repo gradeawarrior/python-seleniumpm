@@ -15,7 +15,15 @@ class GooglePage(Webpage):
         self.search_field = TextField(driver, Locator(By.NAME, 'q'))
 
     def get_result_links(self):
-        return self.driver.find_elements(By.XPATH, "//h3[contains(@class, 'r')]/a")
+        """
+        Returns a list of links from a Google search.
+        :return: Returns a list of links from a Google search.
+        """
+        links = []
+        elements = self.driver.find_elements(By.XPATH, "//h3[contains(@class, 'r')]/a")
+        for element in elements:
+            links.append(element.get_attribute("href"))
+        return links
 
     def wait_for_page_load(self, timeout=30):
         """
