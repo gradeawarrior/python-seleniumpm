@@ -43,6 +43,10 @@ The library can be installed via::
 
     pip install seleniumpm
 
+Or if you want to install from src::
+
+    pip install git+https://github.com/gradeawarrior/python-seleniumpm.git
+
 Usage
 -----
 
