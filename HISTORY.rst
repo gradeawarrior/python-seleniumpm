@@ -1,8 +1,10 @@
+===============
 Release History
 ===============
 
 
-### 2.4.0 (UN-RELEASED)
+2.4.0 (UN-RELEASED)
+-------------------
 
 **New Features**
 
@@ -20,14 +22,17 @@ Release History
 - The Widget type was missing in 2.3.0 release
 - Expanding of the UnitTest coverage to ensure libraries are working correctly
 - Fixing issue with get_text() in Python Selenium. Apparently, this call in Python (versus Java) is simply called 'text'
+- Conversion of README and HISTORY files to rst. This is so that they are rendered correctly on PyPi server
 
-### 2.3.0 (2017-02-06)
+2.3.0 (2017-02-06)
+------------------
 
 **New Features**
 
 - Provides a full implementation of the current Java v2.3 of Selenium PageModel
 
-### 2.0.0 (2017-01-10)
+2.0.0 (2017-01-10)
+------------------
 
 **New Features**
 

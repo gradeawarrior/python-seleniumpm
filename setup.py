@@ -45,12 +45,10 @@ with open('seleniumpm/__init__.py', 'r') as fd:
 if not version:
     raise RuntimeError('Cannot find version information')
 
-readme_file = 'README.md'
-if os.path.isfile('README-pypi.md'):
-    readme_file = 'README-pypi.md'
+readme_file = 'README.rst'
 with open(readme_file, 'r', 'utf-8') as f:
     readme = f.read()
-with open('HISTORY.md', 'r', 'utf-8') as f:
+with open('HISTORY.rst', 'r', 'utf-8') as f:
     history = f.read()
 
 setup(
@@ -67,7 +65,7 @@ setup(
     include_package_data=True,
     install_requires=requires,
     license='Apache 2.0',
-    keywords=['testing', 'requests', 'seleniumpm', 'selenium', 'pagemodel', 'rest', 'restest'],
+    keywords=['testing', 'seleniumpm', 'selenium', 'pagemodel', 'pageobjectmodel'],
     zip_safe=False,
     classifiers=(
         'Development Status :: 5 - Production/Stable',

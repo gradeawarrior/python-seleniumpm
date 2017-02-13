@@ -14,6 +14,7 @@ seleniumpm.egg-info/
 *.pyc
 *.swp
 *.egg
+*.html
 env/
 venv/
 

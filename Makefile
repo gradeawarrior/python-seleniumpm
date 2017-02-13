@@ -1,6 +1,6 @@
 VIRTUALENV?=venv
 
-init: setup.venv
+init: setup.venv list
 	$(info ****************)
 	$(info > init)
 	$(info ****************)
@@ -18,7 +18,7 @@ delete.venv:
 	$(info ****************)
 	rm -rf $(VIRTUALENV)
 
-test: init
+test: setup.venv
 	# This runs all of the tests. To run an individual test, run py.test with
 	# the -k flag, like "py.test -k test_path_is_not_double_encoded"
 	$(info ****************)
@@ -26,17 +26,24 @@ test: init
 	$(info ****************)
 	source $(VIRTUALENV)/bin/activate; py.test tests -lvs
 
-coverage: init
+coverage:
 	$(info ****************)
 	$(info > coverage)
 	$(info ****************)
 	source $(VIRTUALENV)/bin/activate; py.test --verbose --cov-report term --cov=requests tests
 
-ci: init
+ci: setup.venv
 	$(info ****************)
 	$(info > ci)
 	$(info ****************)
 	source $(VIRTUALENV)/bin/activate; py.test --junitxml=junit.xml
+
+generate.rst: setup.venv
+	$(info ****************)
+	$(info > generate.rst)
+	$(info ****************)
+	source $(VIRTUALENV)/bin/activate; rst2html.py README.rst > README.html
+	source $(VIRTUALENV)/bin/activate; rst2html.py HISTORY.rst > HISTORY.html
 
 publish.test:
 	python setup.py register -r pypitest
@@ -50,3 +57,10 @@ publish:
 
 clean:
 	rm -rf build dist .egg seleniumpm.egg-info
+	rm README.html HISTORY.html
+
+list:
+	$(info ************************************)
+	$(info > Here is a list of Makefile targets)
+	$(info ************************************)
+	@grep '^[^#[:space:]].*:' Makefile
