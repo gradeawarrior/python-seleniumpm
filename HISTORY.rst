@@ -1,7 +1,16 @@
-===============
 Release History
 ===============
 
+
+2.4.2 (2017-02-13)
+------------------
+
+**New Features**
+
+**Fixed**
+
+- Fixing issue appending two .rst files together to generate the long_description
+- Using setuptools for setup.py.
 
 2.4.1 (2017-02-13)
 ------------------
