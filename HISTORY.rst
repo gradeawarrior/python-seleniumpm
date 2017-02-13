@@ -3,8 +3,17 @@ Release History
 ===============
 
 
+2.4.1 (2017-02-13)
+------------------
+
+**New Features**
+
+**Fixed**
+
+- Using disutils.core instead of setuptools for setup.py. Hoping this fixes pretty-print of rst files on PyPi
+
 2.4.0 (2017-02-13)
--------------------
+------------------
 
 **New Features**
 
