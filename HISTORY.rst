@@ -8,6 +8,7 @@ Release History
 **New Features:**
 
 **Fixed:**
+
 - Fixing issue with uploading to wheel
 - Simplifying README for more of a project overview. More details should be located on the wiki
 
