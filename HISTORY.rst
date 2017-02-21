@@ -7,6 +7,10 @@ Release History
 
 **New Features:**
 
+- Addition of RadioButton type
+- Addition of Dropdown type
+- Addition of Image type
+
 **Fixed:**
 
 - Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
