@@ -6,6 +6,7 @@ from seleniumpm.examples.google_page import GooglePage
 from seleniumpm.webelements.button import Button
 from seleniumpm.webelements.link import Link
 from seleniumpm.webelements.textelement import TextElement
+from seleniumpm.webelements.widget import Widget
 from urlparse import urlparse
 
 
@@ -87,7 +88,9 @@ class TestWebPage(object):
     def test_extended_webpage_with_multiple_elements(self):
         wikipedia = SuperWikipedia(self.driver, "https://en.wikipedia.org/wiki/Selenium")
         elements = wikipedia.get_element_attr()
-        assert len(elements) == 8
+        assert len(elements) == 9
+        elements = wikipedia.get_element_attr(type=Widget)
+        assert len(elements) == 1
         elements = wikipedia.get_element_attr(type=Button)
         assert len(elements) == 0
         elements = wikipedia.get_element_attr(type=Link)

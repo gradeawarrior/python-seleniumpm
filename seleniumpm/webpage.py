@@ -1,6 +1,7 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from seleniumpm.webelements.element import Element
+from seleniumpm.webelements.widget import Widget
 from urlparse import urlparse
 import re
 
@@ -137,7 +138,15 @@ class Webpage(object):
         """
         elements = []
         for attr in dir(self):
-            if isinstance(getattr(self, attr), type):
-                elements.append(getattr(self, attr))
+            element = getattr(self, attr)
+            # Ensure that it is of type Element
+            if isinstance(element, Element):
+                # If it is a widget, then recursively drill down and get its Elements
+                if isinstance(element, Widget):
+                    for welement in element.get_element_attr(type=type):
+                        elements.append(welement)
+                # Add the element if it matches the expected type
+                if isinstance(element, type):
+                    elements.append(element)
         return elements
 
