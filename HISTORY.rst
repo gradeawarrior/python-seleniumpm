@@ -10,6 +10,9 @@ Release History
 - Addition of RadioButton type
 - Addition of Dropdown type
 - Addition of Image type
+- Add new method get_element_attributes() to Webpage and Widget type. This will give developers access to all define
+  Element attributes on a Webpage or within a Widget. This method all supports retrieving a specific Element type
+  (e.g. Button, Link, Checkbox)
 
 **Fixed:**
 
