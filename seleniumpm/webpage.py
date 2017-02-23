@@ -1,5 +1,6 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from seleniumpm.webelements.element import Element
 from urlparse import urlparse
 import re
 
@@ -126,3 +127,17 @@ class Webpage(object):
         :raises TimeoutException: if an element doesn't appear within timeout
         """
         raise NotImplementedError
+
+    def get_element_attr(self, type=Element):
+        """
+        Retrieves a list of WebElements on a Webpage. Optionally, you can pass in a different type (e.g. Button,
+        Link, TextElement) to return only those types associated with a Webpage object.
+        :param type: one of the seleniumpm.webelement types (Default: seleniumpm.webelements.Element)
+        :return: This is a list of attributes of base type seleniumpm.webelements.Element
+        """
+        elements = []
+        for attr in dir(self):
+            if isinstance(getattr(self, attr), type):
+                elements.append(getattr(self, attr))
+        return elements
+

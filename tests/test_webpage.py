@@ -1,5 +1,11 @@
 from selenium import webdriver
 from seleniumpm.webpage import Webpage
+from seleniumpm.examples.wikipedia import Wikipedia
+from seleniumpm.examples.superwikipedia import SuperWikipedia
+from seleniumpm.examples.google_page import GooglePage
+from seleniumpm.webelements.button import Button
+from seleniumpm.webelements.link import Link
+from seleniumpm.webelements.textelement import TextElement
 from urlparse import urlparse
 
 
@@ -61,3 +67,30 @@ class TestWebPage(object):
                 assert False, "Expecting an AttributeError for the following invalid url: '{}'".format(url)
             except AttributeError:
                 pass
+
+    def test_webpage_with_no_defined_elements(self):
+        elements = Webpage(self.driver).get_element_attr()
+        assert len(elements) == 0
+
+    def test_webpage_with_multiple_elements(self):
+        google = GooglePage(self.driver, "http://www.google.com")
+        wikipedia = Wikipedia(self.driver, "https://en.wikipedia.org/wiki/Selenium")
+        elements = google.get_element_attr()
+        assert len(elements) == 1
+        elements = wikipedia.get_element_attr()
+        assert len(elements) == 3
+        elements = wikipedia.get_element_attr(type=Button)
+        assert len(elements) == 0
+        elements = wikipedia.get_element_attr(type=TextElement)
+        assert len(elements) == 3
+
+    def test_extended_webpage_with_multiple_elements(self):
+        wikipedia = SuperWikipedia(self.driver, "https://en.wikipedia.org/wiki/Selenium")
+        elements = wikipedia.get_element_attr()
+        assert len(elements) == 8
+        elements = wikipedia.get_element_attr(type=Button)
+        assert len(elements) == 0
+        elements = wikipedia.get_element_attr(type=Link)
+        assert len(elements) == 5
+        elements = wikipedia.get_element_attr(type=TextElement)
+        assert len(elements) == 3
