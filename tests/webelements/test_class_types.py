@@ -6,10 +6,12 @@ from seleniumpm.webelements.button import Button
 from seleniumpm.webelements.checkbox import Checkbox
 from seleniumpm.webelements.clickable import Clickable
 from seleniumpm.webelements.dropdown import Dropdown
+from seleniumpm.webelements.image import Image
 from seleniumpm.webelements.link import Link
 from seleniumpm.webelements.table import Table
 from seleniumpm.webelements.textelement import TextElement
 from seleniumpm.webelements.textfield import TextField
+from seleniumpm.webelements.radiobutton import RadioButton
 from seleniumpm.webelements.widget import Widget
 from seleniumpm.webpage import Webpage
 
@@ -52,6 +54,15 @@ class TestClassTypes(object):
         assert isinstance(button, Element)
         assert isinstance(button, object)
 
+    def test_radiobutton(self):
+        """RadioButton --> Element --> object"""
+        button = RadioButton(self.driver, Locator(By.XPATH, "//foo"))
+        assert not isinstance(button, Button)
+        assert isinstance(button, RadioButton)
+        assert isinstance(button, Clickable)
+        assert isinstance(button, Element)
+        assert isinstance(button, object)
+
     def test_checkbox(self):
         """Checkbox --> Clickable --> Element --> object"""
         checkbox = Checkbox(self.driver, Locator(By.XPATH, "//foo"))
@@ -74,6 +85,13 @@ class TestClassTypes(object):
         assert isinstance(dropdown, Clickable)
         assert isinstance(dropdown, Element)
         assert isinstance(dropdown, object)
+
+    def test_image(self):
+        """Image --> Element --> object"""
+        image = Image(self.driver, Locator(By.XPATH, "//foo"))
+        assert isinstance(image, Image)
+        assert isinstance(image, Element)
+        assert isinstance(image, object)
 
     def test_link(self):
         """Link --> Clickable --> Element --> object"""
