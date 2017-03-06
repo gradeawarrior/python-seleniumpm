@@ -13,6 +13,8 @@ Release History
 - Add new method get_element_attr() to Webpage and Widget type. This will give developers access to all define
   Element attributes on a Webpage or within a Widget. This method all supports retrieving a specific Element type
   (e.g. Button, Link, Checkbox)
+- Changing default wait_for_page_load() and validate() methods to use the above mentioned get_element_attr(). This can
+  still be overridden, and does not affect previous implementations.
 - Adding new seleniumpm.examples.widgets package
 
 **Fixed:**
