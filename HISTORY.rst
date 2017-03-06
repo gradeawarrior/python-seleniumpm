@@ -19,6 +19,8 @@ Release History
 
 **Fixed:**
 
+- Adding type-checking to constructor of the Element, Widget, and Webpage types. These classes will now throw an
+  AttributeError if not passed in a legitimate RemoteWebdriver, URL, or Locator type as parameters.
 - Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 - Simplifying README for more of a project overview. More details should be located on the wiki
 

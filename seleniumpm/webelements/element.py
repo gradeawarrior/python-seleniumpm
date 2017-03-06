@@ -1,10 +1,16 @@
+from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from seleniumpm.locator import Locator
 
 
 class Element(object):
     def __init__(self, driver, locator):
+        if not isinstance(driver, WebDriver):
+            raise AttributeError("driver was not an expected RemoteWebdriver type!")
+        if not isinstance(locator, Locator):
+            raise AttributeError("locator was not an expected seleniumpm.Locator type!")
         self.driver = driver
         self.locator = locator
 
