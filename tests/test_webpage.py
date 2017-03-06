@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.remote.webdriver import WebDriver
 from seleniumpm.webpage import Webpage
 from seleniumpm.examples.wikipedia import Wikipedia
 from seleniumpm.examples.superwikipedia import SuperWikipedia
@@ -73,27 +74,32 @@ class TestWebPage(object):
         elements = Webpage(self.driver).get_element_attr()
         assert len(elements) == 0
 
+    def assert_elements(self, elements, expected_count):
+        assert len(elements) == expected_count
+        for element in elements:
+            assert isinstance(element.driver, WebDriver)
+
     def test_webpage_with_multiple_elements(self):
         google = GooglePage(self.driver, "http://www.google.com")
         wikipedia = Wikipedia(self.driver, "https://en.wikipedia.org/wiki/Selenium")
         elements = google.get_element_attr()
-        assert len(elements) == 1
+        self.assert_elements(elements, expected_count=1)
         elements = wikipedia.get_element_attr()
-        assert len(elements) == 3
+        self.assert_elements(elements, expected_count=3)
         elements = wikipedia.get_element_attr(type=Button)
-        assert len(elements) == 0
+        self.assert_elements(elements, expected_count=0)
         elements = wikipedia.get_element_attr(type=TextElement)
-        assert len(elements) == 3
+        self.assert_elements(elements, expected_count=3)
 
     def test_extended_webpage_with_multiple_elements(self):
         wikipedia = SuperWikipedia(self.driver, "https://en.wikipedia.org/wiki/Selenium")
         elements = wikipedia.get_element_attr()
-        assert len(elements) == 9
+        self.assert_elements(elements, expected_count=9)
         elements = wikipedia.get_element_attr(type=Widget)
-        assert len(elements) == 1
+        self.assert_elements(elements, expected_count=1)
         elements = wikipedia.get_element_attr(type=Button)
-        assert len(elements) == 0
+        self.assert_elements(elements, expected_count=0)
         elements = wikipedia.get_element_attr(type=Link)
-        assert len(elements) == 5
+        self.assert_elements(elements, expected_count=5)
         elements = wikipedia.get_element_attr(type=TextElement)
-        assert len(elements) == 3
+        self.assert_elements(elements, expected_count=3)
