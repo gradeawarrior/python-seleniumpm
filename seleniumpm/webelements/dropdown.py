@@ -11,7 +11,7 @@ class Dropdown(Clickable):
 
     def instantiateSelect(self):
         if self.select == None:
-            self.select = Select(self.driver.find_element(self.locator.by, self.locator.value))
+            self.select = Select(self.get_webelement())
 
     def count_options(self):
         # TODO - Need to implement a way to get and modify the original locator to append '/option' (Assuming xpath)

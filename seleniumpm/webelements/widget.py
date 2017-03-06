@@ -6,8 +6,14 @@ class Widget(Clickable):
     def __init__(self, driver, locator):
         super(Clickable, self).__init__(driver, locator)
 
-    def validate(self):
-        raise NotImplementedError
+    def validate(self, timeout=10):
+        """
+        The intention of validate is to make sure that an already loaded widget contains these elements.
+        :param timeout: The number of seconds to poll waiting for an element
+        :raises TimeoutException: if an element doesn't appear within timeout
+        """
+        for element in self.get_element_attr():
+            element.wait_for_present_and_visible(timeout)
 
     def get_element_attr(self, type=Element):
         """

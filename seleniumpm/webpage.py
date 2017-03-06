@@ -70,6 +70,7 @@ class Webpage(object):
         2) It will use the url specified when the WebPage object was specified (Recommended)
 
         The latter method is the recommended approach.
+
         :param url: The url to open, but it is recommended that this be specified in constructor - Default: None
         :return:
         """
@@ -104,6 +105,7 @@ class Webpage(object):
     def wait_for_title(self, title, timeout=10):
         """This could be used similar to a wait_for_page_load() if the page title can uniquely identify
         different pages or states of the page. Google Search works like this.
+
         :param title: The title to search for (case sensitive)
         :param timeout: The number of seconds to wait - Default: 10
         :raises TimeoutException: if the title does not appear within timeout period
@@ -111,28 +113,52 @@ class Webpage(object):
         WebDriverWait(driver=self.driver, timeout=timeout).until(EC.title_contains(title))
         return self
 
-    def wait_for_page_load(self):
+    def wait_for_page_load(self, timeout=30, check_visibility=True):
         """
         This method "waits for page load" by checking that all expected objects are both present and visible on the
         page. This is similar to validate() operation except that sometimes certain pages take a long time to load.
         Typically the threshold is 30sec, but this is configurable.
+
+        :param timeout: The number of seconds to poll waiting for an element
         :return: self if everything is successful
         :raises TimeoutException: if an element doesn't appear within timeout
         """
-        raise NotImplementedError
+        self.validate(timeout=timeout, check_visibility=check_visibility)
+        return self
 
-    def validate(self):
+    def validate(self, timeout=10, check_visibility=True):
         """
         The intention of validate is to make sure that an already loaded webpage contains these elements.
-        :return:
+
+        :param timeout: The number of seconds to poll waiting for an element
         :raises TimeoutException: if an element doesn't appear within timeout
         """
-        raise NotImplementedError
+        for element in self.get_element_attr():
+            if check_visibility:
+                element.wait_for_present_and_visible(timeout)
+            else:
+                element.wait_for_present(timeout)
+
+    def is_page(self, timeout=30, check_visibility=True):
+        """
+        This is like validate() operation except that it returns a boolean True/False. The idea is to
+        ask whether or not you are on a page; this is an implementation of that idea. There are of course
+        other ways of checking whether you are on the right page or not (e.g. checking the page title).
+
+        :param timeout: The number of seconds to poll waiting for an element
+        :return: True if validate() does not throw an exception; False otherwise
+        """
+        try:
+            self.validate(timeout=timeout, check_visibility=check_visibility)
+            return True
+        except:
+            return False
 
     def get_element_attr(self, type=Element):
         """
         Retrieves a list of WebElements on a Webpage. Optionally, you can pass in a different type (e.g. Button,
         Link, TextElement) to return only those types associated with a Webpage object.
+
         :param type: one of the seleniumpm.webelement types (Default: seleniumpm.webelements.Element)
         :return: This is a list of attributes of base type seleniumpm.webelements.Element
         """
@@ -149,4 +175,3 @@ class Webpage(object):
                 if isinstance(element, type):
                     elements.append(element)
         return elements
-
