@@ -10,7 +10,7 @@ Release History
 - Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 - Simplifying README for more of a project overview. More details should be located on the wiki
 
-2.5.0 (UN-RELEASED)
+2.5.0 (2017-03-07)
 -------------------
 
 **New Features:**
