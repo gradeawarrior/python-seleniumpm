@@ -15,6 +15,15 @@ Release History
 
 **New Features:**
 
+**Fixed:**
+
+- Fixing issue with set_focus() or scroll_into_view(). There were apparently not included in 2.5.0 release
+
+2.5.0 (2017-03-07)
+-------------------
+
+**New Features:**
+
 - Addition of RadioButton type
 - Addition of Dropdown type
 - Addition of Image type
