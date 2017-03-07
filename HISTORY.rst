@@ -1,6 +1,14 @@
 Release History
 ===============
 
+2.6.0 (UN-RELEASED)
+-------------------
+
+**New Features:**
+
+**Fixed:**
+- Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
+- Simplifying README for more of a project overview. More details should be located on the wiki
 
 2.5.0 (UN-RELEASED)
 -------------------
@@ -16,13 +24,14 @@ Release History
 - Changing default wait_for_page_load() and validate() methods to use the above mentioned get_element_attr(). This can
   still be overridden, and does not affect previous implementations.
 - Adding new seleniumpm.examples.widgets package
+- Element class now implements a get_action_chains() method to return back an ActionChains type.
+- Element class now implements a set_focus() or scroll_into_view() functionality, for those pesky webelements that are
+  need to be visible, but are corrently scrolled off page somehow.
 
 **Fixed:**
 
 - Adding type-checking to constructor of the Element, Widget, and Webpage types. These classes will now throw an
   AttributeError if not passed in a legitimate RemoteWebdriver, URL, or Locator type as parameters.
-- Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
-- Simplifying README for more of a project overview. More details should be located on the wiki
 
 2.4.2 (2017-02-13)
 ------------------

@@ -2,6 +2,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from selenium.webdriver.common.action_chains import ActionChains
 from seleniumpm.locator import Locator
 
 
@@ -19,6 +20,9 @@ class Element(object):
 
     def get_webelements(self):
         return self.driver.find_elements(self.locator.by, self.locator.value)
+
+    def get_action_chains(self):
+        return ActionChains(self.driver)
 
     def get_text(self):
         return self.get_webelement().text
@@ -51,6 +55,13 @@ class Element(object):
 
     def is_present_and_visible(self, timeout=10):
         return self.is_present(timeout) and self.is_visible(0)
+
+    def set_focus(self):
+        self.move_to_element().perform()
+        return self
+
+    def move_to_element(self):
+        return self.get_action_chains().move_to_element(self.get_webelement())
 
     def wait_for_present(self, timeout=10):
         try:
