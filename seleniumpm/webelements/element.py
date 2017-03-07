@@ -57,7 +57,10 @@ class Element(object):
         return self.is_present(timeout) and self.is_visible(0)
 
     def set_focus(self):
-        self.move_to_element().perform()
+        return self.scroll_into_view()
+
+    def scroll_into_view(self):
+        self.driver.execute_script("arguments[0].scrollIntoView();", self.get_webelement())
         return self
 
     def move_to_element(self):
