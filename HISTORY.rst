@@ -10,7 +10,16 @@ Release History
 - Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 - Simplifying README for more of a project overview. More details should be located on the wiki
 
-2.5.1 (2017-03-07)
+2.5.2 (2017-03-07)
+-------------------
+
+**New Features:**
+
+**Fixed:**
+
+- Fixing issue with setup.py throwing error missing HISTORY.rst from package data
+
+2.5.1 (2017-03-07) - BROKEN
 -------------------
 
 **New Features:**
@@ -19,7 +28,7 @@ Release History
 
 - Fixing issue with set_focus() or scroll_into_view(). There were apparently not included in 2.5.0 release
 
-2.5.0 (2017-03-07)
+2.5.0 (2017-03-07) - BROKEN
 -------------------
 
 **New Features:**
