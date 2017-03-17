@@ -25,7 +25,7 @@ FUTURE (UN-RELEASED)
     * by_partial_link_text(path)
     * by_tag_name(path)
 - Adding wait_for_selected() to Element
-- Adding wait_for_clickable() to Clickable
+- Adding wait_for_clickable() and click_invisible() to Clickable
 - Adding send_keys_delayed() and type_delayed() to TextField
 - Adding new Panel type that simply extends Widget. Conceptually they're exactly the same, but Panel appears to be a more generally acceptable term for a section of a page
 
@@ -47,7 +47,7 @@ FUTURE (UN-RELEASED)
 
 **Fixed:**
 
-- Fixing issue with set_focus() or scroll_into_view(). There were apparently not included in 2.5.0 release
+- Fixing issue with set_focus() or scroll_into_view(). They were apparently not included in 2.5.0 release
 
 2.5.0 (2017-03-07) - BROKEN
 -------------------
