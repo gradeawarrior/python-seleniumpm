@@ -52,32 +52,58 @@ Usage
 
 Here is the ever so popular Google example using *seleniumpm*::
 
-	from selenium import webdriver
-	from seleniumpm.examples.google_page import GooglePage
-	
-	"""
-	Setup for Remote execution against a local standalone-selenium-server
-	and using the PhantomJS driver. This can be changed of course to using 
-	the driver of your choice (e.g. Chrome or Firefox)
-	"""
-	driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub", desired_capabilities=webdriver.DesiredCapabilities.PHANTOMJS)
-	
-	# Instantiate Google Page
-	google = GooglePage(driver, url="https://www.google.com")
-	
-	# Open + wait for page load + validate Google
-	google.open().wait_for_page_load().validate()
-	
-	# Print the page title
-	print google.get_title()
-	
-	# Search for 'Cheese!'
-	search_str = "Cheese!"
-	google.search_field.type(search_str)
-	google.search_field.submit()
-	
-	# Ensure that the page is refreshed from your search
-	print google.wait_for_title(search_str).get_title()
+    from selenium import webdriver
+    from seleniumpm.examples.google_page import GooglePage
+
+    """
+    Setup for Remote execution against a local standalone-selenium-server
+    and using the PhantomJS driver. This can be changed of course to using
+    the driver of your choice (e.g. Chrome or Firefox)
+    """
+    driver = webdriver.Remote(command_executor="http://localhost:4444/wd/hub", desired_capabilities=webdriver.DesiredCapabilities.PHANTOMJS)
+
+    # Instantiate Google Page
+    google = GooglePage(driver, url="https://www.google.com")
+
+    # Open + wait for page load + validate Google
+    google.open().wait_for_page_load().validate()
+
+    # Print the page title
+    print google.get_title()
+
+    # Search for 'Cheese!'
+    search_str = "Cheese!"
+    google.search_field.type(search_str)
+    google.search_field.submit()
+
+    # Ensure that the page is refreshed from your search
+    print google.wait_for_title(search_str).get_title()
+
+Creating your PageObject's
+++++++++++++++++++++++++++
+
+The GooglePage used in the above example looks like the following::
+
+    from selenium.webdriver.common.by import By
+    from seleniumpm.webpage import Webpage
+    from seleniumpm.webelements.textfield import TextField
+    from seleniumpm.locator import Locator
+
+    class GooglePage(Webpage):
+        def __init__(self, driver, url=None):
+            super(GooglePage, self).__init__(driver, url)
+            self.search_field = TextField(driver, Locator.by_name('q'))
+
+        def get_result_links(self):
+            links = []
+            elements = self.driver.find_elements(By.XPATH, "//h3[contains(@class, 'r')]/a")
+            for element in elements:
+                links.append(element.get_attribute("href"))
+            return links
+
+You should notice that most of the operations except for get_result_links() are not visible on the GooglePage class. That is because the basic behaviors are either part of the Webpage or the TextField (aka an Element) type.
+
+For more information about writing your PageObject's in SeleniumPM, please direct your attention to Creating-your-PageObject-with-SeleniumPM_
 
 Language Support
 ----------------
@@ -99,56 +125,6 @@ Contributing to SeleniumPM
 * Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
 * Please try not to mess with the version or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so that I can cherry-pick around it.
 
-Testing and Releasing
-~~~~~~~~~~~~~~~~~~~~~
-
-1. Uprev the version in seleniumpm/__init__.py
-++++++++++++++++++++++++++++++++++++++++++++++
-
-You'll need to uprev the *__version__* attribute in *seleniumpm/__init__.py*::
-
-	...
-	
-	__title__ = 'seleniumpm'
-	__version__ = '1.0.0'
-	__build__ = 0x021000
-	__author__ = 'Peter Salas'
-	__license__ = 'Apache 2.0'
-	
-	...
-	
-Commit and push your changes to Github!
-
-2. Update HISTORY.md
-++++++++++++++++++++
-
-You should update the Release Notes with the high-level changes contained within the release. If not ready to publish in Step 4 below, then put *UN-RELEASED* to denote that the feature is still under development has not been published to Pypi.
-
-3. Test your code!
-++++++++++++++++++
-
-For goodness' sake! You should always be writing and running the UnitTests::
-
-    make test
-
-At this moment, it requires a *standalone-selenium-server* running locally. If you are running on a Mac, I recommend installing selenium-server-runner_ to get your system up-and-running in no time!
-
-4. Upload your package to PyPI Test
-+++++++++++++++++++++++++++++++++++
-
-Run::
-
-    make publish.test
-	
-You should get no errors, and should also now be able to see your library in the test PyPI repository.
-
-5. Upload to PyPI Live
-++++++++++++++++++++++
-
-Once you've successfully uploaded to PyPI Test, publish your changes to Live::
-
-    make publish
-
 References
 ----------
 
@@ -161,6 +137,7 @@ Also see the following:
 - requestests_ - An API testing library
 
 .. _Selenium-PageModel: https://github.com/gradeawarrior/python-seleniumpm
+.. _Creating-your-PageObject-with-SeleniumPM: https://github.com/gradeawarrior/python-seleniumpm/wiki/Page-Object-Model
 .. _SeleniumPM: https://github.com/gradeawarrior/python-seleniumpm
 .. _Java-SeleniumPM: https://github.com/gradeawarrior/selenium-pagemodel
 .. _selenium-server-runner: https://github.com/gradeawarrior/selenium-server-runner

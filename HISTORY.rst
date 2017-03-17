@@ -8,9 +8,15 @@ FUTURE (UN-RELEASED)
 
 **Fixed:**
 - Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
-- Simplifying README for more of a project overview. More details should be located on the wiki
 
-2.6.0 (UN-RELEASED)
+2.7.0 (UN-RELEASED)
+-------------------
+
+**New Features:**
+
+**Fixed:**
+
+2.6.0 (2017-03-17)
 -------------------
 
 **New Features:**
@@ -30,6 +36,7 @@ FUTURE (UN-RELEASED)
 - Adding new Panel type that simply extends Widget. Conceptually they're exactly the same, but Panel appears to be a more generally acceptable term for a section of a page
 
 **Fixed:**
+- Simplifying README for more of a project overview. Details should be located on the wiki
 
 2.5.2 (2017-03-07)
 -------------------
