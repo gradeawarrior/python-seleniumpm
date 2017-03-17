@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 
 class WikipediaPersonal(Widget):
     """
-    This is an example way of sub-organizing elements on a page. In this examp,e, we're grouping a set of
+    This is an example way of sub-organizing elements on a page. In this example, we're grouping a set of
     links located near the top-right of the Wikipedia page.
     """
 

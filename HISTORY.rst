@@ -27,6 +27,7 @@ FUTURE (UN-RELEASED)
 - Adding wait_for_selected() to Element
 - Adding wait_for_clickable() to Clickable
 - Adding send_keys_delayed() and type_delayed() to TextField
+- Adding new Panel type that simply extends Widget. Conceptually they're exactly the same, but Panel appears to be a more generally acceptable term for a section of a page
 
 **Fixed:**
 
