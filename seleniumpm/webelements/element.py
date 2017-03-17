@@ -66,12 +66,22 @@ class Element(object):
     def move_to_element(self):
         return self.get_action_chains().move_to_element(self.get_webelement())
 
+    def wait_for_selected(self, timeout=10):
+        try:
+            WebDriverWait(self.driver, timeout).until(
+                EC.element_to_be_selected((self.locator.by, self.locator.value)))
+        except TimeoutException as e:
+            e.message = "TimeoutException waiting for selected {}={} with timeout={}s ({})".format(self.locator.by, self.locator.value, timeout, self.__class__)
+            e.msg = e.message
+            raise e
+        return self
+
     def wait_for_present(self, timeout=10):
         try:
             WebDriverWait(self.driver, timeout).until(
                 EC.presence_of_element_located((self.locator.by, self.locator.value)))
         except TimeoutException as e:
-            e.message = "TimeoutException waiting for present {}={} ({})".format(self.locator.by, self.locator.value, self.__class__)
+            e.message = "TimeoutException waiting for present {}={} with timeout={}s ({})".format(self.locator.by, self.locator.value, timeout, self.__class__)
             e.msg = e.message
             raise e
         return self
@@ -81,7 +91,7 @@ class Element(object):
             WebDriverWait(self.driver, timeout).until(
                 EC.visibility_of_element_located((self.locator.by, self.locator.value)))
         except TimeoutException as e:
-            e.message = "TimeoutException waiting for visibile {}={} ({})".format(self.locator.by, self.locator.value, self.__class__)
+            e.message = "TimeoutException waiting for present {}={} with timeout={}s ({})".format(self.locator.by, self.locator.value, timeout, self.__class__)
             e.msg = e.message
             raise e
         return self

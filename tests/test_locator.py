@@ -116,3 +116,91 @@ class TestLocator:
         assert locator.value == xpath
         locator.append("/helloworld")
         assert locator.value == "{}{}".format(xpath, "/helloworld")
+
+    def test_locator_by_xpath(self):
+        """
+        Tests that can create Locator.by_xpath(path)
+        :return:
+        """
+        path = "//div/foobar"
+        locator = Locator.by_xpath(path)
+        assert locator != None
+        assert locator.by == By.XPATH
+        assert locator.value == path
+
+    def test_locator_by_css_selector(self):
+        """
+        Tests that can create Locator.by_css_selector(path)
+        :return:
+        """
+        path = "//div/foobar"
+        locator = Locator.by_css_selector(path)
+        assert locator != None
+        assert locator.by == By.CSS_SELECTOR
+        assert locator.value == path
+
+    def test_locator_by_name(self):
+        """
+        Tests that can create Locator.by_name(path)
+        :return:
+        """
+        path = "//div/foobar"
+        locator = Locator.by_name(path)
+        assert locator != None
+        assert locator.by == By.NAME
+        assert locator.value == path
+
+    def test_locator_by_class_name(self):
+        """
+        Tests that can create Locator.by_class_name(path)
+        :return:
+        """
+        path = "//div/foobar"
+        locator = Locator.by_class_name(path)
+        assert locator != None
+        assert locator.by == By.CLASS_NAME
+        assert locator.value == path
+
+    def test_locator_by_id(self):
+        """
+        Tests that can create Locator.by_id(path)
+        :return:
+        """
+        path = "//div/foobar"
+        locator = Locator.by_id(path)
+        assert locator != None
+        assert locator.by == By.ID
+        assert locator.value == path
+
+    def test_locator_by_link_text(self):
+        """
+        Tests that can create Locator.by_link_text(path)
+        :return:
+        """
+        path = "//div/foobar"
+        locator = Locator.by_link_text(path)
+        assert locator != None
+        assert locator.by == By.LINK_TEXT
+        assert locator.value == path
+
+    def test_locator_by_partial_link_text(self):
+        """
+        Tests that can create Locator.by_partial_link_text(path)
+        :return:
+        """
+        path = "//div/foobar"
+        locator = Locator.by_partial_link_text(path)
+        assert locator != None
+        assert locator.by == By.PARTIAL_LINK_TEXT
+        assert locator.value == path
+
+    def test_locator_by_tag_name(self):
+        """
+        Tests that can create Locator.by_tag_name(path)
+        :return:
+        """
+        path = "//div/foobar"
+        locator = Locator.by_tag_name(path)
+        assert locator != None
+        assert locator.by == By.TAG_NAME
+        assert locator.value == path
