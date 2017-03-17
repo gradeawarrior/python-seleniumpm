@@ -1,7 +1,7 @@
 Release History
 ===============
 
-2.6.0 (UN-RELEASED)
+FUTURE (UN-RELEASED)
 -------------------
 
 **New Features:**
@@ -9,6 +9,26 @@ Release History
 **Fixed:**
 - Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 - Simplifying README for more of a project overview. More details should be located on the wiki
+
+2.6.0 (UN-RELEASED)
+-------------------
+
+**New Features:**
+- Adding get_tuple() to Locator object. This is to make passing between SeleniumPM and the Selenium libraries eaiser
+- Adding simpler way of defining Locators. Locators can now be created via Locator.by_xpath(path) or Locator.by_css_selector(path). The following types are supported:
+    * by_xpath(path)
+    * by_css_selector(path)
+    * by_name(path)
+    * by_class_name(path)
+    * by_id(path)
+    * by_link_text(path)
+    * by_partial_link_text(path)
+    * by_tag_name(path)
+- Adding wait_for_selected() to Element
+- Adding wait_for_clickable() to Clickable
+- Adding send_keys_delayed() and type_delayed() to TextField
+
+**Fixed:**
 
 2.5.2 (2017-03-07)
 -------------------
