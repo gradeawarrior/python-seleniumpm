@@ -17,6 +17,7 @@ seleniumpm.egg-info/
 *.html
 env/
 venv/
+RELEASE_NOTES.rst
 
 .workon
 .idea/

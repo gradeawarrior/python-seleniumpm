@@ -2,15 +2,16 @@ Release History
 ===============
 
 FUTURE (UN-RELEASED)
--------------------
+--------------------
 
 **New Features:**
 
 **Fixed:**
 - Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
+- Fixed HISTORY.rst and README.rst files that are malformed sometime after 2.5.1 release
 
 2.7.0 (2017-03-20)
--------------------
+------------------
 
 **New Features:**
 - Adding a new ability to mark an Element type as 'invisible' so that validations on a Widget or Webpage can be done simply on presence
@@ -19,7 +20,7 @@ FUTURE (UN-RELEASED)
 **Fixed:**
 
 2.6.0 (2017-03-17)
--------------------
+------------------
 
 **New Features:**
 - Adding get_tuple() to Locator object. This is to make passing between SeleniumPM and the Selenium libraries eaiser
@@ -41,7 +42,7 @@ FUTURE (UN-RELEASED)
 - Simplifying README for more of a project overview. Details should be located on the wiki
 
 2.5.2 (2017-03-07)
--------------------
+------------------
 
 **New Features:**
 
@@ -50,7 +51,7 @@ FUTURE (UN-RELEASED)
 - Fixing issue with setup.py throwing error missing HISTORY.rst from package data
 
 2.5.1 (2017-03-07) - BROKEN
--------------------
+---------------------------
 
 **New Features:**
 
@@ -59,7 +60,7 @@ FUTURE (UN-RELEASED)
 - Fixing issue with set_focus() or scroll_into_view(). They were apparently not included in 2.5.0 release
 
 2.5.0 (2017-03-07) - BROKEN
--------------------
+---------------------------
 
 **New Features:**
 

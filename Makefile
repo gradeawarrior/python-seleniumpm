@@ -44,6 +44,9 @@ generate.rst: setup.venv
 	$(info ****************)
 	source $(VIRTUALENV)/bin/activate; rst2html.py README.rst > README.html
 	source $(VIRTUALENV)/bin/activate; rst2html.py HISTORY.rst > HISTORY.html
+	cat README.rst > RELEASE_NOTES.rst
+	cat HISTORY.rst >> RELEASE_NOTES.rst
+	source $(VIRTUALENV)/bin/activate; rst2html.py RELEASE_NOTES.rst > RELEASE_NOTES.html
 
 publish.test:
 	python setup.py register -r pypitest
@@ -57,7 +60,7 @@ publish:
 
 clean:
 	rm -rf build dist .egg seleniumpm.egg-info
-	rm README.html HISTORY.html
+	rm README.html HISTORY.html RELEASE_NOTES.rst RELEASE_NOTES.html
 
 list:
 	$(info ************************************)
