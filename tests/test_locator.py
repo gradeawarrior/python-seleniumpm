@@ -117,6 +117,18 @@ class TestLocator:
         locator.append("/helloworld")
         assert locator.value == "{}{}".format(xpath, "/helloworld")
 
+    def test_locator_get_tuple(self):
+        """
+        Tests that can create Locator.by_xpath(path)
+        :return:
+        """
+        path = "//div/foobar"
+        locator = Locator.by_xpath(path)
+        assert locator != None
+        assert locator.by == By.XPATH
+        assert locator.value == path
+        assert locator.get_tuple() == (By.XPATH, path)
+
     def test_locator_by_xpath(self):
         """
         Tests that can create Locator.by_xpath(path)

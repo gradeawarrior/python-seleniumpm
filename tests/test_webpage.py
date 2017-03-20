@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.remote.webdriver import WebDriver
 from seleniumpm.webpage import Webpage
 from seleniumpm.examples.wikipedia import Wikipedia
@@ -9,6 +10,8 @@ from seleniumpm.webelements.link import Link
 from seleniumpm.webelements.textelement import TextElement
 from seleniumpm.webelements.widget import Widget
 from urlparse import urlparse
+import tests.pages.testingwebpages as testingwebpages
+from pytest import skip
 
 
 class TestWebPage(object):
@@ -85,7 +88,7 @@ class TestWebPage(object):
         elements = google.get_element_attr()
         self.assert_elements(elements, expected_count=1)
         elements = wikipedia.get_element_attr()
-        self.assert_elements(elements, expected_count=3)
+        self.assert_elements(elements, expected_count=4)
         elements = wikipedia.get_element_attr(type=Button)
         self.assert_elements(elements, expected_count=0)
         elements = wikipedia.get_element_attr(type=TextElement)
@@ -94,7 +97,7 @@ class TestWebPage(object):
     def test_extended_webpage_with_multiple_elements(self):
         wikipedia = SuperWikipedia(self.driver, "https://en.wikipedia.org/wiki/Selenium")
         elements = wikipedia.get_element_attr()
-        self.assert_elements(elements, expected_count=9)
+        self.assert_elements(elements, expected_count=10)
         elements = wikipedia.get_element_attr(type=Widget)
         self.assert_elements(elements, expected_count=1)
         elements = wikipedia.get_element_attr(type=Button)
@@ -103,3 +106,43 @@ class TestWebPage(object):
         self.assert_elements(elements, expected_count=5)
         elements = wikipedia.get_element_attr(type=TextElement)
         self.assert_elements(elements, expected_count=3)
+
+    def test_zero_validated_webpage(self):
+        page = testingwebpages.ZeroValidatedElementsPage(self.driver, "https://en.wikipedia.org/wiki/Selenium")
+        elements = page.get_element_attr()
+        self.assert_elements(elements, expected_count=3)
+        for element in elements:
+            assert element.do_not_check == True
+            assert element.check_visible == True
+        # Since there all elements are marked as 'do not check', I expect these operations to succeed
+        page.open().wait_for_page_load().validate()
+
+    def test_hidden_elements_on_webpage(self):
+        page = testingwebpages.HiddenElementsPage(self.driver, "https://en.wikipedia.org/wiki/Selenium")
+        elements = page.get_element_attr()
+        self.assert_elements(elements, expected_count=3)
+        for element in elements:
+            assert element.do_not_check == False
+            assert element.check_visible == False
+
+        # TODO : This is simply testing testing that TimeoutException is happening on a non-existent element. The real
+        # TODO : work is to actually define an element that is present but is not visible on a Webpage
+        try:
+            page.open().wait_for_page_load()
+            assert False, "Expecting there to be a TimeoutException thrown"
+        except TimeoutException:
+            pass
+
+    def test_marking_elements_as_do_not_check(self):
+        page = testingwebpages.HiddenElementsPage(self.driver, "https://en.wikipedia.org/wiki/Selenium")
+        elements = page.get_element_attr()
+        # Manually mark all elements as 'do not check'
+        for element in elements:
+            element.mark_do_not_check()
+            assert element.do_not_check == True
+            assert element.check_visible == False
+        page.open().wait_for_page_load().validate()
+
+    @skip("Need to find a hidden element on a page to test this out on")
+    def test_hidden_element_validation(self):
+        pass

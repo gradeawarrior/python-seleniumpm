@@ -6,14 +6,24 @@ class Widget(Clickable):
     def __init__(self, driver, locator):
         super(Clickable, self).__init__(driver, locator)
 
-    def validate(self, timeout=10):
+    def validate(self, timeout=10, force_check_visibility=False):
         """
         The intention of validate is to make sure that an already loaded widget contains these elements.
-        :param timeout: The number of seconds to poll waiting for an element
+        :param timeout: (Default: 10s) The number of seconds to poll waiting for an element
+        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible (but present) on
+                                       load. The default is to respect this setting and only check for presence. Setting
+                                       this to 'True' means you want to check for both present and visible.
         :raises TimeoutException: if an element doesn't appear within timeout
         """
         for element in self.get_element_attr():
-            element.wait_for_present_and_visible(timeout)
+            # Continue if the element has marked itself do_not_check=True
+            if element.do_not_check:
+                continue
+            # Check for presence and visibility
+            if force_check_visibility or element.check_visible:
+                element.wait_for_present_and_visible(timeout)
+            else:
+                element.wait_for_present(timeout)
 
     def get_element_attr(self, type=Element):
         """

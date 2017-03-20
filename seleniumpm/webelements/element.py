@@ -15,6 +15,18 @@ class Element(object):
         self.driver = driver
         self.locator = locator
 
+        # These attributes controls Webpage and Widget validation checks
+        self.check_visible = True
+        self.do_not_check = False
+
+    def mark_invisible(self):
+        self.check_visible = False
+        return self
+
+    def mark_do_not_check(self):
+        self.do_not_check = True
+        return self
+
     def get_webelement(self):
         return self.driver.find_element(self.locator.by, self.locator.value)
 

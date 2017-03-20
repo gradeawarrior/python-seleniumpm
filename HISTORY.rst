@@ -13,6 +13,8 @@ FUTURE (UN-RELEASED)
 -------------------
 
 **New Features:**
+- Adding a new ability to mark an Element type as 'invisible' so that validations on a Widget or Webpage can be done simply on presence
+- Adding a new ability to mark an Element type as 'do not check' so that you could potentially define an Element that you simply don't validate using the default validation() operation defined on a Widget or a Webpage. This feature should be used sparingly as there are better design patterns to handle **most** cases that you may think that you need to avoid validating the presence of specific Element types.
 
 **Fixed:**
 

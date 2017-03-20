@@ -116,43 +116,56 @@ class Webpage(object):
         WebDriverWait(driver=self.driver, timeout=timeout).until(EC.title_contains(title))
         return self
 
-    def wait_for_page_load(self, timeout=30, check_visibility=True):
+    def wait_for_page_load(self, timeout=30, force_check_visibility=True):
         """
         This method "waits for page load" by checking that all expected objects are both present and visible on the
         page. This is similar to validate() operation except that sometimes certain pages take a long time to load.
         Typically the threshold is 30sec, but this is configurable.
 
-        :param timeout: The number of seconds to poll waiting for an element
+        :param timeout: (Default: 30s) The number of seconds to poll waiting for an element
+        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible (but present) on
+                                       load. The default is to respect this setting and only check for presence. Setting
+                                       this to 'True' means you want to check for both present and visible.
         :return: self if everything is successful
         :raises TimeoutException: if an element doesn't appear within timeout
         """
-        self.validate(timeout=timeout, check_visibility=check_visibility)
+        self.validate(timeout=timeout, force_check_visibility=force_check_visibility)
         return self
 
-    def validate(self, timeout=10, check_visibility=True):
+    def validate(self, timeout=10, force_check_visibility=False):
         """
         The intention of validate is to make sure that an already loaded webpage contains these elements.
 
-        :param timeout: The number of seconds to poll waiting for an element
+        :param timeout: (Default: 10s) The number of seconds to poll waiting for an element
+        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible (but present) on
+                                       load. The default is to respect this setting and only check for presence. Setting
+                                       this to 'True' means you want to check for both present and visible.
         :raises TimeoutException: if an element doesn't appear within timeout
         """
         for element in self.get_element_attr():
-            if check_visibility:
+            # Continue if the element has marked itself do_not_check=True
+            if element.do_not_check:
+                continue
+            # Check for presence and visibility
+            if force_check_visibility or element.check_visible:
                 element.wait_for_present_and_visible(timeout)
             else:
                 element.wait_for_present(timeout)
 
-    def is_page(self, timeout=30, check_visibility=True):
+    def is_page(self, timeout=30, force_check_visibility=False):
         """
         This is like validate() operation except that it returns a boolean True/False. The idea is to
         ask whether or not you are on a page; this is an implementation of that idea. There are of course
         other ways of checking whether you are on the right page or not (e.g. checking the page title).
 
-        :param timeout: The number of seconds to poll waiting for an element
+        :param timeout: (Default: 30s) The number of seconds to poll waiting for an element
+        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible (but present) on
+                                       load. The default is to respect this setting and only check for presence. Setting
+                                       this to 'True' means you want to check for both present and visible.
         :return: True if validate() does not throw an exception; False otherwise
         """
         try:
-            self.validate(timeout=timeout, check_visibility=check_visibility)
+            self.validate(timeout=timeout, force_check_visibility=force_check_visibility)
             return True
         except:
             return False

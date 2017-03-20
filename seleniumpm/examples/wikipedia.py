@@ -1,5 +1,6 @@
 from seleniumpm.locator import Locator
 from seleniumpm.webpage import Webpage
+from seleniumpm.webelements.element import Element
 from seleniumpm.webelements.textelement import TextElement
 from selenium.webdriver.common.by import By
 
@@ -14,6 +15,7 @@ class Wikipedia(Webpage):
         self.headingText = TextElement(driver, Locator(By.ID, "firstHeading"))
         self.bodyText = TextElement(driver, Locator(By.ID, "bodyContent"))
         self.bodyTexts = TextElement(driver, Locator(By.XPATH, "//div[@id='bodyContent']/div/p"))
+        self.bogus_element = Element(driver, Locator.by_xpath("//foo")).mark_do_not_check()
 
     def get_text(self):
         """Retrieves all the words in the body
@@ -23,12 +25,3 @@ class Wikipedia(Webpage):
         for paragraph in paragraphs:
             txt += " {}".format(paragraph.text.encode('ascii', 'ignore'))
         return txt
-
-    def wait_for_page_load(self, timeout=30):
-        self.headingText.wait_for_present_and_visible(timeout=timeout)
-        self.bodyText.wait_for_present_and_visible(timeout=timeout)
-        return self
-
-    def validate(self):
-        self.headingText.wait_for_present_and_visible()
-        self.bodyText.wait_for_present_and_visible()
