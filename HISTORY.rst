@@ -7,13 +7,24 @@ FUTURE (UN-RELEASED)
 **New Features:**
 
 **Fixed:**
-- Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
-- Fixed HISTORY.rst and README.rst files that are malformed sometime after 2.5.1 release
 
-2.7.0 (2017-03-20)
+- Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
+
+2.7.1 (2017-03-20)
 ------------------
 
 **New Features:**
+
+**Fixed:**
+
+- Fixed HISTORY.rst and README.rst files that are malformed sometime after 2.5.1 release
+- Hopefully fixing other issues with 2.7.0 not being installable
+
+2.7.0 (2017-03-20) - BROKEN
+---------------------------
+
+**New Features:**
+
 - Adding a new ability to mark an Element type as 'invisible' so that validations on a Widget or Webpage can be done simply on presence
 - Adding a new ability to mark an Element type as 'do not check' so that you could potentially define an Element that you simply don't validate using the default validation() operation defined on a Widget or a Webpage. This feature should be used sparingly as there are better design patterns to handle **most** cases that you may think that you need to avoid validating the presence of specific Element types.
 
@@ -23,16 +34,17 @@ FUTURE (UN-RELEASED)
 ------------------
 
 **New Features:**
+
 - Adding get_tuple() to Locator object. This is to make passing between SeleniumPM and the Selenium libraries eaiser
 - Adding simpler way of defining Locators. Locators can now be created via Locator.by_xpath(path) or Locator.by_css_selector(path). The following types are supported:
-    * by_xpath(path)
-    * by_css_selector(path)
-    * by_name(path)
-    * by_class_name(path)
-    * by_id(path)
-    * by_link_text(path)
-    * by_partial_link_text(path)
-    * by_tag_name(path)
+   * by_xpath(path)
+   * by_css_selector(path)
+   * by_name(path)
+   * by_class_name(path)
+   * by_id(path)
+   * by_link_text(path)
+   * by_partial_link_text(path)
+   * by_tag_name(path)
 - Adding wait_for_selected() to Element
 - Adding wait_for_clickable() and click_invisible() to Clickable
 - Adding send_keys_delayed() and type_delayed() to TextField
