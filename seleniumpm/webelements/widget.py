@@ -24,6 +24,7 @@ class Widget(Clickable):
                 element.wait_for_present_and_visible(timeout)
             else:
                 element.wait_for_present(timeout)
+        return self
 
     def get_element_attr(self, type=Element):
         """

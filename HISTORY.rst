@@ -9,6 +9,7 @@ FUTURE (UN-RELEASED)
 **Fixed:**
 
 - Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
+- Both Webpage and Widget validate() methods should return self
 
 2.7.1 (2017-03-20)
 ------------------

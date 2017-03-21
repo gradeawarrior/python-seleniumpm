@@ -151,6 +151,7 @@ class Webpage(object):
                 element.wait_for_present_and_visible(timeout)
             else:
                 element.wait_for_present(timeout)
+        return self
 
     def is_page(self, timeout=30, force_check_visibility=False):
         """
