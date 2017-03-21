@@ -9,7 +9,16 @@ FUTURE (UN-RELEASED)
 **Fixed:**
 
 - Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
+
+2.7.2 (2017-03-20)
+--------------------
+
+**New Features:**
+
+**Fixed:**
+
 - Both Webpage and Widget validate() methods should return self
+- Fixing force_check_visibility parameter in Webpage.wait_for_page_load(). The default was set to True instead of False
 
 2.7.1 (2017-03-20)
 ------------------
@@ -21,8 +30,8 @@ FUTURE (UN-RELEASED)
 - Fixed HISTORY.rst and README.rst files that are malformed sometime after 2.5.1 release
 - Hopefully fixing other issues with 2.7.0 not being installable
 
-2.7.0 (2017-03-20) - BROKEN
----------------------------
+2.7.0 (2017-03-20)
+------------------
 
 **New Features:**
 

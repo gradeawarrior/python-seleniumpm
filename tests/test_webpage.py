@@ -107,6 +107,22 @@ class TestWebPage(object):
         elements = wikipedia.get_element_attr(type=TextElement)
         self.assert_elements(elements, expected_count=3)
 
+    def test_validate_returns_self(self):
+        page = testingwebpages.ZeroValidatedElementsPage(self.driver, "https://en.wikipedia.org/wiki/Selenium")
+        page = page.open().validate()
+        assert page != None, "validate returns an object"
+        assert isinstance(page, Webpage), "Ensure returned page is of type Webpage"
+        assert isinstance(page, testingwebpages.ZeroValidatedElementsPage),\
+            "Ensure returned page is of type ZeroValidatedElementPage"
+
+    def test_wait_for_page_load_returns_self(self):
+        page = testingwebpages.ZeroValidatedElementsPage(self.driver, "https://en.wikipedia.org/wiki/Selenium")
+        page = page.open().wait_for_page_load()
+        assert page != None, "validate returns an object"
+        assert isinstance(page, Webpage), "Ensure returned page is of type Webpage"
+        assert isinstance(page, testingwebpages.ZeroValidatedElementsPage), \
+            "Ensure returned page is of type ZeroValidatedElementPage"
+
     def test_zero_validated_webpage(self):
         page = testingwebpages.ZeroValidatedElementsPage(self.driver, "https://en.wikipedia.org/wiki/Selenium")
         elements = page.get_element_attr()

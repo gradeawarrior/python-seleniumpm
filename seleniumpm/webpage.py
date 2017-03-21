@@ -5,6 +5,7 @@ from seleniumpm.webelements.element import Element
 from seleniumpm.webelements.widget import Widget
 from urlparse import urlparse
 import re
+import sys
 
 url_regex = re.compile(
     r'^(?:http|ftp)s?://'  # http:// or https://
@@ -116,7 +117,7 @@ class Webpage(object):
         WebDriverWait(driver=self.driver, timeout=timeout).until(EC.title_contains(title))
         return self
 
-    def wait_for_page_load(self, timeout=30, force_check_visibility=True):
+    def wait_for_page_load(self, timeout=30, force_check_visibility=False):
         """
         This method "waits for page load" by checking that all expected objects are both present and visible on the
         page. This is similar to validate() operation except that sometimes certain pages take a long time to load.
@@ -148,6 +149,9 @@ class Webpage(object):
                 continue
             # Check for presence and visibility
             if force_check_visibility or element.check_visible:
+                # Print to stderr a WARNING message when force_check_visibility=True and element has been marked 'invisible'
+                if force_check_visibility and not element.check_visible:
+                    sys.stderr.write("[WARNING] element {}={} ({}) was marked as 'invisible' but force_check_visibility=True".format(element.locator.by, element.locator.value, self.__class__))
                 element.wait_for_present_and_visible(timeout)
             else:
                 element.wait_for_present(timeout)
