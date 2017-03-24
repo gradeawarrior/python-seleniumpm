@@ -6,9 +6,14 @@ FUTURE (UN-RELEASED)
 
 **New Features:**
 
+- Adding click() operations to a Widget. This is to support the fact that sometimes an entire section of a page can be "clickable"
+- Adding new IFrame type
+
 **Fixed:**
 
 - Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
+- Fixing issue with get_element_attr() method on both a Widget and a Webpage. The problem was that if you marked Widget type as do_not_check, then it should respect both the Widget and all of its embedded elements. The issue was that it would respect that the Widget was marked as do_not_check, but would still enumerate over all of its sub-elements.
+- Fixing another issue with get_element_attr() method on both a Widget and a Webpage. The problem was related to Widget's that are marked "invisible". Similar to do_not_check, sub-elements should not be checked if the top-level Widget is already "invisible".
 
 2.7.2 (2017-03-20)
 ------------------
