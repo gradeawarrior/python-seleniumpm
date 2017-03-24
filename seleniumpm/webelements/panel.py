@@ -1,5 +1,6 @@
 from seleniumpm.webelements.widget import Widget
 
+
 class Panel(Widget):
     """
     The Panel type is a construct for describing a specific section of a page. This is conceptually the same

@@ -103,7 +103,7 @@ class Element(object):
             WebDriverWait(self.driver, timeout).until(
                 EC.visibility_of_element_located((self.locator.by, self.locator.value)))
         except TimeoutException as e:
-            e.message = "TimeoutException waiting for present {}={} with timeout={}s ({})".format(self.locator.by, self.locator.value, timeout, self.__class__)
+            e.message = "TimeoutException waiting for visible {}={} with timeout={}s ({})".format(self.locator.by, self.locator.value, timeout, self.__class__)
             e.msg = e.message
             raise e
         return self

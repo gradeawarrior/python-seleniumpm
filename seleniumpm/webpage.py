@@ -42,13 +42,6 @@ class Webpage(object):
         1) Call the parent class's constructor
         2) You define 'path' attribute (default is "", so it didn't need to be specified in this example)
         3) You add a set of WebElements to your Webpage
-
-    There are two additional methods that you should override from the parent:
-
-        1) wait_for_page_load() - This is used for defining a set of WebElements that can be checked to determine if the
-                                  Webpage was successfully loaded
-        2) validate() - This is used for quick validation of a set of WebElements on a page (e.g.
-                        registration_page.validate())
     """
 
     def __init__(self, driver, url=None):
