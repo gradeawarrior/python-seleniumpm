@@ -10,6 +10,15 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
+2.9.1 (2017-03-27)
+------------------
+
+**New Features:**
+
+**Fixed:**
+
+- Fixing missing implementation to do proper validation of an IFrame that is embedded on a Webpage
+
 2.9.0 (2017-03-27)
 ------------------
 

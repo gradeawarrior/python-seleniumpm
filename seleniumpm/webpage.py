@@ -147,7 +147,10 @@ class Webpage(object):
                 # Print to stderr a WARNING message when force_check_visibility=True and element has been marked 'invisible'
                 if force_check_visibility and not element.check_visible:
                     sys.stderr.write("[WARNING] element {}={} ({}) was marked as 'invisible' but force_check_visibility=True".format(element.locator.by, element.locator.value, self.__class__))
-                element.wait_for_present_and_visible(timeout)
+                if isinstance(element, IFrame):
+                    element.validate(timeout=timeout, force_check_visibility=force_check_visibility)
+                else:
+                    element.wait_for_present_and_visible(timeout)
             else:
                 element.wait_for_present(timeout)
         return self
