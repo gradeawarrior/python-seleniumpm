@@ -6,6 +6,8 @@ FUTURE (UN-RELEASED)
 
 **New Features:**
 
+- Added hightlight() feature to all Element types
+
 **Fixed:**
 
 - Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
