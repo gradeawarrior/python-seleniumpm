@@ -20,6 +20,7 @@ class TestGoogle():
     google = None
     wikipedia = None
 
+    @classmethod
     def setup_class(self):
 
         # Capability for Firefox

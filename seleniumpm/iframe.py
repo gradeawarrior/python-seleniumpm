@@ -2,8 +2,8 @@ from seleniumpm.webelements.panel import Panel
 
 
 class IFrame(Panel):
-    def __init__(self, driver, frame_locator):
-        super(IFrame, self).__init__(driver=driver, locator=frame_locator)
+    def __init__(self, driver, locator):
+        super(IFrame, self).__init__(driver=driver, locator=locator)
 
     def validate(self, timeout=10, force_check_visibility=False):
         self.switch_in()
