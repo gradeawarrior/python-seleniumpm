@@ -20,11 +20,14 @@ FUTURE (UN-RELEASED)
 
 **Fixed:**
 
+- Fixed several critical issues related to get_element_attr(), validate(), and wait_for_page_load() operations on both a Webpage and Widget types
 - Add more unittests for IFrame
 - Fix wait_for_present_and_visible() timeout for the check for visibility. There are scenarios in which an element may be present, but not immediately visible
 
 2.8.0 (2017-03-24)
 ------------------
+
+**New Features:**
 
 - Adding click() operations to a Widget. This is to support the fact that sometimes an entire section of a page can be "clickable"
 - Adding new IFrame type
