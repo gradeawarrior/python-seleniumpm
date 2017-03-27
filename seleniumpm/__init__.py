@@ -9,7 +9,7 @@ Selenium PageModel library
 """
 
 __title__ = 'seleniumpm'
-__version__ = '2.8.0'
+__version__ = '2.9.0'
 __build__ = 0x021000
 __author__ = 'Peter Salas'
 __license__ = 'Apache 2.0'
