@@ -39,6 +39,13 @@ class Element(object):
     def get_text(self):
         return self.get_webelement().text
 
+    def get_texts(self):
+        web_elements = self.get_webelements()
+        results = []
+        for web_element in web_elements:
+            results.append(web_element.text)
+        return results
+
     def get_attribute(self, name):
         self.get_webelement().get_attribute(name)
 
@@ -76,7 +83,10 @@ class Element(object):
         return self
 
     def move_to_element(self):
-        return self.get_action_chains().move_to_element(self.get_webelement())
+        return self.get_action_chains().move_to_element(self.get_webelement()).build().perform()
+
+    def hover_over(self):
+        self.move_to_element()
 
     def wait_for_selected(self, timeout=10):
         try:
