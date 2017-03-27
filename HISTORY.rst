@@ -7,6 +7,7 @@ FUTURE (UN-RELEASED)
 **New Features:**
 
 - Added hightlight() feature to all Element types
+- Implemented pretty-print way of visualizing all attributes and methods for a Webpage. This is useful for documentation as well as for debugging
 
 **Fixed:**
 
