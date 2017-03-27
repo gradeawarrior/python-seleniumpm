@@ -9,7 +9,19 @@ FUTURE (UN-RELEASED)
 **Fixed:**
 
 - Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
+
+2.9.0 (2017-03-27)
+------------------
+
+**New Features:**
+
+- Implement a get_texts() which returns back all the text (in a List) given a locator. This is available for all Element types
+- Implement hover_over() capability to Element
+
+**Fixed:**
+
 - Add more unittests for IFrame
+- Fix wait_for_present_and_visible() timeout for the check for visibility. There are scenarios in which an element may be present, but not immediately visible
 
 2.8.0 (2017-03-24)
 ------------------

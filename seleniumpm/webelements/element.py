@@ -118,9 +118,9 @@ class Element(object):
             raise e
         return self
 
-    def wait_for_present_and_visible(self, timeout=10):
-        self.wait_for_present(timeout)
-        self.wait_for_visible(0)
+    def wait_for_present_and_visible(self, timeout=None, present_timeout=10, visible_timeout=10):
+        self.wait_for_present(timeout if timeout else present_timeout)
+        self.wait_for_visible(timeout if timeout else visible_timeout)
         return self
 
     def __eq__(self, other):
