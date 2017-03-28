@@ -27,17 +27,10 @@ class Webpage(object):
     The first step to do is to write your own class that extends Webpage:
 
         class Google(Webpage):
-            def __init__(self, driver, locator):
-                super(Google, self).__init__(driver, locator)
+            def __init__(self, driver, url=None):
+                super(Google, self).__init__(driver, url)
                 self.path = ""
-                self.search_field = TextField(driver, Locator(By.NAME, 'q'))
-
-            def wait_for_page_load(self, timeout=30):
-                self.search_field.wait_for_present_and_visible(timeout=timeout)
-                return self
-
-            def validate(self, timeout=10):
-                self.search_field.wait_for_present_and_visible(timeout=timeout)
+                self.search_field = TextField(driver, Locator.by_name('q'))
 
     In the constructor, you do the following:
 
