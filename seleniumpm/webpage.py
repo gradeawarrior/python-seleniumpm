@@ -79,6 +79,12 @@ class Webpage(object):
             raise AttributeError("Url is not defined!")
         return self
 
+    def refresh(self):
+        self.driver.refresh()
+
+    def reload(self):
+        self.refresh()
+
     def close(self):
         """Closes the browser
         """
