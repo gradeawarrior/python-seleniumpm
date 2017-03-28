@@ -47,7 +47,7 @@ class Element(object):
         return results
 
     def get_attribute(self, name):
-        self.get_webelement().get_attribute(name)
+        return self.get_webelement().get_attribute(name)
 
     def is_displayed(self):
         return self.get_webelement().is_displayed()
