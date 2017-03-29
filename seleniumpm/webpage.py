@@ -80,9 +80,13 @@ class Webpage(object):
         return self
 
     def refresh(self):
+        """Does a page refresh
+        """
         self.driver.refresh()
 
     def reload(self):
+        """Does a page refresh
+        """
         self.refresh()
 
     def close(self):
@@ -99,6 +103,17 @@ class Webpage(object):
         """Returns the title of the WebPage
         """
         return self.driver.title
+
+    def get_current_url(self):
+        """Returns the current page url
+        """
+        return self.driver.current_url
+
+    @property
+    def current_url(self):
+        """Returns the current page url
+        """
+        return self.get_current_url()
 
     def wait_for_title(self, title, timeout=10):
         """This could be used similar to a wait_for_page_load() if the page title can uniquely identify

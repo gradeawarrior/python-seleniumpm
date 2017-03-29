@@ -60,8 +60,13 @@ class TestGoogle():
 
         # Check the title of the page
         title = self.google.get_title()
-        print "Page title is: {}".format(title)
+        url = self.google.get_current_url()
+        expected_url = 'https://www.google.com/'
+
         # Should see: "cheese! - Google Search"
+        print "Page title is: {}".format(title)
+        print "Url: '{}'".format(url)
+        assert url == expected_url, "Expecting url to be '{}'".format(expected_url)
 
         # Enter something to search for
         self.google.search_field.clear().type(search_term)
@@ -71,8 +76,12 @@ class TestGoogle():
 
         # Check the title of the page
         title = self.google.wait_for_title(search_term).get_title()
+        url = self.google.current_url
+        expected_url = 'https://www.google.com/search?hl=en&source=hp&biw=&bih=&q=Cheese%21&gbv=2&oq=&gs_l='
         print "Page title is: {}".format(title)
+        print "Url: '{}'".format(url)
         assert search_term in title, "Expected '{}' in '{}'".format(search_term, title)
+        assert url == expected_url, "Expecting url to be '{}'".format(expected_url)
         self.google.validate()
 
     def test_get_result_links(self):

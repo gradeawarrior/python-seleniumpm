@@ -11,6 +11,7 @@ FUTURE (UN-RELEASED)
 - Added a global page_element_timeout and page_load_timeout for all of SeleniumPM. Defaults are still 10s for page_element_timeout and 30s for page_load_timeout
 - Added a get_attribute_contains() and a get_attribute_is() on Element type. The intention is to implement and all-in-one solution for both retrieving an attribute and validating whether something contains or is something. This operation is useful for dynamic elements that use css classes for changing the state of a page (e.g. <div class='svgOverviewView-status-icon fa fa-exclamation-triangle svg-status-warning'>); One could define a generic reference to this element, and then use get_attribute_contains() to check if it now contains 'fa-exclamation-triangle' css class.
 - Added a refresh() operation on a Webpage (a.k.a. a page refresh). This of course is simply a driver.refresh() operation on an opened page.
+- Added a get_current_url() operation on a Webpage
 
 **Fixed:**
 
