@@ -14,6 +14,7 @@ FUTURE (UN-RELEASED)
 - Added a get_current_url() operation on a Webpage
 - Added ability to calculate durations between common operations (e.g. page or widget load times)
 - Added get_number(), get_numbers(), get_int(), and get_float() to an Element. This is so that you can quickly and easily get numbers from element(s) text that represent numbers
+- Added take_screenshot() feature to a Webpage. Also added a take_screenshot_on_error annotation for annotating tests.
 
 **Fixed:**
 
