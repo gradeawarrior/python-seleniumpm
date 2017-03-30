@@ -1,3 +1,5 @@
+import re
+
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -5,8 +7,11 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
 from seleniumpm.locator import Locator
 
+# Regular expression to find numbers (both int and float) in a string
+number_re = r'([\-]*\d+\.\d+|[\-]*\d+)'
 
 class Element(object):
+
     def __init__(self, driver, locator):
         if not isinstance(driver, WebDriver):
             raise AttributeError("driver was not an expected RemoteWebdriver type!")
@@ -45,6 +50,67 @@ class Element(object):
         for web_element in web_elements:
             results.append(web_element.text)
         return results
+
+    def get_number(self, string=None, result_index=0):
+        """
+        This simplifies getting a number from an element
+
+        :param string: (Optional) Default: None - This is a string that we want to extract a number from. By default
+                        this is implicitly doing an element.text operation to retrieve the string.
+        :param result_index: (Optional) Default: 0 - By default, converts and returns the first matching set. This can
+                                be changed to return the n'th matching set
+        :return: A number that can be (i) an int, (ii) a float, or (iii) None if neither.
+        """
+        string = self.get_text() if string == None else string
+        try:
+            return self.get_int(string, result_index)
+        except ValueError:
+            try:
+                return self.get_float(string, result_index)
+            except ValueError:
+                return None
+
+    def get_numbers(self):
+        """
+        This simplifies getting a list of numbers from a set of web elements
+
+        :return: A list of numbers where each item can be (i) an int, (ii) a float, or (iii) None if neither.
+        """
+        web_elements = self.get_webelements()
+        results = []
+        for web_element in web_elements:
+            results.append(self.get_number(web_element.text))
+        return results
+
+    def get_int(self, string=None, result_index=0):
+        """
+        This simplifies getting an integer from an element
+
+        :param string: (Optional) Default: None - This is a string that we want to extract a number from. By default
+                        this is implicitly doing an element.text operation to retrieve the string.
+        :param result_index: (Optional) Default: 0 - By default, converts and returns the first matching set. This can
+                                be changed to return the n'th matching set
+        :return: an integer value
+        :raises ValueError: if the element text is not an integer
+        """
+        string = self.get_text() if string == None else string
+        results = map(int, re.findall(number_re, string))
+        return results[result_index] if len(results) > 0 else None
+
+    def get_float(self, string=None, result_index=0):
+        """
+        This simplifies getting an float from an element
+
+        :param string: (Optional) Default: None - This is a string that we want to extract a number from. By default
+                        this is implicitly doing an element.text operation to retrieve the string.
+        :param result_index: (Optional) Default: 0 - By default, converts and returns the first matching set. This can
+                                be changed to return the n'th matching set
+        :return: an float value
+        :raises ValueError: if the element text is not an float
+        """
+        string = self.get_text() if string == None else string
+        results = map(float, re.findall(number_re, string))
+        return results[result_index] if len(results) > 0 else None
 
     def get_attribute(self, name):
         return self.get_webelement().get_attribute(name)
