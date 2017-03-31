@@ -113,7 +113,36 @@ class Element(object):
         return results[result_index] if len(results) > 0 else None
 
     def get_attribute(self, name):
+        """
+        Performs a Webelement.get_attribute() and thus returns back a string
+
+        :param name: This is the attribute that you want to retrieve (e.g. class or href) the value of
+        :return: string
+        """
         return self.get_webelement().get_attribute(name)
+
+    def get_attribute_contains(self, name, value):
+        """
+        Returns True|False depending on whether or not the specified value is in the results. This is implemented
+        specifically for matching css classes, and thus the attribute values **MUST** be space-delimited
+
+        :param name: The attribute name to retrieve
+        :param value: A specific attribute value that you want to match
+        :return: True|False if the attribute value is in the list
+        """
+        attribute = self.get_attribute(name)
+        attributes = attribute.split()
+        return True if value in attributes else False
+
+    def get_attribute_is(self, name, value):
+        """
+        Returns True|False depending on whether or not the specified value matches the returned attribute value
+
+        :param name: The attribute name to retrieve
+        :param value: A specific attribute value that you want to match
+        :return: True|False if the attribute value is an exact match
+        """
+        return True if self.get_attribute(name) == value else False
 
     def is_displayed(self):
         return self.get_webelement().is_displayed()

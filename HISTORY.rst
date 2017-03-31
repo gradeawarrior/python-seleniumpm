@@ -9,16 +9,26 @@ FUTURE (UN-RELEASED)
 - Added hightlight() feature to all Element types
 - Added pretty-print way of visualizing all attributes and methods for a Webpage. This is useful for documentation as well as for debugging
 - Added a global page_element_timeout and page_load_timeout for all of SeleniumPM. Defaults are still 10s for page_element_timeout and 30s for page_load_timeout
-- Added a get_attribute_contains() and a get_attribute_is() on Element type. The intention is to implement an all-in-one solution for both retrieving an attribute and validating whether something contains or is something. This operation is useful for dynamic elements that use css classes for changing the state of a page (e.g. <div class='svgOverviewView-status-icon fa fa-exclamation-triangle svg-status-warning'>); One could define a generic reference to this element, and then use get_attribute_contains() to check if it now contains 'fa-exclamation-triangle' css class.
-- Added a refresh() operation on a Webpage (a.k.a. a page refresh). This of course is simply a driver.refresh() operation on an opened page.
-- Added a get_current_url() operation on a Webpage
 - Added ability to calculate durations between common operations (e.g. page or widget load times)
-- Added get_number(), get_numbers(), get_int(), and get_float() to an Element. This is so that you can quickly and easily get numbers from element(s) text that represent numbers
 - Added take_screenshot() feature to a Webpage. Also added a take_screenshot_on_error annotation for annotating tests.
+- Added an "access element" abstraction layer so that you can retrieve any element defined any levels deep (e.g. A button defined within a Panel that is under an IFrame). The idea is simple: If I want to click a button 2-levels-deep, I can do that either by (1) page.iframe.panel1.login_button.click(), or (2) through an exposed abstraction page.login_button.click()
 
 **Fixed:**
 
 - Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
+
+2.10.0 (UN-RELEASED)
+--------------------
+
+**New Features:**
+
+- Added a get_attribute_contains() and a get_attribute_is() on Element type. The intention is to implement an all-in-one solution for both retrieving an attribute and validating whether something contains or is something. This operation is useful for dynamic elements that use css classes for changing the state of a page (e.g. <div class='svgOverviewView-status-icon fa fa-exclamation-triangle svg-status-warning'>); One could define a generic reference to this element, and then use get_attribute_contains() to check if it now contains 'fa-exclamation-triangle' css class.
+- Added a refresh() operation on a Webpage (a.k.a. a page refresh). This of course is simply a driver.refresh() operation on an opened page.
+- Added a get_current_url() operation on a Webpage
+- Added get_number(), get_numbers(), get_int(), and get_float() to an Element. This is so that you can quickly and easily get numbers from element(s) text that represent numbers
+
+**Fixed:**
+
 - Fixing issue with get_attribute() on Element. This method did not have an expected return statement
 
 2.9.1 (2017-03-27)
