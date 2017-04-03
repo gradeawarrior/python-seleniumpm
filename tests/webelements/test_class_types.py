@@ -13,6 +13,8 @@ from seleniumpm.webelements.textelement import TextElement
 from seleniumpm.webelements.textfield import TextField
 from seleniumpm.webelements.radiobutton import RadioButton
 from seleniumpm.webelements.widget import Widget
+from seleniumpm.webelements.panel import Panel
+from seleniumpm.iframe import IFrame
 from seleniumpm.webpage import Webpage
 
 class TestClassTypes(object):
@@ -130,3 +132,22 @@ class TestClassTypes(object):
         assert isinstance(widget, Clickable)
         assert isinstance(widget, Element)
         assert isinstance(widget, object)
+
+    def test_panel(self):
+        """Panel --> Widget --> Clickable --> Element --> object"""
+        panel = Panel(self.driver, Locator(By.XPATH, "//foo"))
+        assert isinstance(panel, Panel)
+        assert isinstance(panel, Widget)
+        assert isinstance(panel, Clickable)
+        assert isinstance(panel, Element)
+        assert isinstance(panel, object)
+
+    def test_iframe(self):
+        """IFrame --> Panel --> Widget --> Clickable --> Element --> object"""
+        iframe = IFrame(self.driver, Locator(By.XPATH, "//foo"))
+        assert isinstance(iframe, IFrame)
+        assert isinstance(iframe, Panel)
+        assert isinstance(iframe, Widget)
+        assert isinstance(iframe, Clickable)
+        assert isinstance(iframe, Element)
+        assert isinstance(iframe, object)
