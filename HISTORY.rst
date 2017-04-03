@@ -11,7 +11,6 @@ FUTURE (UN-RELEASED)
 - Added a global page_element_timeout and page_load_timeout for all of SeleniumPM. Defaults are still 10s for page_element_timeout and 30s for page_load_timeout
 - Added ability to calculate durations between common operations (e.g. page or widget load times)
 - Added take_screenshot() feature to a Webpage. Also added a take_screenshot_on_error annotation for annotating tests.
-- Added an "access element" abstraction layer so that you can retrieve any element defined any levels deep (e.g. A button defined within a Panel that is under an IFrame). The idea is simple: If I want to click a button 2-levels-deep, I can do that either by (1) page.iframe.panel1.login_button.click(), or (2) through an exposed abstraction page.login_button.click()
 
 **Fixed:**
 
@@ -26,6 +25,7 @@ FUTURE (UN-RELEASED)
 - Added a refresh() operation on a Webpage (a.k.a. a page refresh). This of course is simply a driver.refresh() operation on an opened page.
 - Added a get_current_url() operation on a Webpage
 - Added get_number(), get_numbers(), get_int(), and get_float() to an Element. This is so that you can quickly and easily get numbers from element(s) text that represent numbers
+- Added an "access element" abstraction layer so that you can retrieve any element defined any levels deep (e.g. A button defined within a Panel that is under an IFrame). The idea is simple: If I want to click a button 2-levels-deep, this can be done either by (1) page.iframe.panel1.login_button.click(), or (2) through an exposed abstraction page.login_button.click()
 
 **Fixed:**
 

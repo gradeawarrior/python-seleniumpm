@@ -30,9 +30,9 @@ class MyComplexPage(Webpage):
 class MyComplexWidget(Widget):
     def __init__(self, driver, locator):
         super(MyComplexWidget, self).__init__(driver=driver, locator=locator)
-        self.regular_element = Element(driver, Locator.by_xpath("//d"))
-        self.invisible_element = Element(driver, Locator.by_xpath("//e")).mark_invisible()
-        self.not_checked_element = Element(driver, Locator.by_xpath("//f")).mark_do_not_check()
+        self.regular_element_on_widget = Element(driver, Locator.by_xpath("//d"))
+        self.invisible_element_on_widget = Element(driver, Locator.by_xpath("//e")).mark_invisible()
+        self.not_checked_element_on_widget = Element(driver, Locator.by_xpath("//f")).mark_do_not_check()
 
 class MyComplexPanel(Panel):
     def __init__(self, driver, locator):

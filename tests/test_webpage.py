@@ -325,3 +325,112 @@ class TestWebPage(object):
         except AttributeError:
             pass
 
+    def test_access_element_defined_directly_on_webpage(self):
+        page = testingwebpages.MyComplexPage(self.driver)
+
+        # None of these should throw an AttributeError
+        page.regular_element
+        page.invisible_element
+        page.not_checked_element
+
+    def test_get_element_attr_dict(self):
+        page = testingwebpages.MyComplexPage(self.driver)
+        elements = page.get_element_attr(result_type=dict)
+        assert len(elements) == 3, 'Expecting 3 elements'
+        assert 'regular_element' in elements
+        assert 'invisible_element' in elements
+        assert 'not_checked_element' in elements
+
+    def test_get_element_attr_dict_with_iframe(self):
+        page = testingwebpages.MyComplexPage(self.driver)
+        visible_iframe = testingwebpages.MyComplexIframe(self.driver, Locator.by_xpath("//iframe"))
+        page.visible_iframe = visible_iframe
+        elements = page.get_element_attr(result_type=dict)
+        assert len(elements) == 4, 'Expecting 4 elements'
+        assert 'regular_element' in elements
+        assert 'invisible_element' in elements
+        assert 'not_checked_element' in elements
+        assert 'visible_iframe' in elements
+
+    def test_get_element_attr_dict_with_expanded_widget(self):
+        page = testingwebpages.MyComplexPage(self.driver)
+        visible_widget = testingwebpages.MyComplexWidget(self.driver, Locator.by_xpath("//widget"))
+        page.visible_widget = visible_widget
+        elements = page.get_element_attr(result_type=dict)
+        assert len(elements) == 7, 'Expecting 7 elements'
+        assert 'regular_element' in elements
+        assert 'invisible_element' in elements
+        assert 'not_checked_element' in elements
+        assert 'visible_widget' in elements
+        assert 'regular_element_on_widget' in elements
+        assert 'invisible_element_on_widget' in elements
+        assert 'not_checked_element_on_widget' in elements
+
+    def test_get_element_attr_dict_with_expanded_iframe(self):
+        page = testingwebpages.MyComplexPage(self.driver)
+        visible_iframe = testingwebpages.MyComplexIframe(self.driver, Locator.by_xpath("//iframe"))
+        page.visible_iframe = visible_iframe
+        elements = page.get_element_attr(result_type=dict, expand_iframe_elements=True)
+        assert len(elements) == 7, 'Expecting 7 elements'
+        assert 'regular_element' in elements
+        assert 'invisible_element' in elements
+        assert 'not_checked_element' in elements
+        assert 'visible_iframe' in elements
+        assert 'visible_iframe_regular_element' in elements
+        assert 'visible_iframe_invisible_element' in elements
+        assert 'visible_iframe_not_checked_element' in elements
+
+    def test_access_element_defined_indirectly_on_webpage(self):
+        page = testingwebpages.MyComplexPage(self.driver)
+
+        # None of these should throw an AttributeError
+        page.regular_element
+        page.invisible_element
+        page.not_checked_element
+
+    def test_access_element_not_defined_directly_on_webpage(self):
+        page = testingwebpages.MyComplexPage(self.driver)
+        visible_widget = testingwebpages.MyComplexWidget(self.driver, Locator.by_xpath("//widget"))
+        page.visible_widget = visible_widget
+
+        # None of these should throw an AttributeError
+        page.regular_element
+        page.invisible_element
+        page.not_checked_element
+        page.visible_widget
+        page.regular_element_on_widget
+        page.invisible_element_on_widget
+        page.not_checked_element_on_widget
+
+    def test_access_element_not_defined_directly_on_webpage_with_duplicates(self):
+        page = testingwebpages.MyComplexPage(self.driver)
+        visible_iframe = testingwebpages.MyComplexIframe(self.driver, Locator.by_xpath("//iframe"))
+        visible_widget = testingwebpages.MyComplexWidget(self.driver, Locator.by_xpath("//widget"))
+        page.visible_iframe = visible_iframe
+        page.visible_widget = visible_widget
+
+        # None of these should throw an AttributeError
+        page.regular_element
+        page.invisible_element
+        page.not_checked_element
+        page.visible_iframe
+        page.visible_iframe_regular_element
+        page.visible_iframe_invisible_element
+        page.visible_iframe_not_checked_element
+        page.visible_widget
+        page.regular_element_on_widget
+        page.invisible_element_on_widget
+        page.not_checked_element_on_widget
+
+    def test_access_element_not_definedy_on_webpage(self):
+        page = testingwebpages.MyComplexPage(self.driver)
+        visible_iframe = testingwebpages.MyComplexIframe(self.driver, Locator.by_xpath("//iframe"))
+        visible_widget = testingwebpages.MyComplexWidget(self.driver, Locator.by_xpath("//widget"))
+        page.visible_iframe = visible_iframe
+        page.visible_widget = visible_widget
+
+        try:
+            page.foobar
+            assert False, "Expecting page.foobar to throw an AttributeError!"
+        except AttributeError:
+            pass

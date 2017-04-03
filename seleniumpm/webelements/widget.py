@@ -37,35 +37,110 @@ class Widget(Clickable):
                 element.wait_for_present(timeout)
         return self
 
-    def get_element_attr(self, type=Element, expand_iframe_elements=False):
+    def get_element_attr(self, type=Element, override_check_visible=False, override_do_not_check=False, expand_iframe_elements=False, result_type=list, attr_name='widget'):
         """
         Retrieves a list of WebElements on a Widget. Optionally, you can pass in a different type (e.g. Button,
         Link, TextElement) to return only those types associated with a Widget object.
 
         :param type: one of the seleniumpm.webelement types (Default: seleniumpm.webelements.Element)
+        :param override_check_visible: (Default: False) This overrides check for visibility. By default, widgets that are
+                                        invisible, means that we assume its elements are also invisible
+        :param override_do_not_check: (Default: False) This overrides check for do_not_check. By default, widgets that are
+                                        marked as do_not_check, means that we assume its elements are not accessible
         :param expand_iframe_elements: (Default: False) Elements within an iFrame must be kept together in order to execute validate()
-        :return: This is a list of attributes of base type seleniumpm.webelements.Element
+        :param result_type: (Default: list) This value can either be (list|dict). By default, we simply want a list of
+                            available elements on the page. However, the dictionary version is implemented for the ability
+                            to retrieve every element and sub-element on a Webpage directly from the page level
+        :param attr_name: (Default: 'widget') This is for passing the attribute name from its parent when recursively
+                            iterating through all of its sub-elements.
+        :return: This is a list or dict of attributes of base type seleniumpm.webelements.Element
         """
         from seleniumpm.iframe import IFrame
         from seleniumpm.webelements.panel import Panel
-        elements = []
+        if result_type != list and result_type != dict:
+            raise AttributeError("result_type can either be 'list' (default) or 'dict', but was '{}'".format(result_type))
+        elements = [] if result_type == list else {}
+        temp_widgets = {}
         # Add myself if I match the expected type
-        if isinstance(self, type) and not isinstance(self, IFrame):
-            elements.append(self)
+        if isinstance(self, type) and (not isinstance(self, IFrame) or expand_iframe_elements):
+            if result_type == dict:
+                elements[attr_name] = self
+            else:
+                elements.append(self)
         for attr in dir(self):
             element = getattr(self, attr)
             # Ensure that it is of type Element
             if isinstance(element, Element):
                 # If it is a widget, then recursively drill down and get its Elements
                 if isinstance(element, Widget):
-                    # Check if widget is a type of iFrame, then override expanding elements
-                    if element.check_visible and not element.do_not_check and not isinstance(element, IFrame) or (isinstance(element, IFrame) and expand_iframe_elements):
-                        for welement in element.get_element_attr(type=type):
-                            elements.append(welement)
+                    # Check if widget is a type of iFrame and also check for visibility
+                    if (element.check_visible or override_check_visible) and \
+                            (not element.do_not_check or override_do_not_check) and \
+                            not isinstance(element, IFrame) or \
+                            ((isinstance(element, IFrame) and expand_iframe_elements)):
+                        if result_type == dict:
+                            temp_widgets[attr] = []
+                            for key, value in element.get_element_attr(type=type,
+                                                                       override_check_visible=override_check_visible,
+                                                                       override_do_not_check=override_do_not_check,
+                                                                       expand_iframe_elements=expand_iframe_elements,
+                                                                       result_type=result_type,
+                                                                       attr_name=attr).items():
+                                temp_widgets[attr].append({'key': key, 'value': value})
+                        else:
+                            for welement in element.get_element_attr(type=type):
+                                elements.append(welement)
                     # Add the widget but not its sub-elements if invisible
                     else:
-                        elements.append(element)
+                        if result_type == dict:
+                            elements[attr] = element
+                        else:
+                            elements.append(element)
                 # Add the element if it matches the expected type (not a Widget)
                 if type not in (Widget, Panel, IFrame) and isinstance(element, type) and not isinstance(element, Widget):
-                    elements.append(element)
+                    if result_type == dict:
+                        elements[attr] = element
+                    else:
+                        elements.append(element)
+
+        # Give non-widgets priority, hence why there is a separate loop for widgets and their elements
+        for attr, values in temp_widgets.items():
+            for element in values:
+                if element['key'] not in elements:
+                    elements[element['key']] = element['value']
+                else:
+                    elements["{}_{}".format(attr, element['key'])] = element['value']
         return elements
+
+    def get_all_elements_on_widget(self):
+        """
+        Retrieves all the webelements that have been defined on the widget. This includes all sub-elements found on
+        widgets, panels, and iframes.
+
+        :return: A dict of all the elements
+        """
+        return self.get_element_attr(override_check_visible=True,
+                                     override_do_not_check=True,
+                                     expand_iframe_elements=True,
+                                     result_type=dict)
+
+    def __getattr__(self, name):
+        """
+        Overridden method so that we can also be able to directly access all webelements defined at lower level
+        webelements (a.k.a. widgets, panels, and iframes)
+
+        :param name: The name of the attribute or webelement that we expect to exist on the Webpage
+        :return: The attribute value if found
+        :raises AttributeError: If the attribute with given name doesn't exist
+        """
+        # Need to escape a potential infinite recursion for the following names
+        if name in ('__members__', '__methods__'):
+            return
+        # Checking if the element is defined in the sub-widgets, panels, or iframes
+        all_elements = self.get_all_elements_on_widget()
+        if name in all_elements:
+            return all_elements[name]
+        else:
+            raise AttributeError(
+                "'{}' webpage and its widgets has no attribute '{}'. The following are valid webelements on the page:\n  - {}".format(
+                    self.__class__.__name__, name, "\n  - ".join(all_elements.keys())))
