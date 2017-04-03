@@ -6,15 +6,15 @@ FUTURE (UN-RELEASED)
 
 **New Features:**
 
-- Added hightlight() feature to all Element types
+- Added take_screenshot() feature to a Webpage. Also added a take_screenshot_on_error annotation for annotating tests.
 - Added pretty-print way of visualizing all attributes and methods for a Webpage. This is useful for documentation as well as for debugging
+- Added highlight() feature to all Element types
 - Added a global page_element_timeout and page_load_timeout for all of SeleniumPM. Defaults are still 10s for page_element_timeout and 30s for page_load_timeout
 - Added ability to calculate durations between common operations (e.g. page or widget load times)
-- Added take_screenshot() feature to a Webpage. Also added a take_screenshot_on_error annotation for annotating tests.
 
 **Fixed:**
 
-- Moving upload of wheel to use to twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
+- Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
 2.10.0 (UN-RELEASED)
 --------------------
