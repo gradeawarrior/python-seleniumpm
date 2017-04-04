@@ -8,7 +8,8 @@ class Clickable(Element):
     def __init__(self, driver, locator):
         super(Clickable, self).__init__(driver, locator)
 
-    def wait_for_clickable(self, timeout=10):
+    def wait_for_clickable(self, timeout=None):
+        timeout = timeout if timeout is not None else self.element_timeout
         try:
             WebDriverWait(self.driver, timeout).until(
                 EC.element_to_be_clickable((self.locator.by, self.locator.value)))

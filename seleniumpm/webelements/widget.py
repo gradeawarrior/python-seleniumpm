@@ -8,7 +8,7 @@ class Widget(Clickable):
     def __init__(self, driver, locator):
         super(Clickable, self).__init__(driver, locator)
 
-    def validate(self, timeout=10, force_check_visibility=False):
+    def validate(self, timeout=None, force_check_visibility=False):
         """
         The intention of validate is to make sure that an already loaded widget contains these elements.
         :param timeout: (Default: 10s) The number of seconds to poll waiting for an element
@@ -17,6 +17,7 @@ class Widget(Clickable):
                                        this to 'True' means you want to check for both present and visible.
         :raises TimeoutException: if an element doesn't appear within timeout
         """
+        timeout = timeout if timeout is not None else self.element_timeout
         from seleniumpm.iframe import IFrame
         for element in self.get_element_attr(expand_iframe_elements=False):
             # Continue if the element has marked itself do_not_check=True

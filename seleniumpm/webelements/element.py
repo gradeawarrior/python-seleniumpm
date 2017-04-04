@@ -1,5 +1,6 @@
 import re
 
+import seleniumpm.config as seleniumconfig
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -153,22 +154,27 @@ class Element(object):
     def is_selected(self):
         return self.get_webelement().is_selected()
 
-    def is_present(self, timeout=10):
+    def is_present(self, timeout=None):
+        timeout = timeout if timeout is not None else self.element_timeout
         try:
             self.wait_for_present(timeout)
             return True
         except:
             return False
 
-    def is_visible(self, timeout=10):
+    def is_visible(self, timeout=None):
+        timeout = timeout if timeout is not None else self.element_timeout
         try:
             self.wait_for_visible(timeout)
             return True
         except:
             return False
 
-    def is_present_and_visible(self, timeout=10):
-        return self.is_present(timeout) and self.is_visible(0)
+    def is_present_and_visible(self, timeout=None, present_timeout=None, visible_timeout=None):
+        present_timeout = present_timeout if present_timeout is not None else self.element_timeout
+        visible_timeout = visible_timeout if visible_timeout is not None else self.element_timeout
+        return self.is_present(timeout if timeout is not None else present_timeout) and \
+               self.is_visible(timeout if timeout is not None else visible_timeout)
 
     def set_focus(self):
         return self.scroll_into_view()
@@ -183,7 +189,8 @@ class Element(object):
     def hover_over(self):
         self.move_to_element()
 
-    def wait_for_selected(self, timeout=10):
+    def wait_for_selected(self, timeout=None):
+        timeout = timeout if timeout is not None else self.element_timeout
         try:
             WebDriverWait(self.driver, timeout).until(
                 EC.element_to_be_selected((self.locator.by, self.locator.value)))
@@ -193,7 +200,8 @@ class Element(object):
             raise e
         return self
 
-    def wait_for_present(self, timeout=10):
+    def wait_for_present(self, timeout=None):
+        timeout = timeout if timeout is not None else self.element_timeout
         try:
             WebDriverWait(self.driver, timeout).until(
                 EC.presence_of_element_located((self.locator.by, self.locator.value)))
@@ -203,7 +211,8 @@ class Element(object):
             raise e
         return self
 
-    def wait_for_visible(self, timeout=10):
+    def wait_for_visible(self, timeout=None):
+        timeout = timeout if timeout is not None else self.element_timeout
         try:
             WebDriverWait(self.driver, timeout).until(
                 EC.visibility_of_element_located((self.locator.by, self.locator.value)))
@@ -213,9 +222,11 @@ class Element(object):
             raise e
         return self
 
-    def wait_for_present_and_visible(self, timeout=None, present_timeout=10, visible_timeout=10):
-        self.wait_for_present(timeout if timeout else present_timeout)
-        self.wait_for_visible(timeout if timeout else visible_timeout)
+    def wait_for_present_and_visible(self, timeout=None, present_timeout=None, visible_timeout=None):
+        present_timeout = present_timeout if present_timeout is not None else self.element_timeout
+        visible_timeout = visible_timeout if visible_timeout is not None else self.element_timeout
+        self.wait_for_present(timeout if timeout is not None else present_timeout)
+        self.wait_for_visible(timeout if timeout is not None else visible_timeout)
         return self
 
     def __eq__(self, other):
@@ -230,3 +241,17 @@ class Element(object):
 
     def __hash__(self):
         return hash(tuple(sorted(self.__dict__.items())))
+
+    @property
+    def page_timeout(self):
+        return self.get_page_timeout()
+
+    @property
+    def element_timeout(self):
+        return self.get_element_timeout()
+
+    def get_page_timeout(self):
+        return seleniumconfig.page_timeout_in_sec
+
+    def get_element_timeout(self):
+        return seleniumconfig.element_timeout_in_sec

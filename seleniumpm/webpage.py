@@ -1,10 +1,14 @@
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+import seleniumpm.config as seleniumconfig
+
 from seleniumpm.iframe import IFrame
 from seleniumpm.webelements.element import Element
 from seleniumpm.webelements.widget import Widget
 from seleniumpm.webelements.panel import Panel
+
 from urlparse import urlparse
 import re
 import sys
@@ -115,18 +119,33 @@ class Webpage(object):
         """
         return self.get_current_url()
 
-    def wait_for_title(self, title, timeout=10):
+    @property
+    def page_timeout(self):
+        return self.get_page_timeout()
+
+    @property
+    def element_timeout(self):
+        return self.get_element_timeout()
+
+    def get_page_timeout(self):
+        return seleniumconfig.page_timeout_in_sec
+
+    def get_element_timeout(self):
+        return seleniumconfig.element_timeout_in_sec
+
+    def wait_for_title(self, title, timeout=None):
         """This could be used similar to a wait_for_page_load() if the page title can uniquely identify
         different pages or states of the page. Google Search works like this.
 
         :param title: The title to search for (case sensitive)
-        :param timeout: The number of seconds to wait - Default: 10
+        :param timeout: The number of seconds to wait - Default: 10s
         :raises TimeoutException: if the title does not appear within timeout period
         """
+        timeout = timeout if timeout is not None else self.element_timeout
         WebDriverWait(driver=self.driver, timeout=timeout).until(EC.title_contains(title))
         return self
 
-    def wait_for_page_load(self, timeout=30, force_check_visibility=False):
+    def wait_for_page_load(self, timeout=None, force_check_visibility=False):
         """
         This method "waits for page load" by checking that all expected objects are both present and visible on the
         page. This is similar to validate() operation except that sometimes certain pages take a long time to load.
@@ -139,10 +158,11 @@ class Webpage(object):
         :return: self if everything is successful
         :raises TimeoutException: if an element doesn't appear within timeout
         """
+        timeout = timeout if timeout is not None else self.page_timeout
         self.validate(timeout=timeout, force_check_visibility=force_check_visibility)
         return self
 
-    def validate(self, timeout=10, force_check_visibility=False):
+    def validate(self, timeout=None, force_check_visibility=False):
         """
         The intention of validate is to make sure that an already loaded webpage contains these elements.
 
@@ -152,6 +172,7 @@ class Webpage(object):
                                        this to 'True' means you want to check for both present and visible.
         :raises TimeoutException: if an element doesn't appear within timeout
         """
+        timeout = timeout if timeout is not None else self.element_timeout
         for element in self.get_element_attr():
             # Continue if the element has marked itself do_not_check=True
             if element.do_not_check:
@@ -171,7 +192,7 @@ class Webpage(object):
                 element.wait_for_present(timeout)
         return self
 
-    def is_page(self, timeout=30, force_check_visibility=False):
+    def is_page(self, timeout=None, force_check_visibility=False):
         """
         This is like validate() operation except that it returns a boolean True/False. The idea is to
         ask whether or not you are on a page; this is an implementation of that idea. There are of course
@@ -183,6 +204,7 @@ class Webpage(object):
                                        this to 'True' means you want to check for both present and visible.
         :return: True if validate() does not throw an exception; False otherwise
         """
+        timeout = timeout if timeout is not None else self.page_timeout
         try:
             self.validate(timeout=timeout, force_check_visibility=force_check_visibility)
             return True
@@ -278,9 +300,9 @@ class Webpage(object):
         :return: A dict of all the elements
         """
         return self.get_element_attr(override_check_visible=True,
-                                             override_do_not_check=True,
-                                             expand_iframe_elements=True,
-                                             result_type=dict)
+                                     override_do_not_check=True,
+                                     expand_iframe_elements=True,
+                                     result_type=dict)
 
     def __getattr__(self, name):
         """

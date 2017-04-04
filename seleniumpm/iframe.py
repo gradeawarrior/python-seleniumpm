@@ -5,7 +5,8 @@ class IFrame(Panel):
     def __init__(self, driver, locator):
         super(IFrame, self).__init__(driver=driver, locator=locator)
 
-    def validate(self, timeout=10, force_check_visibility=False):
+    def validate(self, timeout=None, force_check_visibility=False):
+        timeout = timeout if timeout is not None else self.element_timeout
         self.switch_in()
         super(IFrame, self).validate(timeout=timeout, force_check_visibility=force_check_visibility)
         self.switch_out()
