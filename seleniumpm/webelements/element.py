@@ -329,6 +329,20 @@ class Element(object):
     def __hash__(self):
         return hash(tuple(sorted(self.__dict__.items())))
 
+    def dict(self):
+        """
+        This returns a dictionary representation of a Element
+
+        :return: a dict representation of a Element
+        """
+        return {
+            'type': self.__class__.__name__,
+            'package': self.__module__,
+            'locator': self.locator.dict(),
+            'check_visible': self.check_visible,
+            'do_not_check': self.do_not_check
+        }
+
     @property
     def page_timeout(self):
         return self.get_page_timeout()

@@ -32,6 +32,12 @@ class Locator(object):
     def copy(self):
         return copy.deepcopy(self)
 
+    def dict(self):
+        return {
+            'by': self.by,
+            'value': self.value
+        }
+
     @staticmethod
     def by_xpath(value):
         return Locator(by=By.XPATH, value=value)

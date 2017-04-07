@@ -12,10 +12,13 @@ from seleniumpm.webelements.panel import Panel
 from functools import wraps
 from urlparse import urlparse
 import base64
+import inspect
+import json
 import os
 import re
 import sys
 import time
+import types
 
 url_regex = re.compile(
     r'^(?:http|ftp)s?://'  # http:// or https://
@@ -140,6 +143,39 @@ class Webpage(object):
         """Returns the title of the WebPage
         """
         return self.driver.title
+
+    def dict(self, simple=False):
+        """
+        This returns a dictionary representation of the Webpage
+
+        :param simple: (Default: False) If set to True, this will return a simple representation of a Webpage containing
+                        only the list of 'methods' and a list of 'accessible_elements'
+        :return: a dict representation of a Webpage
+        """
+        dictionary = {
+            'type': "{}.{}".format(self.__module__, self.__class__.__name__),
+        }
+        if not simple:
+            dictionary['url'] = self.url.geturl()
+            dictionary['path'] = self.path
+            elements = self.get_element_attr_local()
+            dictionary['elements'] = {}
+            for key, element in elements.iteritems():
+                dictionary['elements'][key] = element.dict()
+        methods = self.get_methods_local()
+        dictionary['methods'] = methods.keys() if simple else methods
+        dictionary['accessible_elements'] = self.get_all_elements_on_page().keys()
+        return dictionary
+
+    def to_json(self, simple=False):
+        """Returns a json string
+        """
+        return json.dumps(self.dict(simple=simple))
+
+    def to_json_pp(self, simple=False):
+        """Returns a pretty-print json string
+        """
+        return json.dumps(self.dict(simple=simple), indent=4)
 
     def get_current_url(self):
         """Returns the current page url
@@ -361,6 +397,36 @@ class Webpage(object):
                     "If necessary, please mark at least 1 of them using 'mark_do_not_check()'")
 
         return elements
+
+    def get_element_attr_local(self):
+        """
+        This is a much simpler implement of get_element_attr() in that it only returns back the locally defined
+        Elements, and not any elements defined in sub-Widgets and sub-Panels.
+
+        :return: A dict of Element types
+        """
+        elements = {}
+        for attr in dir(self):
+            element = getattr(self, attr)
+            if isinstance(element, Element) and attr in self.__dict__.keys():
+                elements[attr] = element
+        return elements
+
+    def get_methods_local(self):
+        """
+        Returns only the local methods defined for this class
+
+        :return: a dict containing method names (keys) and a list of parameters for the method (values)
+        """
+        results = {}
+        for attr in dir(self):
+            method = getattr(self, attr)
+            if type(method) == types.MethodType and \
+                            method.__name__ not in ('__init__') and \
+                            method.__func__ in method.im_class.__dict__.values():
+                args = inspect.getargspec(method)[0][1:]
+                results[method.__name__] = args
+        return results
 
     def get_all_elements_on_page(self):
         """

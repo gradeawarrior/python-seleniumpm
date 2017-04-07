@@ -1,4 +1,6 @@
+import inspect
 import sys
+import types
 
 from seleniumpm.webelements.clickable import Clickable
 from seleniumpm.webelements.element import Element
@@ -7,6 +9,20 @@ from seleniumpm.webelements.element import Element
 class Widget(Clickable):
     def __init__(self, driver, locator):
         super(Clickable, self).__init__(driver, locator)
+
+    def dict(self):
+        """
+        This returns a dictionary representation of a Widget
+
+        :return: a dict representation of a Widget
+        """
+        dictionary = super(Widget, self).dict()
+        elements = self.get_element_attr_local()
+        dictionary['elements'] = {}
+        for key, element in elements.iteritems():
+            dictionary['elements'][key] = element.dict()
+        dictionary['methods'] = self.get_methods_local()
+        return dictionary
 
     def validate(self, timeout=None, force_check_visibility=False):
         """
@@ -112,6 +128,36 @@ class Widget(Clickable):
                 else:
                     elements["{}_{}".format(attr, element['key'])] = element['value']
         return elements
+
+    def get_element_attr_local(self):
+        """
+        This is a much simpler implement of get_element_attr() in that it only returns back the locally defined
+        Elements, and not any elements defined in sub-Widgets and sub-Panels.
+
+        :return: A dict of Element types
+        """
+        elements = {}
+        for attr in dir(self):
+            element = getattr(self, attr)
+            if isinstance(element, Element) and attr in self.__dict__.keys():
+                elements[attr] = element
+        return elements
+
+    def get_methods_local(self):
+        """
+        Returns only the local methods defined for this class
+
+        :return: a dict containing method names (keys) and a list of parameters for the method (values)
+        """
+        results = {}
+        for attr in dir(self):
+            method = getattr(self, attr)
+            if type(method) == types.MethodType and \
+                            method.__name__ not in ('__init__') and \
+                            method.__func__ in method.im_class.__dict__.values():
+                args = inspect.getargspec(method)[0][1:]
+                results[method.__name__] = args
+        return results
 
     def get_all_elements_on_widget(self):
         """

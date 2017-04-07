@@ -6,7 +6,6 @@ FUTURE (UN-RELEASED)
 
 **New Features:**
 
-- Added pretty-print way of visualizing all attributes and methods for a Webpage. This is useful for documentation as well as for debugging
 - Added highlight() feature to all Element types
 - Added ability to calculate durations between common operations (e.g. page or widget load times)
 
@@ -14,8 +13,8 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
-2.10.0 (UN-RELEASED)
---------------------
+2.10.0 (2017-04-07)
+-------------------
 
 **New Features:**
 
@@ -30,6 +29,7 @@ FUTURE (UN-RELEASED)
 - Added an "access element" abstraction layer so that you can retrieve any element defined any levels deep (e.g. A button defined within a Panel that is under an IFrame). The idea is simple: If I want to click a button 2-levels-deep, this can be done either by (1) page.iframe.panel1.login_button.click(), or (2) through an exposed abstraction page.login_button.click()
 - Added take_screenshot() feature to both a Webpage and Element types. The screenshot capability is controlled by *seleniumpm.config.screenshot_enabled* and is set to True by default.
 - Added a take_screenshot_on_test_error annotation for annotating tests. The screenshot capability for a test is controlled by *seleniumpm.config.test_screenshot_enabled* and is set to True by default.
+- Added pretty-print way of visualizing all attributes and methods for a Webpage. This is useful for documentation as well as for debugging
 
 **Fixed:**
 
