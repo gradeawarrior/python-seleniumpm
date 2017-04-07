@@ -9,9 +9,13 @@ from seleniumpm.webelements.element import Element
 from seleniumpm.webelements.widget import Widget
 from seleniumpm.webelements.panel import Panel
 
+from functools import wraps
 from urlparse import urlparse
+import base64
+import os
 import re
 import sys
+import time
 
 url_regex = re.compile(
     r'^(?:http|ftp)s?://'  # http:// or https://
@@ -20,6 +24,35 @@ url_regex = re.compile(
     r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
     r'(?::\d+)?'  # optional port
     r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
+
+def take_screenshot_on_webpage_error(func):
+    @wraps(func)
+    def newFunc(*args, **kwargs):
+        try:
+            # Disable Screenshot
+            current_screenshot_enabled = seleniumconfig.screenshot_enabled
+            if current_screenshot_enabled:
+                seleniumconfig.screenshot_enabled = False
+            try:
+                func_response = func(*args, **kwargs)
+            finally:
+                # Reset screenshot
+                seleniumconfig.screenshot_enabled = current_screenshot_enabled
+        except Exception as e:
+            if seleniumconfig.screenshot_enabled:
+                funcObj = args[0]
+                filename = "page_error_%s_%s" % (func.func_name, time.strftime('%Y_%m_%d-%H_%M_%S'))
+                page = Webpage(funcObj.driver)
+                page.take_screenshot(screenshot_name=filename)
+                import sys
+                exc_class, exc, tb = sys.exc_info()
+                new_exc = exc_class("\n%s\nScreenshot file: %s.png" % (exc or exc_class, filename))
+                raise new_exc.__class__, new_exc, tb
+            raise e
+        return func_response
+
+    return newFunc
 
 
 class Webpage(object):
@@ -133,6 +166,7 @@ class Webpage(object):
     def get_element_timeout(self):
         return seleniumconfig.element_timeout_in_sec
 
+    @take_screenshot_on_webpage_error
     def wait_for_title(self, title, timeout=None):
         """This could be used similar to a wait_for_page_load() if the page title can uniquely identify
         different pages or states of the page. Google Search works like this.
@@ -145,6 +179,7 @@ class Webpage(object):
         WebDriverWait(driver=self.driver, timeout=timeout).until(EC.title_contains(title))
         return self
 
+    @take_screenshot_on_webpage_error
     def wait_for_page_load(self, timeout=None, force_check_visibility=False):
         """
         This method "waits for page load" by checking that all expected objects are both present and visible on the
@@ -162,6 +197,7 @@ class Webpage(object):
         self.validate(timeout=timeout, force_check_visibility=force_check_visibility)
         return self
 
+    @take_screenshot_on_webpage_error
     def validate(self, timeout=None, force_check_visibility=False):
         """
         The intention of validate is to make sure that an already loaded webpage contains these elements.
@@ -210,6 +246,40 @@ class Webpage(object):
             return True
         except:
             return False
+
+    def take_screenshot(self, screenshot_dir=None, screenshot_name=None, debug_logger_object=None):
+        """
+        Allows you to take a screenshot of the current page.
+
+        :param screenshot_dir: (Default: './screenshots') The directory path for the screenshots
+        :param screenshot_name: (Default: "screenshot_%s" % time.strftime('%Y_%m_%d-%H_%M_%S')) The file name excluding
+                                the type
+        :param debug_logger_object: (Default: None) Ability to reference your own debugger object. I am assuming there
+                                    is a debug(msg) method, in which this method will write to.
+        :return: screenshot_name
+        """
+        screenshot_name = "screenshot_%s" % time.strftime(
+            '%Y_%m_%d-%H_%M_%S') if screenshot_name is None else screenshot_name
+        screenshot_dir = seleniumconfig.screenshot_dir if screenshot_dir is None else screenshot_dir
+        debug_logger_object = seleniumconfig.debug_logger_object if debug_logger_object is None else debug_logger_object
+        filename = "%s/%s.png" % (screenshot_dir, screenshot_name)
+
+        # Ensure that path exists, otherwise create it
+        if not os.path.exists(screenshot_dir):
+            os.makedirs(screenshot_dir)
+        # Debugging information
+        if debug_logger_object is not None:
+            debug_logger_object.debug("Saving ScreenShot at %s" % filename)
+        else:
+            print "[DEBUG] Saving Screenshot at %s" % filename
+
+        base64_data = self.driver.get_screenshot_as_base64()
+        screenshot_data = base64.decodestring(base64_data)
+        screenshot_file = open(filename, "w")
+        screenshot_file.write(screenshot_data)
+        screenshot_file.close()
+
+        return screenshot_name
 
     def get_element_attr(self, type=Element, override_check_visible=False, override_do_not_check=False,
                          expand_iframe_elements=False, result_type=list):

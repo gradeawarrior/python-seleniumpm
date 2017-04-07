@@ -1,15 +1,47 @@
+from functools import wraps
+import base64
+import os
 import re
+import time
 
-import seleniumpm.config as seleniumconfig
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.action_chains import ActionChains
+import seleniumpm.config as seleniumconfig
 from seleniumpm.locator import Locator
 
 # Regular expression to find numbers (both int and float) in a string
 number_re = r'([\-]*\d+\.\d+|[\-]*\d+)'
+
+def take_screenshot_on_element_error(func):
+    @wraps(func)
+    def newFunc(*args, **kwargs):
+        try:
+            # Disable Screenshot
+            current_screenshot_enabled = seleniumconfig.screenshot_enabled
+            if current_screenshot_enabled:
+                seleniumconfig.screenshot_enabled = False
+            try:
+                func_response = func(*args, **kwargs)
+            finally:
+                # Reset screenshot
+                seleniumconfig.screenshot_enabled = current_screenshot_enabled
+        except Exception as e:
+            if seleniumconfig.screenshot_enabled:
+                funcObj = args[0]
+                filename = "element_error_%s_%s" % (func.func_name, time.strftime('%Y_%m_%d-%H_%M_%S'))
+                page = Element(funcObj.driver, Locator.by_xpath("//placeholder"))
+                page.take_screenshot(screenshot_name=filename)
+                import sys
+                exc_class, exc, tb = sys.exc_info()
+                new_exc = exc_class("\n%s\nScreenshot file: %s.png" % (exc or exc_class, filename))
+                raise new_exc.__class__, new_exc, tb
+            raise e
+        return func_response
+
+    return newFunc
 
 class Element(object):
 
@@ -33,15 +65,18 @@ class Element(object):
         self.do_not_check = True
         return self
 
+    @take_screenshot_on_element_error
     def get_webelement(self):
         return self.driver.find_element(self.locator.by, self.locator.value)
 
+    @take_screenshot_on_element_error
     def get_webelements(self):
         return self.driver.find_elements(self.locator.by, self.locator.value)
 
     def get_action_chains(self):
         return ActionChains(self.driver)
 
+    @take_screenshot_on_element_error
     def get_text(self):
         return self.get_webelement().text
 
@@ -52,6 +87,7 @@ class Element(object):
             results.append(web_element.text)
         return results
 
+    @take_screenshot_on_element_error
     def get_number(self, string=None, result_index=0):
         """
         This simplifies getting a number from an element
@@ -83,6 +119,7 @@ class Element(object):
             results.append(self.get_number(web_element.text))
         return results
 
+    @take_screenshot_on_element_error
     def get_int(self, string=None, result_index=0):
         """
         This simplifies getting an integer from an element
@@ -98,6 +135,7 @@ class Element(object):
         results = map(int, re.findall(number_re, string))
         return results[result_index] if len(results) > 0 else None
 
+    @take_screenshot_on_element_error
     def get_float(self, string=None, result_index=0):
         """
         This simplifies getting an float from an element
@@ -113,6 +151,7 @@ class Element(object):
         results = map(float, re.findall(number_re, string))
         return results[result_index] if len(results) > 0 else None
 
+    @take_screenshot_on_element_error
     def get_attribute(self, name):
         """
         Performs a Webelement.get_attribute() and thus returns back a string
@@ -145,15 +184,19 @@ class Element(object):
         """
         return True if self.get_attribute(name) == value else False
 
+    @take_screenshot_on_element_error
     def is_displayed(self):
         return self.get_webelement().is_displayed()
 
+    @take_screenshot_on_element_error
     def is_enabled(self):
         return self.get_webelement().is_enabled()
 
+    @take_screenshot_on_element_error
     def is_selected(self):
         return self.get_webelement().is_selected()
 
+    @take_screenshot_on_element_error
     def is_present(self, timeout=None):
         timeout = timeout if timeout is not None else self.element_timeout
         try:
@@ -162,6 +205,7 @@ class Element(object):
         except:
             return False
 
+    @take_screenshot_on_element_error
     def is_visible(self, timeout=None):
         timeout = timeout if timeout is not None else self.element_timeout
         try:
@@ -170,25 +214,31 @@ class Element(object):
         except:
             return False
 
+    @take_screenshot_on_element_error
     def is_present_and_visible(self, timeout=None, present_timeout=None, visible_timeout=None):
         present_timeout = present_timeout if present_timeout is not None else self.element_timeout
         visible_timeout = visible_timeout if visible_timeout is not None else self.element_timeout
         return self.is_present(timeout if timeout is not None else present_timeout) and \
                self.is_visible(timeout if timeout is not None else visible_timeout)
 
+    @take_screenshot_on_element_error
     def set_focus(self):
         return self.scroll_into_view()
 
+    @take_screenshot_on_element_error
     def scroll_into_view(self):
         self.driver.execute_script("arguments[0].scrollIntoView();", self.get_webelement())
         return self
 
+    @take_screenshot_on_element_error
     def move_to_element(self):
         return self.get_action_chains().move_to_element(self.get_webelement()).build().perform()
 
+    @take_screenshot_on_element_error
     def hover_over(self):
         self.move_to_element()
 
+    @take_screenshot_on_element_error
     def wait_for_selected(self, timeout=None):
         timeout = timeout if timeout is not None else self.element_timeout
         try:
@@ -200,6 +250,7 @@ class Element(object):
             raise e
         return self
 
+    @take_screenshot_on_element_error
     def wait_for_present(self, timeout=None):
         timeout = timeout if timeout is not None else self.element_timeout
         try:
@@ -211,6 +262,7 @@ class Element(object):
             raise e
         return self
 
+    @take_screenshot_on_element_error
     def wait_for_visible(self, timeout=None):
         timeout = timeout if timeout is not None else self.element_timeout
         try:
@@ -222,11 +274,46 @@ class Element(object):
             raise e
         return self
 
+    @take_screenshot_on_element_error
     def wait_for_present_and_visible(self, timeout=None, present_timeout=None, visible_timeout=None):
         present_timeout = present_timeout if present_timeout is not None else self.element_timeout
         visible_timeout = visible_timeout if visible_timeout is not None else self.element_timeout
         self.wait_for_present(timeout if timeout is not None else present_timeout)
         self.wait_for_visible(timeout if timeout is not None else visible_timeout)
+
+    def take_screenshot(self, screenshot_dir=None, screenshot_name=None, debug_logger_object=None):
+        """
+        Allows you to take a screenshot of the current page.
+
+        :param screenshot_dir: (Default: './screenshots') The directory path for the screenshots
+        :param screenshot_name: (Default: "screenshot_%s" % time.strftime('%Y_%m_%d-%H_%M_%S')) The file name excluding
+                                the type
+        :param debug_logger_object: (Default: None) Ability to reference your own debugger object. I am assuming there
+                                    is a debug(msg) method, in which this method will write to.
+        :return: screenshot_name
+        """
+        screenshot_name = "screenshot_%s" % time.strftime(
+            '%Y_%m_%d-%H_%M_%S') if screenshot_name is None else screenshot_name
+        screenshot_dir = seleniumconfig.screenshot_dir if screenshot_dir is None else screenshot_dir
+        debug_logger_object = seleniumconfig.debug_logger_object if debug_logger_object is None else debug_logger_object
+        filename = "%s/%s.png" % (screenshot_dir, screenshot_name)
+
+        # Ensure that path exists, otherwise create it
+        if not os.path.exists(screenshot_dir):
+            os.makedirs(screenshot_dir)
+        # Debugging information
+        if debug_logger_object is not None:
+            debug_logger_object.debug("Saving ScreenShot at %s" % filename)
+        else:
+            print "[DEBUG] Saving Screenshot at %s" % filename
+
+        base64_data = self.driver.get_screenshot_as_base64()
+        screenshot_data = base64.decodestring(base64_data)
+        screenshot_file = open(filename, "w")
+        screenshot_file.write(screenshot_data)
+        screenshot_file.close()
+
+        return screenshot_name
         return self
 
     def __eq__(self, other):

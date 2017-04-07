@@ -16,6 +16,7 @@ seleniumpm.egg-info/
 *.egg
 *.html
 env/
+screenshots/
 venv/
 RELEASE_NOTES.rst
 

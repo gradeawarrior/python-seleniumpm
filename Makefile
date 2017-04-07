@@ -60,7 +60,9 @@ publish:
 
 clean:
 	rm -rf build dist .egg seleniumpm.egg-info
-	rm README.html HISTORY.html RELEASE_NOTES.rst RELEASE_NOTES.html
+	rm -f README.html HISTORY.html RELEASE_NOTES.rst RELEASE_NOTES.html
+	rm -rf tests/screenshots
+	rm -rf screenshots
 
 list:
 	$(info ************************************)

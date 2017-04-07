@@ -1,7 +1,6 @@
 from selenium.webdriver.support.select import Select
 from seleniumpm.webelements.clickable import Clickable
-
-from seleniumpm.webelements.element import Element
+from seleniumpm.webelements.element import take_screenshot_on_element_error
 
 
 class Dropdown(Clickable):
@@ -9,6 +8,7 @@ class Dropdown(Clickable):
         super(Dropdown, self).__init__(driver, locator)
         self.select = None
 
+    @take_screenshot_on_element_error
     def instantiateSelect(self):
         if self.select == None:
             self.select = Select(self.get_webelement())
