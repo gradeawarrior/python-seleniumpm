@@ -20,18 +20,18 @@ Using these constructs, you can describe a *WebPage* as having the following web
     * A Login *Link*
     * A Register *Link*
 2. A form *Widget* containing:
-    * A username *TextField*
+    * A userName *TextField*
     * A password *TextField*
-    * A Submit *Button*
+    * A submitButton *Button*
     * A potential Error message *TextElement* (in the event of a login failure)
 
 Once a *PageModel* is defined, a *login test* for an imaginary website may look like this::
 
     homePage.open();
     loginPage.waitForPageLoad().validate();
-    loginPage.loginForm.userName.type("myuser");
-    loginPage.loginForm.password.type("mypassword");
-    loginPage.loginForm.submitButton.click();
+    loginPage.userName.type("myuser");
+    loginPage.password.type("mypassword");
+    loginPage.submitButton.click();
     homePage.waitForPageLoad().isLoggedIn();
 
 Please see the project's Homepage for more information: Selenium-PageModel_
