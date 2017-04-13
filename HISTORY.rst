@@ -6,6 +6,8 @@ FUTURE (UN-RELEASED)
 
 **New Features:**
 
+- Support defining locators as tuples
+
 **Fixed:**
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
