@@ -12,5 +12,5 @@ class Panel(Widget):
     has a Location associated with it.
     """
 
-    def __init__(self, driver, locator):
+    def __init__(self, driver, locator=None):
         super(Panel, self).__init__(driver=driver, locator=locator)

@@ -2,7 +2,7 @@ from seleniumpm.webelements.panel import Panel
 
 
 class IFrame(Panel):
-    def __init__(self, driver, locator):
+    def __init__(self, driver, locator=None):
         super(IFrame, self).__init__(driver=driver, locator=locator)
 
     def validate(self, timeout=None, force_check_visibility=False):

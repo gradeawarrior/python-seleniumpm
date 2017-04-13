@@ -48,7 +48,7 @@ class Element(object):
     def __init__(self, driver, locator):
         if not isinstance(driver, WebDriver):
             raise AttributeError("driver was not an expected RemoteWebdriver type!")
-        if not isinstance(locator, Locator):
+        if not isinstance(locator, Locator) and locator is not None:
             raise AttributeError("locator was not an expected seleniumpm.Locator type!")
         self.driver = driver
         self.locator = locator
@@ -67,10 +67,14 @@ class Element(object):
 
     @take_screenshot_on_element_error
     def get_webelement(self):
+        if self.locator is None:
+            raise AttributeError("locator was not specified!")
         return self.driver.find_element(self.locator.by, self.locator.value)
 
     @take_screenshot_on_element_error
     def get_webelements(self):
+        if self.locator is None:
+            raise AttributeError("locator was not specified!")
         return self.driver.find_elements(self.locator.by, self.locator.value)
 
     def get_action_chains(self):
@@ -240,6 +244,8 @@ class Element(object):
 
     @take_screenshot_on_element_error
     def wait_for_selected(self, timeout=None):
+        if self.locator is None:
+            raise AttributeError("locator was not specified!")
         timeout = timeout if timeout is not None else self.element_timeout
         try:
             WebDriverWait(self.driver, timeout).until(
@@ -252,6 +258,8 @@ class Element(object):
 
     @take_screenshot_on_element_error
     def wait_for_present(self, timeout=None):
+        if self.locator is None:
+            raise AttributeError("locator was not specified!")
         timeout = timeout if timeout is not None else self.element_timeout
         try:
             WebDriverWait(self.driver, timeout).until(
@@ -264,6 +272,8 @@ class Element(object):
 
     @take_screenshot_on_element_error
     def wait_for_visible(self, timeout=None):
+        if self.locator is None:
+            raise AttributeError("locator was not specified!")
         timeout = timeout if timeout is not None else self.element_timeout
         try:
             WebDriverWait(self.driver, timeout).until(

@@ -7,7 +7,7 @@ from seleniumpm.webelements.element import Element
 
 
 class Widget(Clickable):
-    def __init__(self, driver, locator):
+    def __init__(self, driver, locator=None):
         super(Clickable, self).__init__(driver, locator)
 
     def dict(self):
@@ -36,8 +36,8 @@ class Widget(Clickable):
         timeout = timeout if timeout is not None else self.element_timeout
         from seleniumpm.iframe import IFrame
         for element in self.get_element_attr(expand_iframe_elements=False):
-            # Continue if the element has marked itself do_not_check=True
-            if element.do_not_check:
+            # Continue if the element has marked itself do_not_check=True or a Locator is not defined
+            if element.do_not_check or element.locator is None:
                 continue
             # Check for presence and visibility
             if force_check_visibility or element.check_visible:
