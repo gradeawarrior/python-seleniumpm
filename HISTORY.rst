@@ -6,12 +6,22 @@ FUTURE (UN-RELEASED)
 
 **New Features:**
 
-- Added highlight() feature to all Element types
-- Added ability to calculate durations between common operations (e.g. page or widget load times)
-
 **Fixed:**
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
+
+2.10.1 (UN-RELEASED)
+--------------------
+
+**New Features:**
+
+- Added highlight() feature to all Element types
+- Added ability to calculate durations between common operations (e.g. page or widget load times)
+- Removed requirement that a Widget/Panel/IFrame type must define a Locator. This is to support situations where a developer doesn't want to validate the location of the Widget, but instead just wants to validate the objects that are within a Widget. This is similar to a Webpage validation.
+
+**Fixed:**
+
+- Fixed scenario for __getattr__ where a developer could decorate a method with @property, and thus could execute code that results in an Error/Exception.
 
 2.10.0 (2017-04-07)
 -------------------
