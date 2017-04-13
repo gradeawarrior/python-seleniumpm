@@ -85,7 +85,12 @@ class Widget(Clickable):
             else:
                 elements.append(self)
         for attr in dir(self):
-            element = getattr(self, attr)
+            # This is to catch potential exceptions thrown in situations where a developer
+            # decorates a method with @property and the method raises an error
+            try:
+                element = getattr(self, attr, None)
+            except:
+                element = None
             # Ensure that it is of type Element
             if isinstance(element, Element):
                 # If it is a widget, then recursively drill down and get its Elements

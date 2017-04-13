@@ -30,6 +30,11 @@ url_regex = re.compile(
 
 
 def take_screenshot_on_webpage_error(func):
+    """
+    This is an annotation for automatic screenshot ability for Webpage functions. It leverages "higher-order" operations
+    available through functools library; and as the function implies, allows for automatic taking of a screenshot
+    when there is an error/exception thrown.
+    """
     @wraps(func)
     def newFunc(*args, **kwargs):
         try:
@@ -340,7 +345,12 @@ class Webpage(object):
         elements = [] if result_type == list else {}
         temp_widgets = {}
         for attr in dir(self):
-            element = getattr(self, attr)
+            # This is to catch potential exceptions thrown in situations where a developer
+            # decorates a method with @property and the method raises an error
+            try:
+                element = getattr(self, attr, None)
+            except:
+                element = None
             # Ensure that it is of type Element
             if isinstance(element, Element):
                 # If it is a widget, then recursively drill down and get its Elements
