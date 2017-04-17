@@ -60,6 +60,9 @@ class TestGoogle(UiTestWrapper):
         assert url == expected_url, "Expecting url to be '{}'".format(expected_url)
 
         # Enter something to search for
+        inner_html = self.google.search_field.get_html()
+        print "search_field inner-html: '{}'".format(inner_html)
+        assert len(inner_html) == 0, "Expecting there to be no html in the search_field element"
         self.google.search_field.clear().type(search_term)
 
         # Now submit the form. WebDriver will find the form for us from the element
@@ -97,6 +100,12 @@ class TestGoogle(UiTestWrapper):
         2) For each word, go to google and grab the top-5 links
         """
         self.wikipedia.open().wait_for_page_load().validate()
+
+        # Testing inner-html
+        inner_html = self.wikipedia.bodyText.get_html()
+        # print "bodyText inner-html: '{}'".format(inner_html)
+        assert inner_html and len(inner_html) > 100, "Expecting there to be quite a bit of html code in inner_html"
+
         wikipedia_text = self.wikipedia.get_text()
         assert wikipedia_text
         word_list = wikipedia_text.split()

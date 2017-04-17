@@ -19,6 +19,7 @@ FUTURE (UN-RELEASED)
 
 **New Features:**
 
+- Adding a get_html() capability to return back either an entire page or the inner-html of a specific element. This is implemented on a Webpage, an IFrame, and Element types.
 - Added ability to calculate durations between common operations (e.g. page or widget load times)
 - Removed requirement that a Widget/Panel/IFrame type must define a Locator. This is to support situations where a developer doesn't want to validate the location of the Widget, but instead just wants to validate the objects that are within a Widget. This is similar to a Webpage validation.
 

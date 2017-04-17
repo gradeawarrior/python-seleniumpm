@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 import seleniumpm.config as seleniumconfig
 
 from seleniumpm.iframe import IFrame
+from seleniumpm.locator import Locator
 from seleniumpm.webelements.element import Element
 from seleniumpm.webelements.widget import Widget
 from seleniumpm.webelements.panel import Panel
@@ -206,6 +207,15 @@ class Webpage(object):
 
     def get_element_timeout(self):
         return seleniumconfig.element_timeout_in_sec
+
+    @take_screenshot_on_webpage_error
+    def get_html(self):
+        """
+        Retrieves the html of the entire webpage
+
+        :return: a str of the entire page html
+        """
+        return Element(self.driver, Locator.by_xpath("//html")).get_html()
 
     @take_screenshot_on_webpage_error
     def wait_for_title(self, title, timeout=None):

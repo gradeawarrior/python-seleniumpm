@@ -243,6 +243,15 @@ class Element(object):
         self.move_to_element()
 
     @take_screenshot_on_element_error
+    def get_html(self):
+        """
+        Retrieves the inner-html of an element
+
+        :return: str representing the inner-html of an element
+        """
+        return self.get_webelement().get_attribute("innerHTML").encode("utf-8")
+
+    @take_screenshot_on_element_error
     def wait_for_selected(self, timeout=None):
         if self.locator is None:
             raise AttributeError("locator was not specified!")

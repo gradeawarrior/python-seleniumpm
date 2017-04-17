@@ -1,3 +1,5 @@
+from seleniumpm.locator import Locator
+from seleniumpm.webelements.element import Element
 from seleniumpm.webelements.panel import Panel
 from seleniumpm.webelements.element import take_screenshot_on_element_error
 
@@ -5,6 +7,21 @@ from seleniumpm.webelements.element import take_screenshot_on_element_error
 class IFrame(Panel):
     def __init__(self, driver, locator=None):
         super(IFrame, self).__init__(driver=driver, locator=locator)
+
+    def get_html(self, switch_in=True):
+        """
+        Retrieves the html of the entire page
+
+        :param switch_in: (Default: True) This is used for automatically switching into and out of an iFrame context
+        :return: a str of the entire page html
+        """
+        try:
+            if switch_in:
+                self.switch_in()
+            return Element(self.driver, Locator.by_xpath("//html")).get_html()
+        finally:
+            if switch_in:
+                self.switch_out()
 
     def validate(self, timeout=None, force_check_visibility=False):
         """
