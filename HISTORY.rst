@@ -8,6 +8,7 @@ FUTURE (UN-RELEASED)
 
 - Added highlight() feature to all Element types
 - Support defining locators as tuples
+- Adding utility for scanning a path and generating json output of all the PageObject structures in the project
 
 **Fixed:**
 
