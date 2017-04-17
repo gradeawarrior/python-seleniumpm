@@ -380,6 +380,32 @@ class TestWebPage(object):
         assert 'visible_iframe_invisible_element' in elements
         assert 'visible_iframe_not_checked_element' in elements
 
+    def test_get_element_attr_with_a_property_decorator_webpage(self):
+        page = testingwebpages.MyComplexPageWithErrorProperty(self.driver)
+        elements = page.get_element_attr(result_type=dict, expand_iframe_elements=True)
+        assert len(elements) == 3, 'Expecting 3 elements'
+        assert 'regular_element' in elements
+        assert 'invisible_element' in elements
+        assert 'not_checked_element' in elements
+
+    def test_get_element_attr_with_a_property_decorator_widget(self):
+        widget = testingwebpages.MyComplexWidgetWithErrorProperty(self.driver, Locator.by_xpath("//widget"))
+        elements = widget.get_element_attr(result_type=dict, expand_iframe_elements=True)
+        assert len(elements) == 4, 'Expecting 4 elements'
+        assert 'widget' in elements
+        assert 'regular_element_on_widget' in elements
+        assert 'invisible_element_on_widget' in elements
+        assert 'not_checked_element_on_widget' in elements
+
+    def test_get_element_attr_with_a_property_decorator_iframe(self):
+        iframe = testingwebpages.MyComplexIframeWithErrorProperty(self.driver, Locator.by_xpath("//iframe"))
+        elements = iframe.get_element_attr(result_type=dict, expand_iframe_elements=True)
+        assert len(elements) == 4, 'Expecting 4 elements'
+        assert 'widget' in elements
+        assert 'regular_element' in elements
+        assert 'invisible_element' in elements
+        assert 'not_checked_element' in elements
+
     def test_access_element_defined_indirectly_on_webpage(self):
         page = testingwebpages.MyComplexPage(self.driver)
 

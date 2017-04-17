@@ -1,28 +1,25 @@
-from selenium import webdriver
-
+from tests.uitestwrapper import UiTestWrapper
 from seleniumpm.examples.google_page import GooglePage
 from seleniumpm.examples.wikipedia import Wikipedia
 
 import random
 
 
-class TestGoogle():
+class TestGoogle(UiTestWrapper):
     """
     These are proof-of-concept Selenium programs that leverage the Selenium PageModel library. All these programs
     are based around performing searches on Google.
     """
 
-    server = 'http://localhost:4444/wd/hub'
     google_url = 'https://www.google.com'
     wikipedia_url = 'https://en.wikipedia.org/wiki/Selenium'
     capabilities = None
-    driver = None
     google = None
     wikipedia = None
 
     @classmethod
     def setup_class(self):
-
+        super(TestGoogle, self).setup_class()
         # Capability for Firefox
         # self.capabilities = webdriver.DesiredCapabilities.FIREFOX
         # self.capabilities['marionette'] = True
@@ -34,20 +31,14 @@ class TestGoogle():
         # self.capabilities['driverName'] = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:51.0) Gecko/20100101 Firefox/51.0"
 
         # Capability for PhantomJS
-        self.capabilities = webdriver.DesiredCapabilities.PHANTOMJS
+        # self.capabilities = webdriver.DesiredCapabilities.PHANTOMJS
 
         try:
-            self.driver = webdriver.Remote(command_executor=self.server, desired_capabilities=self.capabilities)
             self.google = GooglePage(self.driver, url=self.google_url)
             self.wikipedia = Wikipedia(self.driver, url=self.wikipedia_url)
         except:
             if self.driver:
                 self.driver.quit()
-
-    @classmethod
-    def teardown_class(self):
-        if self.driver:
-            self.driver.quit()
 
     def test_search(self):
         """This is the traditional 'HelloWorld' program you see in Selenium documentation, but implemented

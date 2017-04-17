@@ -1,4 +1,4 @@
-from selenium import webdriver
+from tests.uitestwrapper import UiTestWrapper
 from selenium.webdriver.common.by import By
 from seleniumpm.locator import Locator
 from seleniumpm.webelements.element import Element
@@ -17,24 +17,11 @@ from seleniumpm.webelements.panel import Panel
 from seleniumpm.iframe import IFrame
 from seleniumpm.webpage import Webpage
 
-class TestClassTypes(object):
+class TestClassTypes(UiTestWrapper):
     """
     Tests to make sure that all classes are the appropriate type. This is at the core of Selenium PageModel library;
     that there is a relationship between the WebElements on a page to other WebElement types.
     """
-
-    driver = None
-
-    @classmethod
-    def setup_class(self):
-        server = 'http://localhost:4444/wd/hub'
-        capabilities = webdriver.DesiredCapabilities.PHANTOMJS
-        self.driver = webdriver.Remote(command_executor=server, desired_capabilities=capabilities)
-
-    @classmethod
-    def teardown_class(self):
-        if self.driver:
-            self.driver.quit()
 
     def test_element(self):
         """Element --> object"""

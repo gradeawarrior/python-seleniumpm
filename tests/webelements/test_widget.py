@@ -1,5 +1,5 @@
+from tests.uitestwrapper import UiTestWrapper
 import tests.pages.testingwebpages as testingwebpages
-from selenium import webdriver
 from seleniumpm.locator import Locator
 from seleniumpm.webelements.element import Element
 from seleniumpm.webelements.widget import Widget
@@ -7,24 +7,10 @@ from seleniumpm.webelements.panel import Panel
 from seleniumpm.iframe import IFrame
 
 
-class TestWidget(object):
+class TestWidget(UiTestWrapper):
     """
     Tests to make sure that the widget type is working correctly.
     """
-
-    driver = None
-
-    @classmethod
-    def setup_class(self):
-        server = 'http://localhost:4444/wd/hub'
-        capabilities = webdriver.DesiredCapabilities.PHANTOMJS
-        self.driver = webdriver.Remote(command_executor=server, desired_capabilities=capabilities)
-
-    @classmethod
-    def teardown_class(self):
-        if self.driver:
-            self.driver.quit()
-
     @staticmethod
     def calculate_meta(elements):
         initial = {'total': 0,

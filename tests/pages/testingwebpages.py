@@ -1,3 +1,4 @@
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from seleniumpm.locator import Locator
 from seleniumpm.webpage import Webpage
 from seleniumpm.iframe import IFrame
@@ -27,12 +28,42 @@ class MyComplexPage(Webpage):
         self.invisible_element = Element(driver, Locator.by_xpath("//b")).mark_invisible()
         self.not_checked_element = Element(driver, Locator.by_xpath("//c")).mark_do_not_check()
 
+class MyComplexPageWithErrorProperty(Webpage):
+    def __init__(self, driver, url=None):
+        super(MyComplexPageWithErrorProperty, self).__init__(driver=driver, url=url)
+        self.regular_element = Element(driver, Locator.by_xpath("//a"))
+        self.invisible_element = Element(driver, Locator.by_xpath("//b")).mark_invisible()
+        self.not_checked_element = Element(driver, Locator.by_xpath("//c")).mark_do_not_check()
+
+    @property
+    def timeout_exception(self):
+        raise TimeoutException()
+
+    @property
+    def no_such_element_exception(self):
+        raise NoSuchElementException()
+
 class MyComplexWidget(Widget):
     def __init__(self, driver, locator):
         super(MyComplexWidget, self).__init__(driver=driver, locator=locator)
         self.regular_element_on_widget = Element(driver, Locator.by_xpath("//d"))
         self.invisible_element_on_widget = Element(driver, Locator.by_xpath("//e")).mark_invisible()
         self.not_checked_element_on_widget = Element(driver, Locator.by_xpath("//f")).mark_do_not_check()
+
+class MyComplexWidgetWithErrorProperty(Widget):
+    def __init__(self, driver, locator):
+        super(MyComplexWidgetWithErrorProperty, self).__init__(driver=driver, locator=locator)
+        self.regular_element_on_widget = Element(driver, Locator.by_xpath("//d"))
+        self.invisible_element_on_widget = Element(driver, Locator.by_xpath("//e")).mark_invisible()
+        self.not_checked_element_on_widget = Element(driver, Locator.by_xpath("//f")).mark_do_not_check()
+
+    @property
+    def timeout_exception(self):
+        raise TimeoutException()
+
+    @property
+    def no_such_element_exception(self):
+        raise NoSuchElementException()
 
 class MyComplexPanel(Panel):
     def __init__(self, driver, locator):
@@ -47,3 +78,18 @@ class MyComplexIframe(IFrame):
         self.regular_element = Element(driver, Locator.by_xpath("//j"))
         self.invisible_element = Element(driver, Locator.by_xpath("//k")).mark_invisible()
         self.not_checked_element = Element(driver, Locator.by_xpath("//l")).mark_do_not_check()
+
+class MyComplexIframeWithErrorProperty(IFrame):
+    def __init__(self, driver, locator):
+        super(MyComplexIframeWithErrorProperty, self).__init__(driver=driver, locator=locator)
+        self.regular_element = Element(driver, Locator.by_xpath("//j"))
+        self.invisible_element = Element(driver, Locator.by_xpath("//k")).mark_invisible()
+        self.not_checked_element = Element(driver, Locator.by_xpath("//l")).mark_do_not_check()
+
+    @property
+    def timeout_exception(self):
+        raise TimeoutException()
+
+    @property
+    def no_such_element_exception(self):
+        raise NoSuchElementException()

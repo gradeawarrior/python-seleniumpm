@@ -2,7 +2,7 @@ from seleniumpm.locator import Locator
 from selenium.webdriver.common.by import By
 
 
-class TestLocator:
+class TestLocator(object):
     def test_new_locator(self):
         """
         Ensure that a locator can be created
