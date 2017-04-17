@@ -24,14 +24,31 @@ class Widget(Clickable):
         dictionary['methods'] = self.get_methods_local()
         return dictionary
 
+    def wait_for_widget_load(self, timeout=None, force_check_visibility=False):
+        """
+        This implementation is the same as Webpage.wait_for_page_load(). This is to support iFrame situations that
+        is a separate page load than the outer page.
+
+        :param timeout: (Default: 30s) The number of seconds to poll waiting for an element
+        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible (but present) on
+                                       load. The default is to respect this setting and only check for presence. Setting
+                                       this to 'True' means you want to check for both present and visible.
+        :raises TimeoutException: if an element doesn't appear within timeout
+        :return: self
+        """
+        timeout = timeout if timeout is not None else self.page_timeout
+        return self.validate(timeout=timeout, force_check_visibility=force_check_visibility)
+
     def validate(self, timeout=None, force_check_visibility=False):
         """
         The intention of validate is to make sure that an already loaded widget contains these elements.
+
         :param timeout: (Default: 10s) The number of seconds to poll waiting for an element
         :param force_check_visibility: (Default: False) Some elements can mark itself as invisible (but present) on
                                        load. The default is to respect this setting and only check for presence. Setting
                                        this to 'True' means you want to check for both present and visible.
         :raises TimeoutException: if an element doesn't appear within timeout
+        :return: self
         """
         timeout = timeout if timeout is not None else self.element_timeout
         from seleniumpm.iframe import IFrame
