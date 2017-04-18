@@ -375,3 +375,62 @@ class Element(object):
 
     def get_element_timeout(self):
         return seleniumconfig.element_timeout_in_sec
+
+    def start_timer(self):
+        """
+        This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
+        will "start" the timer and set driver.start_time = time.time().
+
+        :return: The start time
+        """
+        self.driver.start_time = time.time()
+        return self.driver.start_time
+
+    def stop_timer(self):
+        """
+        This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
+        will "stop" the timer and set driver.end_time = time.time().
+
+        :return: The end time
+        """
+        self.driver.end_time = time.time()
+        return self.driver.end_time
+
+    def get_split_time(self):
+        """
+        This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
+        will return a duration between driver.start_time and now. If a timer was not started, then return 0.
+
+        :return: The duration between driver.start_time and time.time(). Otherwise, 0
+        """
+        if not hasattr(self.driver, "start_time") or self.driver.start_time == 0:
+            return 0
+        return time.time() - self.driver.start_time
+
+    def get_duration(self):
+        """
+        This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
+        will return a duration between driver.start_time and now. This method will also call stop_timer(). If a timer
+        was already stopped, then do not call stop_timer() again; instead return the previous duration. If a timer was
+        not started, then return 0.
+
+        :return: The duration between driver.start_time and driver.end_time. Otherwise, 0
+        """
+        if not hasattr(self.driver, "start_time"):
+            return 0
+        if not hasattr(self.driver, "end_time"):
+            self.stop_timer()
+        if self.driver.end_time < self.driver.start_time:
+            self.stop_timer()
+        return self.driver.end_time - self.driver.start_time
+
+    def reset_timer(self):
+        """
+        This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
+        will set driver.start_time = 0 and driver.end_time = 0
+
+        :return: self
+        """
+        self.driver.start_time = 0
+        self.driver.end_time = 0
+        return self
