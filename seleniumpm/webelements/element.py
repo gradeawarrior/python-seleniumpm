@@ -376,61 +376,96 @@ class Element(object):
     def get_element_timeout(self):
         return seleniumconfig.element_timeout_in_sec
 
-    def start_timer(self):
+    def start_timer(self, type=None):
         """
         This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
         will "start" the timer and set driver.start_time = time.time().
 
+        :param type: (Default: None) This is used for capturing different timers. If not None (e.g. 'page' or
+                        'element') then all timer attributes will be prefixed with '<type>_'
+                        (e.g. driver.page_start_time, page_end_time, and page_duration_time)
         :return: The start time
         """
-        self.driver.start_time = time.time()
-        return self.driver.start_time
+        attr = "start_time" if type is None else "{}_start_time".format(type)
+        setattr(self.driver, attr, time.time())
+        return getattr(self.driver, attr)
 
-    def stop_timer(self):
+    def stop_timer(self, type=None):
         """
         This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
         will "stop" the timer and set driver.end_time = time.time().
 
+        :param type: (Default: None) This is used for capturing different timers. If not None (e.g. 'page' or
+                        'element') then all timer attributes will be prefixed with '<type>_'
+                        (e.g. driver.page_start_time, page_end_time, and page_duration_time)
         :return: The end time
         """
-        self.driver.end_time = time.time()
-        return self.driver.end_time
+        start_attr = "start_time" if type is None else "{}_start_time".format(type)
+        end_attr = "end_time" if type is None else "{}_end_time".format(type)
+        duration_attr = "duration_time" if type is None else "{}_duration_time".format(type)
 
-    def get_split_time(self):
+        # Return None if haven't started a timer
+        if not hasattr(self.driver, start_attr) or getattr(self.driver, start_attr) == 0:
+            return None
+
+        setattr(self.driver, end_attr, time.time())
+        start_time = getattr(self.driver, start_attr)
+        end_time = getattr(self.driver, end_attr)
+        setattr(self.driver, duration_attr, end_time - start_time)
+        return end_time
+
+    def get_split_time(self, type=None):
         """
         This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
         will return a duration between driver.start_time and now. If a timer was not started, then return 0.
 
+        :param type: (Default: None) This is used for capturing different timers. If not None (e.g. 'page' or
+                        'element') then all timer attributes will be prefixed with '<type>_'
+                        (e.g. driver.page_start_time, page_end_time, and page_duration_time)
         :return: The duration between driver.start_time and time.time(). Otherwise, 0
         """
-        if not hasattr(self.driver, "start_time") or self.driver.start_time == 0:
+        attr = "start_time" if type is None else "{}_start_time".format(type)
+        if not hasattr(self.driver, attr) or getattr(self.driver, attr) == 0:
             return 0
-        return time.time() - self.driver.start_time
+        return time.time() - getattr(self.driver, attr)
 
-    def get_duration(self):
+    def get_duration(self, type=None):
         """
         This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
         will return a duration between driver.start_time and now. This method will also call stop_timer(). If a timer
         was already stopped, then do not call stop_timer() again; instead return the previous duration. If a timer was
         not started, then return 0.
 
+        :param type: (Default: None) This is used for capturing different timers. If not None (e.g. 'page' or
+                        'element') then all timer attributes will be prefixed with '<type>_'
+                        (e.g. driver.page_start_time, page_end_time, and page_duration_time)
         :return: The duration between driver.start_time and driver.end_time. Otherwise, 0
         """
-        if not hasattr(self.driver, "start_time"):
+        start_attr = "start_time" if type is None else "{}_start_time".format(type)
+        end_attr = "end_time" if type is None else "{}_end_time".format(type)
+        duration_attr = "duration_time" if type is None else "{}_duration_time".format(type)
+        if not hasattr(self.driver, start_attr):
             return 0
-        if not hasattr(self.driver, "end_time"):
-            self.stop_timer()
-        if self.driver.end_time < self.driver.start_time:
-            self.stop_timer()
-        return self.driver.end_time - self.driver.start_time
+        if not hasattr(self.driver, end_attr):
+            self.stop_timer(type=type)
+        if getattr(self.driver, end_attr) < getattr(self.driver, start_attr):
+            self.stop_timer(type=type)
+        return getattr(self.driver, duration_attr)
 
-    def reset_timer(self):
+    def reset_timer(self, type=None):
         """
         This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
-        will set driver.start_time = 0 and driver.end_time = 0
+        will set driver.start_time = 0, driver.end_time = 0, and driver.duration_time = 0
 
+        :param type: (Default: None) This is used for capturing different timers. If not None (e.g. 'page' or
+                        'element') then all timer attributes will be prefixed with '<type>_'
+                        (e.g. driver.page_start_time, page_end_time, and page_duration_time)
         :return: self
         """
-        self.driver.start_time = 0
-        self.driver.end_time = 0
+        start_attr = "start_time" if type is None else "{}_start_time".format(type)
+        end_attr = "end_time" if type is None else "{}_end_time".format(type)
+        duration_attr = "duration_time" if type is None else "{}_duration_time".format(type)
+        setattr(self.driver, start_attr, 0)
+        setattr(self.driver, end_attr, 0)
+        setattr(self.driver, duration_attr, 0)
         return self

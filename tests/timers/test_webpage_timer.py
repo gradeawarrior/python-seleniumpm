@@ -7,11 +7,13 @@ class TestWebpageTimer(UiTestWrapper):
     def timer_assertions(self, start_time, end_time, duration):
         assert hasattr(self.driver, "start_time")
         assert hasattr(self.driver, "end_time")
+        assert hasattr(self.driver, "duration_time")
         assert isinstance(start_time, float), "Expecting returned start_time to be a float"
         assert isinstance(end_time, float), "Expecting returned end_time to be a float"
         assert isinstance(duration, float), "Expecting returned duration to be a float"
         assert isinstance(self.driver.start_time, float), "Expecting start_time to be a float"
         assert isinstance(self.driver.end_time, float), "Expecting end_time to be a float"
+        assert isinstance(self.driver.duration_time, float), "Expecting duration_time to be a float"
         assert str(self.driver.start_time) == str(start_time), "Expecting the start_time = {} - actual: {}".format(
             start_time, self.driver.start_time)
         assert str(self.driver.end_time) == str(end_time), "Expecting end_time actual: {} - expected: {}".format(
@@ -21,8 +23,12 @@ class TestWebpageTimer(UiTestWrapper):
             actual_duration, duration)
 
     def teardown_method(self, test_method):
-        self.driver.start_time = 0
-        self.driver.end_time = 0
+        if hasattr(self.driver, "start_time"):
+            delattr(self.driver, "start_time")
+        if hasattr(self.driver, "end_time"):
+            delattr(self.driver, "end_time")
+        if hasattr(self.driver, "duration_time"):
+            delattr(self.driver, "duration_time")
 
     def test_start_timer(self):
         page = testingwebpages.MyComplexPage(self.driver)
@@ -98,10 +104,10 @@ class TestWebpageTimer(UiTestWrapper):
         time.sleep(0.5)
         split_time = page.get_split_time()
         assert split_time > 0
-        assert hasattr(self.driver, "end_time") or self.driver.end_time == 0
+        assert not hasattr(self.driver, "end_time") or self.driver.end_time == 0
         time.sleep(0.5)
         split_time = page.get_split_time()
-        assert hasattr(self.driver, "end_time") or self.driver.end_time == 0
+        assert not hasattr(self.driver, "end_time") or self.driver.end_time == 0
         assert split_time > 0
         time.sleep(0.5)
         end_time = page.stop_timer()

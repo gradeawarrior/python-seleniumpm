@@ -49,6 +49,10 @@ class TestGoogle(UiTestWrapper):
         # And now use this to visit Google
         self.google.open().wait_for_page_load().validate()
 
+        # Check duration
+        assert self.google.page_load_duration > 0, "Expecting page_load_duration > 0 - actual: {}".format(
+            self.google.page_load_duration)
+
         # Check the title of the page
         title = self.google.get_title()
         url = self.google.get_current_url()
@@ -100,6 +104,10 @@ class TestGoogle(UiTestWrapper):
         2) For each word, go to google and grab the top-5 links
         """
         self.wikipedia.open().wait_for_page_load().validate()
+
+        # Check duration
+        assert self.wikipedia.page_load_duration > 0, "Expecting page_load_duration > 0 - actual: {}".format(
+            self.wikipedia.page_load_duration)
 
         # Testing inner-html
         inner_html = self.wikipedia.bodyText.get_html()
