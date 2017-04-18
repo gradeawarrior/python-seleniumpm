@@ -481,6 +481,7 @@ class Webpage(object):
                                                                        override_do_not_check=override_do_not_check,
                                                                        expand_iframe_elements=expand_iframe_elements,
                                                                        result_type=result_type,
+                                                                       check_myself=True,
                                                                        attr_name=attr).items():
                                 temp_widgets[attr].append({'key': key, 'value': value})
                         else:

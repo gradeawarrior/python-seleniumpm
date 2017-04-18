@@ -24,7 +24,7 @@ class IFrame(Panel):
             if switch_in:
                 self.switch_out()
 
-    def wait_for_iframe_load(self, timeout=None, force_check_visibility=False):
+    def wait_for_iframe_load(self, timeout=None, force_check_visibility=True, check_myself=True):
         """
         An IFrame wait_for_iframe_load() takes into account that you have to switch_in() to an iFrame to actually
         validate the inner-page.
@@ -33,13 +33,17 @@ class IFrame(Panel):
         :param force_check_visibility: (Default: False) Some elements can mark itself as invisible (but present) on
                                        load. The default is to respect this setting and only check for presence. Setting
                                        this to 'True' means you want to check for both present and visible.
+        :param check_myself: (Default: True) Since a Widget/Panel/IFrame is a type of Element, it also has a locator.
+                             This is used for enabling/disabling adding a validation against itself. The scenario
+                             where this could be used is in a situation where you want to validate the elements of this
+                             container, but not the Locator of the container itself.
         :raises TimeoutException: if an element doesn't appear within timeout
         :return: self
         """
         timeout = timeout if timeout is not None else self.page_timeout
-        return self.validate(timeout=timeout, force_check_visibility=force_check_visibility)
+        return self.validate(timeout=timeout, force_check_visibility=force_check_visibility, check_myself=check_myself)
 
-    def validate(self, timeout=None, force_check_visibility=False):
+    def validate(self, timeout=None, force_check_visibility=False, check_myself=True):
         """
         An IFrame validate takes into account that you have to switch_in() to an iFrame to actually validate the
         inner-page.
@@ -48,16 +52,22 @@ class IFrame(Panel):
         :param force_check_visibility: (Default: False) Some elements can mark itself as invisible (but present) on
                                        load. The default is to respect this setting and only check for presence. Setting
                                        this to 'True' means you want to check for both present and visible.
+        :param check_myself: (Default: True) Since a Widget/Panel/IFrame is a type of Element, it also has a locator.
+                             This is used for enabling/disabling adding a validation against itself. The scenario
+                             where this could be used is in a situation where you want to validate the elements of this
+                             container, but not the Locator of the container itself.
         :raises TimeoutException: if an element doesn't appear within timeout
         :return: self
         """
         timeout = timeout if timeout is not None else self.element_timeout
         try:
             self.start_timer(type="iframe_load")
-            self.switch_in()
-            return super(IFrame, self).validate(timeout=timeout, force_check_visibility=force_check_visibility)
+            self.switch_in() if check_myself else None
+            return super(IFrame, self).validate(timeout=timeout,
+                                                force_check_visibility=force_check_visibility,
+                                                check_myself=check_myself)
         finally:
-            self.switch_out()
+            self.switch_out() if check_myself else None
             self.stop_timer(type="iframe_load")
 
     @take_screenshot_on_element_error

@@ -14,6 +14,15 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
+2.11.1 (2017-04-18)
+-------------------
+
+**New Features:**
+
+- Adding a check_myself flag (Default: True) on a Widget/Panel/IFrame type. This is to support certain scenarios where a developer may want to validate the collection of elements found in an Widget/Panel/IFrame, but not actually validate itself. Again, this is because Widget/Panel/IFrame is of type Element and thus has a locator.
+
+**Fixed:**
+
 2.11.0 (2017-04-18)
 -------------------
 
