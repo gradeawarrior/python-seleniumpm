@@ -14,19 +14,20 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
-2.10.1 (UN-RELEASED)
+2.11.0 (UN-RELEASED)
 --------------------
 
 **New Features:**
 
 - Adding a get_html() capability to return back either an entire page or the inner-html of a specific element. This is implemented on a Webpage, an IFrame, and Element types.
-- Added stop-watch capabilities (e.g. start, stop, split) to a Webpage and Element types. In addition, a basic page load timer has been implemented. Basically, every wait_for_page_load() will calculate a duration time automatically.
+- Adding a wait_for_iframe_load() to IFrame type
+- Added stop-watch capabilities (e.g. start, stop, split) to a Webpage and Element types. In addition, a basic page load timer has been implemented. Basically, every wait_for_page_load() and wait_for_iframe_load() will calculate a duration time automatically.
 - Removed requirement that a Widget/Panel/IFrame type must define a Locator. This is to support situations where a developer doesn't want to validate the location of the Widget, but instead just wants to validate the objects that are within a Widget. This is similar to a Webpage validation.
 
 **Fixed:**
 
 - Fixed scenario for __getattr__ where a developer could decorate a method with @property, and thus could execute code that results in an Error/Exception.
-- Added try/finally block to the validate() operation on an IFrame. This is the handle the situation than a sub-webpage (a.k.a. an iFrame) fails a validation; in this situation, we want to make sure that we allow going back to the top-level-webpage in the event of a Error.
+- Added try/finally block to the validate() operation on an IFrame. This is to handle the situation when a sub-webpage (a.k.a. an iFrame) fails a validation; in this situation, we want to make sure that we allow going back to the top-level-webpage in the event of a Error.
 
 2.10.0 (2017-04-07)
 -------------------

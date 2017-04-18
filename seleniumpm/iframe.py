@@ -7,6 +7,7 @@ from seleniumpm.webelements.element import take_screenshot_on_element_error
 class IFrame(Panel):
     def __init__(self, driver, locator=None):
         super(IFrame, self).__init__(driver=driver, locator=locator)
+        self.iframe_load_duration_time = 0
 
     def get_html(self, switch_in=True):
         """
@@ -23,6 +24,21 @@ class IFrame(Panel):
             if switch_in:
                 self.switch_out()
 
+    def wait_for_iframe_load(self, timeout=None, force_check_visibility=False):
+        """
+        An IFrame wait_for_iframe_load() takes into account that you have to switch_in() to an iFrame to actually
+        validate the inner-page.
+
+        :param timeout: (Default: 30s) The number of seconds to poll waiting for an element
+        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible (but present) on
+                                       load. The default is to respect this setting and only check for presence. Setting
+                                       this to 'True' means you want to check for both present and visible.
+        :raises TimeoutException: if an element doesn't appear within timeout
+        :return: self
+        """
+        timeout = timeout if timeout is not None else self.page_timeout
+        return self.validate(timeout=timeout, force_check_visibility=force_check_visibility)
+
     def validate(self, timeout=None, force_check_visibility=False):
         """
         An IFrame validate takes into account that you have to switch_in() to an iFrame to actually validate the
@@ -35,12 +51,14 @@ class IFrame(Panel):
         :raises TimeoutException: if an element doesn't appear within timeout
         :return: self
         """
-        timeout = timeout if timeout is not None else self.page_timeout
+        timeout = timeout if timeout is not None else self.element_timeout
         try:
+            self.start_timer(type="iframe_load")
             self.switch_in()
             return super(IFrame, self).validate(timeout=timeout, force_check_visibility=force_check_visibility)
         finally:
             self.switch_out()
+            self.stop_timer(type="iframe_load")
 
     @take_screenshot_on_element_error
     def switch_in(self):
@@ -66,3 +84,10 @@ class IFrame(Panel):
         """
         self.driver.switch_to.default_content()
         return self
+
+    @property
+    def iframe_load_duration(self):
+        driver_iframe_load_duration_time = self.get_duration(type="iframe_load")
+        if driver_iframe_load_duration_time > self.iframe_load_duration_time:
+            self.iframe_load_duration_time = driver_iframe_load_duration_time
+        return self.iframe_load_duration_time
