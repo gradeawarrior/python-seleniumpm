@@ -48,7 +48,7 @@ generate.rst: setup.venv
 	cat HISTORY.rst >> RELEASE_NOTES.rst
 	source $(VIRTUALENV)/bin/activate; rst2html.py RELEASE_NOTES.rst > RELEASE_NOTES.html
 
-publish.test:
+publish.test: test
 	python setup.py register -r pypitest
 	python setup.py sdist upload -r pypitest
 
