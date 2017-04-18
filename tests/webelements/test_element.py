@@ -1,12 +1,15 @@
 import pytest
 
 from tests.uitestwrapper import UiTestWrapper
+from tests.pages.googlepage import GooglePage
 
 from seleniumpm.webelements.element import Element
 from seleniumpm.locator import Locator
 from selenium.webdriver.common.by import By
 
 class TestElement(UiTestWrapper):
+    google_url = 'https://www.google.com'
+
     def test_instantiate_element(self):
         xpath = "//foo"
         element = Element(self.driver, Locator(By.XPATH, xpath))
@@ -33,6 +36,17 @@ class TestElement(UiTestWrapper):
         element2 = Element(self.driver, Locator(By.XPATH, xpath2))
         assert element1 != element2
         assert not (element1 == element2)
+
+    def test_define_element_with_no_locator(self):
+        element = Element(self.driver, locator=None)
+        assert isinstance(element, Element)
+        assert element.locator is None
+
+    def test_iframe_with_no_locator_against_google(self):
+        googlepage = GooglePage(self.driver, self.google_url)
+        googlepage.open().wait_for_page_load().validate()
+        googlepage.iframe.wait_for_iframe_load()
+        googlepage.iframe.validate()
 
     test_number_data = [
         ("1", 1),

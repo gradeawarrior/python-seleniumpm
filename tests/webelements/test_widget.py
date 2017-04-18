@@ -49,6 +49,24 @@ class TestWidget(UiTestWrapper):
         assert meta_data['invisible'] == 1, "Expecting there to be 1 invisible"
         assert meta_data['do-not-check'] == 1, "Expecting there to be 1 do-not-check"
 
+    def test_complex_widget_without_locator(self):
+        widget = testingwebpages.MyComplexWidget(self.driver)
+        elements = widget.get_element_attr()
+        meta_data = self.calculate_meta(elements)
+        assert len(elements) == 4, "Expecting there to be 4 elements in this test complex widget"
+        assert meta_data['types']['element'] == 3, "Expecting there to be 3 Element types"
+        assert meta_data['visible'] == 2, "Expecting there to be 2 visible"
+        assert meta_data['invisible'] == 1, "Expecting there to be 1 invisible"
+        assert meta_data['do-not-check'] == 1, "Expecting there to be 1 do-not-check"
+
+    def test_complex_widget_without_locator_get_webelement(self):
+        widget = testingwebpages.MyComplexWidget(self.driver)
+        try:
+            widget.get_webelement()
+            assert False, "Expecting an AttributeError to be thrown for a Widget with no locator"
+        except AttributeError:
+            pass
+
     def test_complex_widget_with_widget(self):
         widget = testingwebpages.MyComplexWidget(self.driver, Locator.by_xpath("//widget"))
         widget.visible_widget = testingwebpages.MyComplexWidget(self.driver, Locator.by_xpath("//widget"))
