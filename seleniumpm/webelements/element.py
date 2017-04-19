@@ -46,7 +46,7 @@ def take_screenshot_on_element_error(func):
 class Element(object):
 
     def __init__(self, driver, locator):
-        if not isinstance(driver, WebDriver):
+        if not seleniumconfig.disable_check_for_selenium_webdriver and not isinstance(driver, WebDriver):
             raise AttributeError("driver was not an expected RemoteWebdriver type!")
         if not isinstance(locator, Locator) and locator is not None:
             raise AttributeError("locator was not an expected seleniumpm.Locator type!")

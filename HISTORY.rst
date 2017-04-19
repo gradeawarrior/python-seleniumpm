@@ -14,6 +14,15 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
+2.11.2 (UN-RELEASED)
+--------------------
+
+**New Features:**
+
+- Adding new config *disable_check_for_selenium_webdriver* (Default: False) which now makes is possible to disable this check on an Element. Apparently, there are situations where a developer may pass in a non-webdriver object that overrides __getattr__() to returns driver.__getattribute__(item)
+
+**Fixed:**
+
 2.11.1 (2017-04-18)
 -------------------
 

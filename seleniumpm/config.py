@@ -16,5 +16,8 @@ screenshot_dir = "./screenshots"
 screenshot_enabled = True
 test_screenshot_enabled = True
 
+# Selenium Checks
+disable_check_for_selenium_webdriver = False
+
 # Debugging configs
 debug_logger_object = None
