@@ -3,6 +3,7 @@ import pytest
 from tests.uitestwrapper import UiTestWrapper
 from tests.pages.googlepage import GooglePage
 
+import seleniumpm.config as seleniumconfig
 from seleniumpm.webelements.element import Element
 from seleniumpm.locator import Locator
 from selenium.webdriver.common.by import By
@@ -111,3 +112,47 @@ class TestElement(UiTestWrapper):
 
         actual = element.get_number(string, result_index=index)
         assert actual == expected, "Expecting '{}' to convert to {} - actual: {}".format(string, expected, actual)
+
+    def test_ensure_element_requires_selenium_driver_with_Webdriver(self):
+        """
+        This test should not raise an exception
+        """
+        Element(driver=self.driver, locator=None)
+
+    def test_ensure_element_requires_selenium_driver_without_Webdriver(self):
+        """
+        This test should raise an exception
+        """
+        try:
+            Element(driver=MyDriver(driver=self.driver), locator=None)
+            assert False, "Expecting Element to raise an AttributeError!"
+        except AttributeError:
+            pass
+
+    def test_disable_require_webdriver_with_webdriver(self):
+        """
+        This test is making sure that it does not matter if driver is a Webdriver or not
+        """
+        try:
+            seleniumconfig.disable_check_for_selenium_webdriver = True
+            Element(driver=self.driver, locator=None)
+        finally:
+            seleniumconfig.disable_check_for_selenium_webdriver = False
+
+    def test_disable_require_webdriver_without_webdriver(self):
+        """
+        This test is making sure that it does not matter if driver is a Webdriver or not
+        """
+        try:
+            seleniumconfig.disable_check_for_selenium_webdriver = True
+            Element(driver=MyDriver(driver=self.driver), locator=None)
+        finally:
+            seleniumconfig.disable_check_for_selenium_webdriver = False
+
+
+class MyDriver(object):
+    def __init__(self, driver):
+        self.driver = driver
+
+    def __getattr__(self, item):
+        return self.driver.__getattribute__(item)
