@@ -14,6 +14,15 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
+2.11.3 (2017-04-20)
+-------------------
+
+**New Features:**
+
+**Fixed:**
+
+- Fixing a missed-case configuring *disable_check_for_selenium_webdriver* (Default: False) on a Webpage
+
 2.11.2 (2017-04-20)
 -------------------
 

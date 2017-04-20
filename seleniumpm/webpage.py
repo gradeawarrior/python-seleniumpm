@@ -86,7 +86,7 @@ class Webpage(object):
     """
 
     def __init__(self, driver, url=None):
-        if not isinstance(driver, WebDriver):
+        if not seleniumconfig.disable_check_for_selenium_webdriver and not isinstance(driver, WebDriver):
             raise AttributeError("driver was not an expected RemoteWebdriver type!")
         self.driver = driver
         self.path = ""
