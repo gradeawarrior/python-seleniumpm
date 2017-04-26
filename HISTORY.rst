@@ -18,6 +18,7 @@ FUTURE (UN-RELEASED)
 -------------------
 
 **New Features:**
+
 - Adding unselect() to Checkbox and select() to both RadioButton and Checkbox types.
 - Adding a new Label type. Right now, this is effectively the same as a TextElement or an Element
 
