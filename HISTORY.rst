@@ -14,6 +14,15 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
+2.11.4 (2017-04-26)
+-------------------
+
+**New Features:**
+- Adding unselect() to Checkbox and select() to both RadioButton and Checkbox types.
+- Adding a new Label type
+
+**Fixed:**
+
 2.11.3 (2017-04-20)
 -------------------
 
