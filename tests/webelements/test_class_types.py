@@ -7,6 +7,7 @@ from seleniumpm.webelements.checkbox import Checkbox
 from seleniumpm.webelements.clickable import Clickable
 from seleniumpm.webelements.dropdown import Dropdown
 from seleniumpm.webelements.image import Image
+from seleniumpm.webelements.label import Label
 from seleniumpm.webelements.link import Link
 from seleniumpm.webelements.table import Table
 from seleniumpm.webelements.textelement import TextElement
@@ -81,6 +82,13 @@ class TestClassTypes(UiTestWrapper):
         assert isinstance(image, Image)
         assert isinstance(image, Element)
         assert isinstance(image, object)
+
+    def test_label(self):
+        """Label --> Element --> object"""
+        label = Label(self.driver, Locator(By.XPATH, "//foo"))
+        assert isinstance(label, Label)
+        assert isinstance(label, Element)
+        assert isinstance(label, object)
 
     def test_link(self):
         """Link --> Clickable --> Element --> object"""
