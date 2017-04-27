@@ -14,6 +14,15 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
+2.11.5 (UN-RELEASED)
+--------------------
+
+**New Features:**
+
+**Fixed:**
+
+- Element.wait_for_present_and_visible() did not have a return self
+
 2.11.4 (2017-04-26)
 -------------------
 

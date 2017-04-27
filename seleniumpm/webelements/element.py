@@ -299,6 +299,7 @@ class Element(object):
         visible_timeout = visible_timeout if visible_timeout is not None else self.element_timeout
         self.wait_for_present(timeout if timeout is not None else present_timeout)
         self.wait_for_visible(timeout if timeout is not None else visible_timeout)
+        return self
 
     def take_screenshot(self, screenshot_dir=None, screenshot_name=None, debug_logger_object=None):
         """
