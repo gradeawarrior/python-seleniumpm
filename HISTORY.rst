@@ -22,6 +22,7 @@ FUTURE (UN-RELEASED)
 **Fixed:**
 
 - Element.wait_for_present_and_visible() did not have a return self
+- Adding mark_check() and mark_visible() to complement the existing mark_do_not_check() and mark_invisible()
 
 2.11.4 (2017-04-26)
 -------------------

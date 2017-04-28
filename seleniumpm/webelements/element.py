@@ -61,8 +61,16 @@ class Element(object):
         self.check_visible = False
         return self
 
+    def mark_visible(self):
+        self.check_visible = True
+        return self
+
     def mark_do_not_check(self):
         self.do_not_check = True
+        return self
+
+    def mark_check(self):
+        self.do_not_check = False
         return self
 
     @take_screenshot_on_element_error
