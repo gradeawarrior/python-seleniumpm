@@ -75,29 +75,131 @@ class Element(object):
 
     @take_screenshot_on_element_error
     def get_webelement(self):
+        """
+        This method basically does a driver.find_element(by, value) call
+
+        :return: A Selenium WebElement
+        """
         if self.locator is None:
             raise AttributeError("locator was not specified!")
         return self.driver.find_element(self.locator.by, self.locator.value)
 
     @take_screenshot_on_element_error
     def get_webelements(self):
+        """
+        This method basically does a driver.find_elements(by, value) call
+
+        :return: A list of Selenium WebElements
+        """
         if self.locator is None:
             raise AttributeError("locator was not specified!")
         return self.driver.find_elements(self.locator.by, self.locator.value)
+
+    @take_screenshot_on_element_error
+    def wait_for_webelements(self, expected_min_length=None, timeout=10, polling=0.5):
+        """
+        This method does a driver.find_elements(by, value) call, but has an optional expected_min_length
+        parameter. This is useful for checking lists after a save has been performed. If no expected_min_length is
+        specified, then this method behaves the same as get_webelements()
+
+        :param expected_min_length: (Default: None) If specified, then poll and check to see if the returned
+                                    WebElements is at least the minimum length.
+        :param timeout: (Default: 10s) This controls the threshold for how long to check if expected_min_length
+                        is specified.
+        :param polling: (Default: 0.5s or 500ms) This controls how often to check
+        :return: A list of Selenium WebElements. If by the expected_min_length is not met by the timeout period, then
+                 the last retrieved list is returned.
+        """
+        if self.locator is None:
+            raise AttributeError("locator was not specified!")
+        current_time = time.time()
+        end_time = (current_time + (timeout * 1000)) \
+            if (expected_min_length is not None and timeout is not None) else current_time
+        return_elements = []
+        while current_time <= end_time:
+            return_elements = self.get_webelements()
+            if expected_min_length is not None and len(return_elements) >= expected_min_length:
+                return return_elements
+            time.sleep(polling)
+            current_time = time.time()
+        return return_elements
 
     def get_action_chains(self):
         return ActionChains(self.driver)
 
     @take_screenshot_on_element_error
     def get_text(self):
+        """
+        This method does a driver.find_elements(by, value).txt call.
+
+        :return: A string
+        """
         return self.get_webelement().text
 
+    @take_screenshot_on_element_error
+    def wait_for_text(self, expected_txt=None, timeout=10, polling=0.5):
+        """
+        This method does a driver.find_elements(by, value).txt call, but has an optional expected_txt parameter.
+
+        :param expected_txt: (Default: None) If specified, then poll and check to see if the returned
+                             WebElement contains the expected txt
+        :param timeout: (Default: 10s) This controls the threshold for how long to check if expected_txt
+                        is specified.
+        :param polling: (Default: 0.5s or 500ms) This controls how often to check
+        :return: A string. If by the expected_txt is not met by the timeout period, then the last retrieved text
+                 is returned.
+        """
+        current_time = time.time()
+        end_time = (current_time + (timeout * 1000)) \
+            if (expected_txt is not None and timeout is not None) else current_time
+        result_txt = None
+        while current_time <= end_time:
+            result_txt = self.get_text()
+            if expected_txt is not None and expected_txt == result_txt:
+                return result_txt
+            time.sleep(polling)
+            current_time = time.time()
+        return result_txt
+
+    @take_screenshot_on_element_error
     def get_texts(self):
-        web_elements = self.get_webelements()
-        results = []
-        for web_element in web_elements:
-            results.append(web_element.text)
-        return results
+        """
+        This method does a driver.find_elements(by, value).txt call
+
+        :return: A list of strings
+        """
+        result_txts = []
+        elements = self.get_webelements()
+        for element in elements:
+            result_txts.append(element.text)
+        return result_txts
+
+    @take_screenshot_on_element_error
+    def wait_for_texts(self, expected_txt=None, timeout=10, polling=0.5):
+        """
+        This method does a driver.find_elements(by, value).txt call, but has an optional expected_txt parameter. This
+        is useful for checking lists after a save has been performed. If no expected_min_length is specified, then
+        this method behaves the same as get_texts()
+
+        :param expected_txt: (Default: None) If specified, then poll and check to see if the returned
+                                    list contains the expected txt
+        :param timeout: (Default: 10s) This controls the threshold for how long to check if expected_txt
+                        is specified.
+        :param polling: (Default: 0.5s or 500ms) This controls how often to check
+        :return: A list of strings. If by the expected_txt is not met by the timeout period, then
+                 the last retrieved list is returned.
+        """
+        current_time = time.time()
+        end_time = (current_time + (timeout * 1000)) \
+            if (expected_txt is not None and timeout is not None) else current_time
+        result_txts = []
+        while current_time <= end_time:
+            result_txts = self.get_texts()
+            if expected_txt is not None and expected_txt in result_txts:
+                return result_txts
+            time.sleep(polling)
+            current_time = time.time()
+        return result_txts
 
     @take_screenshot_on_element_error
     def get_number(self, string=None, result_index=0):

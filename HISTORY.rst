@@ -19,6 +19,8 @@ FUTURE (UN-RELEASED)
 
 **New Features:**
 
+- Adding the following 'wait_for' methods to Element: wait_for_webelements(), wait_for_text(), and wait_for_texts()
+
 **Fixed:**
 
 - Element.wait_for_present_and_visible() did not have a return self
