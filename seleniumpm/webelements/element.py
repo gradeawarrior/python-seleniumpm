@@ -7,7 +7,7 @@ import time
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
 import seleniumpm.config as seleniumconfig
 from seleniumpm.locator import Locator
@@ -217,6 +217,25 @@ class Element(object):
             elif operator == "~=" and re.search(text, element.text):
                 return index
         return -1
+
+    def click_index(self, index=0, fast_click=False):
+        """
+        Using get_webelements(), this clicks on the nth element in the list. If index=0, then this method
+        should behave exactly like click()
+
+        :param index: (Default: 0) The index to click()
+        :param fast_click: (Default: False) This removes all checks on the number of WebElements in the list. Because
+                            of this, this implementation has the potential of raising an IndexError
+        :raises NoSuchElementException, IndexError
+        """
+        if fast_click:
+            self.get_webelements()[index].click()
+        else:
+            elements = self.get_webelements()
+            if index >= len(elements):
+                raise NoSuchElementException("An element at index={} was not found. Number of elements: {}".format(
+                    index, len(elements)))
+            elements[index].click()
 
     @take_screenshot_on_element_error
     def get_number(self, string=None, result_index=0):

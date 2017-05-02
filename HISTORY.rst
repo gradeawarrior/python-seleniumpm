@@ -14,6 +14,15 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
+2.11.7 (2017-05-02)
+-------------------
+
+**New Features:**
+
+**Fixed:**
+
+- Moving click_index() from Clickable to Element type.
+
 2.11.6 (2017-05-02)
 -------------------
 
