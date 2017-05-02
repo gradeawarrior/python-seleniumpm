@@ -14,6 +14,15 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
+2.11.6 (UN-RELEASED)
+--------------------
+
+**New Features:**
+
+**Fixed:**
+
+- Adding Clickable.click_index() and Element.get_index_of_text() to indirectly address StaleElementReferenceException. Unfortunately, the problem may still arise and some experts say that StaleElementReferenceException is by design and should generally be "fixed" on a case-by-case basis and should not be fixed in a wrapper framework like seleniumpm nor will it be addressed in the Selenium core library.
+
 2.11.5 (2017-05-01)
 -------------------
 

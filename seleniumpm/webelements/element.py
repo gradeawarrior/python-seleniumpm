@@ -114,7 +114,7 @@ class Element(object):
             raise AttributeError("locator was not specified!")
         current_time = time.time()
         end_time = (current_time + (timeout * 1000)) \
-            if (expected_min_length is not None and timeout is not None) else current_time
+            if (expected_min_length is not None and timeout is not None and timeout > 0) else current_time
         return_elements = []
         while current_time <= end_time:
             return_elements = self.get_webelements()
@@ -151,7 +151,7 @@ class Element(object):
         """
         current_time = time.time()
         end_time = (current_time + (timeout * 1000)) \
-            if (expected_txt is not None and timeout is not None) else current_time
+            if (expected_txt is not None and timeout is not None and timeout > 0) else current_time
         result_txt = None
         while current_time <= end_time:
             result_txt = self.get_text()
@@ -191,7 +191,7 @@ class Element(object):
         """
         current_time = time.time()
         end_time = (current_time + (timeout * 1000)) \
-            if (expected_txt is not None and timeout is not None) else current_time
+            if (expected_txt is not None and timeout is not None and timeout > 0) else current_time
         result_txts = []
         while current_time <= end_time:
             result_txts = self.get_texts()
@@ -200,6 +200,23 @@ class Element(object):
             time.sleep(polling)
             current_time = time.time()
         return result_txts
+
+    def get_index_of_text(self, text, operator="=="):
+        """
+        This method returns the index where the given text is found. This method of course is assuming your
+        locator is a reference to a list, and performs a get_webelements() to retrieve all WebElements.
+
+        :param text: The text to search for
+        :param operator: (Default: '==') This value can either be '==' or '~='. The first is an exact match, while
+                         The second is a search within the text.
+        :return: The index where the text was found, otherwise, -1
+        """
+        for index, element in enumerate(self.get_texts()):
+            if operator == "==" and element.text == text:
+                return index
+            elif operator == "~=" and re.search(text, element.text):
+                return index
+        return -1
 
     @take_screenshot_on_element_error
     def get_number(self, string=None, result_index=0):
