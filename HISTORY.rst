@@ -14,8 +14,8 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
-2.11.6 (UN-RELEASED)
---------------------
+2.11.6 (2017-05-02)
+-------------------
 
 **New Features:**
 
