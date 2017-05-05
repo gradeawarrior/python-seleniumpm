@@ -124,6 +124,9 @@ class Widget(Clickable):
                 element = None
             # Ensure that it is of type Element
             if isinstance(element, Element):
+                # Set some Widget meta-data in the element
+                element.attr_name = attr
+                element.attr_class_name = self.__class__.__name__
                 # If it is a widget, then recursively drill down and get its Elements
                 if isinstance(element, Widget):
                     # Check if widget is a type of iFrame and also check for visibility

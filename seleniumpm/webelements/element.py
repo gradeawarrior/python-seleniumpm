@@ -52,6 +52,8 @@ class Element(object):
             raise AttributeError("locator was not an expected seleniumpm.Locator type!")
         self.driver = driver
         self.locator = locator
+        self.attr_name = None
+        self.attr_class_name = None
 
         # These attributes controls Webpage and Widget validation checks
         self.check_visible = True
@@ -248,7 +250,7 @@ class Element(object):
                                 be changed to return the n'th matching set
         :return: A number that can be (i) an int, (ii) a float, or (iii) None if neither.
         """
-        string = self.get_text() if string == None else string
+        string = self.get_text() if string is None else string
         try:
             return self.get_int(string, result_index)
         except ValueError:
@@ -406,7 +408,18 @@ class Element(object):
             WebDriverWait(self.driver, timeout).until(
                 EC.element_to_be_selected((self.locator.by, self.locator.value)))
         except TimeoutException as e:
-            e.message = "TimeoutException waiting for selected {}={} with timeout={}s ({})".format(self.locator.by, self.locator.value, timeout, self.__class__)
+            if self.attr_name is not None and self.attr_class_name is not None:
+                e.message = "TimeoutException waiting for selected ({}.{}) " \
+                            "{}={} with timeout={}s ({})" \
+                    .format(self.attr_class_name,
+                            self.attr_name,
+                            self.locator.by,
+                            self.locator.value,
+                            timeout,
+                            self.__class__)
+            else:
+                e.message = "TimeoutException waiting for selected {}={} with timeout={}s ({})" \
+                    .format(self.locator.by, self.locator.value, timeout, self.__class__)
             e.msg = e.message
             raise e
         return self
@@ -420,7 +433,18 @@ class Element(object):
             WebDriverWait(self.driver, timeout).until(
                 EC.presence_of_element_located((self.locator.by, self.locator.value)))
         except TimeoutException as e:
-            e.message = "TimeoutException waiting for present {}={} with timeout={}s ({})".format(self.locator.by, self.locator.value, timeout, self.__class__)
+            if self.attr_name is not None and self.attr_class_name is not None:
+                e.message = "TimeoutException waiting for present ({}.{}) " \
+                            "{}={} with timeout={}s ({})" \
+                    .format(self.attr_class_name,
+                            self.attr_name,
+                            self.locator.by,
+                            self.locator.value,
+                            timeout,
+                            self.__class__)
+            else:
+                e.message = "TimeoutException waiting for present {}={} with timeout={}s ({})" \
+                    .format(self.locator.by, self.locator.value, timeout, self.__class__)
             e.msg = e.message
             raise e
         return self
@@ -434,7 +458,18 @@ class Element(object):
             WebDriverWait(self.driver, timeout).until(
                 EC.visibility_of_element_located((self.locator.by, self.locator.value)))
         except TimeoutException as e:
-            e.message = "TimeoutException waiting for visible {}={} with timeout={}s ({})".format(self.locator.by, self.locator.value, timeout, self.__class__)
+            if self.attr_name is not None and self.attr_class_name is not None:
+                e.message = "TimeoutException waiting for visible ({}.{}) " \
+                            "{}={} with timeout={}s ({})" \
+                    .format(self.attr_class_name,
+                            self.attr_name,
+                            self.locator.by,
+                            self.locator.value,
+                            timeout,
+                            self.__class__)
+            else:
+                e.message = "TimeoutException waiting for visible {}={} with timeout={}s ({})" \
+                    .format(self.locator.by, self.locator.value, timeout, self.__class__)
             e.msg = e.message
             raise e
         return self
