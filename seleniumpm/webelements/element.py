@@ -1,5 +1,6 @@
 from functools import wraps
 import base64
+import logging
 import os
 import re
 import time
@@ -52,6 +53,7 @@ class Element(object):
             raise AttributeError("locator was not an expected seleniumpm.Locator type!")
         self.driver = driver
         self.locator = locator
+        self.log = logging.getLogger(__name__)
         self.attr_name = None
         self.attr_class_name = None
 
@@ -506,7 +508,7 @@ class Element(object):
         if debug_logger_object is not None:
             debug_logger_object.debug("Saving ScreenShot at %s" % filename)
         else:
-            print "[DEBUG] Saving Screenshot at %s" % filename
+            self.log.warning("Saving Screenshot at %s" % filename)
 
         base64_data = self.driver.get_screenshot_as_base64()
         screenshot_data = base64.decodestring(base64_data)

@@ -15,6 +15,7 @@ from urlparse import urlparse
 import base64
 import inspect
 import json
+import logging
 import os
 import re
 import sys
@@ -90,6 +91,7 @@ class Webpage(object):
             raise AttributeError("driver was not an expected RemoteWebdriver type!")
         self.driver = driver
         self.path = ""
+        self.log = logging.getLogger(__name__)
 
         # Check if a valid url
         if url and not url_regex.search(url.geturl() if isinstance(url, tuple) else url):
@@ -419,7 +421,7 @@ class Webpage(object):
         if debug_logger_object is not None:
             debug_logger_object.debug("Saving ScreenShot at %s" % filename)
         else:
-            print "[DEBUG] Saving Screenshot at %s" % filename
+            self.log.warning("Saving Screenshot at %s" % filename)
 
         base64_data = self.driver.get_screenshot_as_base64()
         screenshot_data = base64.decodestring(base64_data)

@@ -9,7 +9,6 @@ FUTURE (UN-RELEASED)
 - Added highlight() feature to all Element types
 - Support defining locators as tuples
 - Adding utility for scanning a path and generating json output of all the PageObject structures in the project
-- Add Logger for better debugging ability for testing purposes
 
 **Fixed:**
 
@@ -21,6 +20,7 @@ FUTURE (UN-RELEASED)
 **New Features:**
 
 - For validate() and wait_for_page_load() operations, adding the meta-data for the Class and attribute name of the element that is being checked. This is so that if there is a TimeoutException, we can also report where we can find this element to fix in the code
+- Add Logger for better debugging capability for testing purposes.
 
 **Fixed:**
 

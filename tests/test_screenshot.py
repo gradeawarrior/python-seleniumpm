@@ -6,9 +6,12 @@ from seleniumpm.examples.google_page import GooglePage
 from seleniumpm.webelements.element import Element
 import seleniumpm.config as seleniumconfig
 
+import logging
 import os
 import time
 
+logging.basicConfig()
+log = logging.getLogger()
 
 class TestScreenshot(UiTestWrapper):
     @staticmethod
@@ -32,6 +35,11 @@ class TestScreenshot(UiTestWrapper):
     def setup_class(self):
         super(TestScreenshot, self).setup_class()
         self.create_screenshot_dir()
+        log.setLevel(logging.ERROR)
+
+    @classmethod
+    def teardown_class(self):
+        log.setLevel(logging.WARNING)
 
     def test_take_explicit_webpage_screenshot(self):
         page = GooglePage(driver=self.driver, url="http://www.google.com")

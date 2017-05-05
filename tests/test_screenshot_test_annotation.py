@@ -1,3 +1,4 @@
+import logging
 import os
 import time
 import pytest
@@ -9,6 +10,9 @@ from seleniumpm.locator import Locator
 from seleniumpm.examples.google_page import GooglePage
 from seleniumpm.webelements.element import Element
 from seleniumpm.annotations import take_screenshot_on_test_error
+
+logging.basicConfig()
+log = logging.getLogger()
 
 class TestScreenshotTestAnnotation(UiTestWrapper):
     @staticmethod
@@ -33,6 +37,11 @@ class TestScreenshotTestAnnotation(UiTestWrapper):
         super(TestScreenshotTestAnnotation, self).setup_class()
         self.create_screenshot_dir()
         self.num_files_before = self.count_files(seleniumconfig.screenshot_dir)
+        log.setLevel(logging.ERROR)
+
+    @classmethod
+    def teardown_class(self):
+        log.setLevel(logging.WARNING)
 
     @pytest.mark.xfail()
     @take_screenshot_on_test_error

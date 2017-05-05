@@ -50,8 +50,8 @@ class TestGoogle(UiTestWrapper):
         self.google.open().wait_for_page_load().validate()
 
         # Check duration
-        assert self.google.page_load_duration > 0, "Expecting page_load_duration > 0 - actual: {}".format(
-            self.google.page_load_duration)
+        assert self.google.page_timeout > 0, "Expecting page_timeout > 0 - actual: {}".format(
+            self.google.page_timeout)
 
         # Check the title of the page
         title = self.google.get_title()
@@ -106,13 +106,14 @@ class TestGoogle(UiTestWrapper):
         self.wikipedia.open().wait_for_page_load().validate()
 
         # Check duration
-        assert self.wikipedia.page_load_duration > 0, "Expecting page_load_duration > 0 - actual: {}".format(
-            self.wikipedia.page_load_duration)
+        assert self.wikipedia.page_timeout > 0, "Expecting page_timeout > 0 - actual: {}".format(
+            self.wikipedia.page_timeout)
 
         # Testing inner-html
         inner_html = self.wikipedia.bodyText.get_html()
         # print "bodyText inner-html: '{}'".format(inner_html)
-        assert inner_html and len(inner_html) > 100, "Expecting there to be quite a bit of html code in inner_html"
+        assert inner_html and len(inner_html) > 100, "Expecting there to be quite a bit " \
+                                                     "of html code in inner_html"
 
         wikipedia_text = self.wikipedia.get_text()
         assert wikipedia_text
