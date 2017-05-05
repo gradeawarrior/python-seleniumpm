@@ -90,7 +90,7 @@ class Webpage(object):
             raise AttributeError("driver was not an expected RemoteWebdriver type!")
         self.driver = driver
         self.path = ""
-        self.page_load_duration_time = 0
+
         # Check if a valid url
         if url and not url_regex.search(url.geturl() if isinstance(url, tuple) else url):
             raise AttributeError("Invalid url: '{}'".format(url))
@@ -259,13 +259,6 @@ class Webpage(object):
         if getattr(self.driver, end_attr) < getattr(self.driver, start_attr):
             self.stop_timer(type=type)
         return getattr(self.driver, duration_attr)
-
-    @property
-    def page_load_duration(self):
-        driver_page_load_duration_time = self.get_duration(type="page_load")
-        if driver_page_load_duration_time > self.page_load_duration_time:
-            self.page_load_duration_time = driver_page_load_duration_time
-        return self.page_load_duration_time
 
     def reset_timer(self, type=None):
         """
