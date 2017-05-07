@@ -541,7 +541,7 @@ class Element(object):
         return {
             'type': self.__class__.__name__,
             'package': self.__module__,
-            'locator': self.locator.dict(),
+            'locator': self.locator.dict() if self.locator is not None else None,
             'check_visible': self.check_visible,
             'do_not_check': self.do_not_check
         }

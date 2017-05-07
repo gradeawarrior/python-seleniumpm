@@ -14,6 +14,17 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
+2.12.0 (2017-05-06)
+-------------------
+
+**New Features:**
+
+-
+
+**Fixed:**
+
+- Element.dict() had an issue if the locator was None
+
 2.11.8 (2017-05-05)
 -------------------
 
