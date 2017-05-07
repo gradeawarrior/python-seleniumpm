@@ -256,7 +256,9 @@ class Widget(Clickable):
         """
         timeout = timeout if timeout is not None else self.element_timeout
         try:
-            self.validate(timeout=timeout, force_check_visibility=force_check_visibility)
+            self.validate(timeout=timeout,
+                          force_check_visibility=force_check_visibility,
+                          failfast_check_element=True)
             return True
         except:
             return False
