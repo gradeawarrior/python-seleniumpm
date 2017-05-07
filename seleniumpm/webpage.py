@@ -1,3 +1,4 @@
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -322,7 +323,8 @@ class Webpage(object):
 
     @take_screenshot_on_webpage_error
     def wait_for_title(self, title, timeout=None):
-        """This could be used similar to a wait_for_page_load() if the page title can uniquely
+        """
+        This could be used similarly to a wait_for_page_load() if the page title can uniquely
         identify different pages or states of the page. Google Search works like this.
 
         :param title: The title to search for (case sensitive)
@@ -358,7 +360,7 @@ class Webpage(object):
         return self
 
     @take_screenshot_on_webpage_error
-    def validate(self, timeout=None, force_check_visibility=False):
+    def validate(self, timeout=None, force_check_visibility=False, failfast_check_element=None):
         """
         The intention of validate is to make sure that an already loaded webpage contains these
         elements.
@@ -368,9 +370,21 @@ class Webpage(object):
                                        (but present) on load. The default is to respect this setting
                                        and only check for presence. Setting this to 'True' means you
                                        want to check for both present and visible.
+        :param failfast_check_element: (Default: True) If set to False, then if there is a
+                                       TimeoutException on a WebElement, then it will cache the
+                                       exception message, check all other elements, and then
+                                       re-raise the TimeoutException with a combined list of all
+                                       WebElements that failed their check. This is useful for
+                                       debugging your Webpage/Widget and all its elements.
+                                       However, it does have the Selenium side-effect that the
+                                       time it takes for the method to return could be compounded
+                                       because of the timeout on each failure.
         :raises TimeoutException: if an element doesn't appear within timeout
         """
         timeout = timeout if timeout is not None else self.element_timeout
+        failfast_check_element = failfast_check_element \
+            if failfast_check_element is not None else seleniumconfig.failfast_check_element
+        error_msgs = []
         for element in self.get_element_attr():
             # Continue if the element has marked itself do_not_check=True
             if element.do_not_check:
@@ -380,17 +394,33 @@ class Webpage(object):
                 # Print to stderr a WARNING message when force_check_visibility=True and element
                 # has been marked 'invisible'
                 if force_check_visibility and not element.check_visible:
-                    sys.stderr.write(
-                        "[WARNING] element {}={} ({}) was marked as 'invisible' "
-                        "but force_check_visibility=True".format(element.locator.by,
-                                                                 element.locator.value,
-                                                                 self.__class__))
-                if isinstance(element, IFrame):
-                    element.validate(timeout=timeout, force_check_visibility=force_check_visibility)
-                else:
-                    element.wait_for_present_and_visible(timeout)
+                    self.log.warn("element {}={} ({}) was marked as 'invisible' "
+                                  "but force_check_visibility=True".format(element.locator.by,
+                                                                           element.locator.value,
+                                                                           self.__class__))
+                try:
+                    if isinstance(element, IFrame):
+                        element.validate(timeout=timeout,
+                                         force_check_visibility=force_check_visibility)
+                    else:
+                        element.wait_for_present_and_visible(timeout)
+                except TimeoutException as ex:
+                    self.log.debug(ex.msg)
+                    if failfast_check_element:
+                        raise ex
+                    self.log.debug("Continuing check on other elements")
+                    error_msgs.append(ex.msg)
             else:
-                element.wait_for_present(timeout)
+                try:
+                    element.wait_for_present(timeout)
+                except TimeoutException as ex:
+                    self.log.debug(ex.msg)
+                    if failfast_check_element:
+                        raise ex
+                    self.log.debug("Continuing check on other elements")
+                    error_msgs.append(ex.msg)
+        if len(error_msgs) > 0:
+            raise TimeoutException("- \n".join(error_msgs))
         return self
 
     def is_page(self, timeout=None, force_check_visibility=False):

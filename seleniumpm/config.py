@@ -18,6 +18,7 @@ test_screenshot_enabled = True
 
 # Selenium Checks
 disable_check_for_selenium_webdriver = False
+failfast_check_element = True
 
 # Debugging configs
 debug_logger_object = None

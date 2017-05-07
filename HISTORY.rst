@@ -20,14 +20,15 @@ FUTURE (UN-RELEASED)
 **New Features:**
 
 - Implementing to_json() and to_json_pp() for Element, Widget, Locator, and Webpage types
-- Adding additional wait_for_widget_load() timer to calculate duration of a widget
+- Adding additional wait_for_widget_load() timer to calculate load time of a widget
 - Adding more logging across seleniumpm. Most are WARNING levels, so this will need to be set accordingly
 - Implemented a is_widget_loaded() for all Widget types. This also includes both Panel and IFrame types
+- Added ability to enumerate over all elements defined on a webpage and/or widget, and then return all elements that failed their checks for presence and visibility. The ability is built directly into *wait_for_page_load()*, *validate()*, and *wait_for_widget_load()*. This check is controlled via parameter and global selenium config *failfast_check_element* (Default: True). This is set to True by default for old behavior of throwing exception on the first element that is not present/visible. Setting this to False will enable this feature and will check each element before raising the expected TimeoutException with a message containing all the elements that failed. *NOTE: Depending on the timeout, this could potentially be a compounded amount of time before the method returns, hence why this feature is disabled by default.*
 
 **Fixed:**
 
 - Element.dict() had an issue if the locator was None
-- Widget.validate() force_check_visibility was accidentally set to True when expected to be False. This ended up causing unexpected conditions in a test where some elemnents were marked as invisible, but validate() was still checking for visibility
+- Widget.validate() force_check_visibility was accidentally set to True when expected to be False. This ended up causing unexpected conditions in a test where some elements were marked as invisible, but validate() was still checking for visibility
 
 2.11.8 (2017-05-05)
 -------------------

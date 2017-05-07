@@ -1,7 +1,8 @@
 import inspect
-import sys
 import types
 
+from selenium.common.exceptions import TimeoutException
+import seleniumpm.config as seleniumconfig
 from seleniumpm.webelements.clickable import Clickable
 from seleniumpm.webelements.element import Element
 
@@ -52,7 +53,7 @@ class Widget(Clickable):
                                                              self.get_duration(timer_type)))
         return self
 
-    def validate(self, timeout=None, force_check_visibility=False, check_myself=False):
+    def validate(self, timeout=None, force_check_visibility=False, failfast_check_element=None, check_myself=False):
         """
         The intention of validate is to make sure that an already loaded widget contains these
         elements.
@@ -62,6 +63,15 @@ class Widget(Clickable):
                                        (but present) on load. The default is to respect this setting
                                        and only check for presence. Setting this to 'True' means you
                                        want to check for both present and visible.
+        :param failfast_check_element: (Default: True) If set to False, then if there is a
+                                       TimeoutException on a WebElement, then it will cache the
+                                       exception message, check all other elements, and then
+                                       re-raise the TimeoutException with a combined list of all
+                                       WebElements that failed their check. This is useful for
+                                       debugging your Webpage/Widget and all its elements.
+                                       However, it does have the Selenium side-effect that the
+                                       time it takes for the method to return could be compounded
+                                       because of the timeout on each failure.
         :param check_myself: (Default: True) Since a Widget/Panel/IFrame is a type of Element, it
                              also has a locator. This is used for enabling/disabling adding a
                              validation against itself. The scenario where this could be used is in
@@ -71,6 +81,9 @@ class Widget(Clickable):
         :return: self
         """
         timeout = timeout if timeout is not None else self.element_timeout
+        failfast_check_element = failfast_check_element \
+            if failfast_check_element is not None else seleniumconfig.failfast_check_element
+        error_msgs = []
         from seleniumpm.iframe import IFrame
         for element in self.get_element_attr(expand_iframe_elements=False,
                                              check_myself=check_myself):
@@ -85,12 +98,28 @@ class Widget(Clickable):
                     self.log.warning("[WARNING] element {}={} ({}) was marked as "
                                      "'invisible' but force_check_visibility=True".format(
                         element.locator.by, element.locator.value, self.__class__))
-                if isinstance(element, IFrame):
-                    element.validate(timeout=timeout, force_check_visibility=force_check_visibility)
-                else:
-                    element.wait_for_present_and_visible(timeout)
+                try:
+                    if isinstance(element, IFrame):
+                        element.validate(timeout=timeout, force_check_visibility=force_check_visibility)
+                    else:
+                        element.wait_for_present_and_visible(timeout)
+                except TimeoutException as ex:
+                    self.log.debug(ex.msg)
+                    if failfast_check_element:
+                        raise ex
+                    self.log.debug("Continuing check on other elements")
+                    error_msgs.append(ex.msg)
             else:
-                element.wait_for_present(timeout)
+                try:
+                    element.wait_for_present(timeout)
+                except TimeoutException as ex:
+                    self.log.debug(ex.msg)
+                    if failfast_check_element:
+                        raise ex
+                    self.log.debug("Continuing check on other elements")
+                    error_msgs.append(ex.msg)
+        if len(error_msgs) > 0:
+            raise TimeoutException("- \n".join(error_msgs))
         return self
 
     def get_element_attr(self, type=Element, override_check_visible=False,
