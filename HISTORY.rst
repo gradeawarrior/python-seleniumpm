@@ -14,12 +14,14 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
-2.12.0 (2017-05-06)
+2.12.0 (2017-05-07)
 -------------------
 
 **New Features:**
 
 - Implementing to_json() and to_json_pp() for Element, Widget, Locator, and Webpage types
+- Adding additional wait_for_widget_load() timer to calculate duration of a widget
+- Adding more logging across seleniumpm. Most are WARNING levels, so this will need to be set accordingly
 
 **Fixed:**
 

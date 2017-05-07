@@ -43,8 +43,14 @@ class Widget(Clickable):
         :return: self
         """
         timeout = timeout if timeout is not None else self.page_timeout
-        return self.validate(timeout=timeout, force_check_visibility=force_check_visibility,
+        timer_type = '{}_load'.format(self.__class__.__name__)
+        self.start_timer(type=timer_type)
+        self.validate(timeout=timeout, force_check_visibility=force_check_visibility,
                              check_myself=check_myself)
+        self.stop_timer(type=timer_type)
+        self.log.debug("{} Widget load time in {}sec".format(self.__class__.__name__,
+                                                             self.get_duration(timer_type)))
+        return self
 
     def validate(self, timeout=None, force_check_visibility=False, check_myself=False):
         """
@@ -154,13 +160,14 @@ class Widget(Clickable):
                             ((isinstance(element, IFrame) and expand_iframe_elements)):
                         if result_type == dict:
                             temp_widgets[attr] = []
-                            for key, value in element.get_element_attr(type=type,
-                                                                       override_check_visible=override_check_visible,
-                                                                       override_do_not_check=override_do_not_check,
-                                                                       expand_iframe_elements=expand_iframe_elements,
-                                                                       result_type=result_type,
-                                                                       check_myself=True,
-                                                                       attr_name=attr).items():
+                            for key, value in element \
+                                    .get_element_attr(type=type,
+                                                      override_check_visible=override_check_visible,
+                                                      override_do_not_check=override_do_not_check,
+                                                      expand_iframe_elements=expand_iframe_elements,
+                                                      result_type=result_type,
+                                                      check_myself=True,
+                                                      attr_name=attr).items():
                                 temp_widgets[attr].append({'key': key, 'value': value})
                         else:
                             for welement in element.get_element_attr(type=type):
@@ -181,7 +188,8 @@ class Widget(Clickable):
                     else:
                         elements.append(element)
 
-        # Give non-widgets priority, hence why there is a separate loop for widgets and their elements
+        # Give non-widgets priority, hence why there is a separate loop for widgets and their
+        # elements
         for attr, values in temp_widgets.items():
             for element in values:
                 if element['key'] not in elements:
@@ -192,8 +200,8 @@ class Widget(Clickable):
 
     def get_element_attr_local(self):
         """
-        This is a much simpler implement of get_element_attr() in that it only returns back the locally defined
-        Elements, and not any elements defined in sub-Widgets and sub-Panels.
+        This is a much simpler implement of get_element_attr() in that it only returns back the
+        locally defined Elements, and not any elements defined in sub-Widgets and sub-Panels.
 
         :return: A dict of Element types
         """
@@ -208,7 +216,8 @@ class Widget(Clickable):
         """
         Returns only the local methods defined for this class
 
-        :return: a dict containing method names (keys) and a list of parameters for the method (values)
+        :return: a dict containing method names (keys) and a list of parameters for the method
+                 (values)
         """
         results = {}
         for attr in dir(self):

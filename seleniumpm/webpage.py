@@ -33,10 +33,11 @@ url_regex = re.compile(
 
 def take_screenshot_on_webpage_error(func):
     """
-    This is an annotation for automatic screenshot ability for Webpage functions. It leverages "higher-order" operations
-    available through functools library; and as the function implies, allows for automatic taking of a screenshot
-    when there is an error/exception thrown.
+    This is an annotation for automatic screenshot ability for Webpage functions. It leverages
+    "higher-order" operations available through functools library; and as the function implies,
+    allows for automatic taking of a screenshot when there is an error/exception thrown.
     """
+
     @wraps(func)
     def newFunc(*args, **kwargs):
         try:
@@ -67,9 +68,9 @@ def take_screenshot_on_webpage_error(func):
 
 class Webpage(object):
     """
-    The Webpage class is intended to be the parent class for all Webpages. In principle, a Webpage is simply a
-    construct that allows us to organize a set of WebElements on any given page; therefore, this class and other
-    Selenium PageModel entities follows this paradigm.
+    The Webpage class is intended to be the parent class for all Webpages. In principle, a Webpage
+    is simply a construct that allows us to organize a set of WebElements on any given page;
+    therefore, this class and other Selenium PageModel entities follows this paradigm.
 
     The first step to do is to write your own class that extends Webpage:
 
@@ -82,12 +83,14 @@ class Webpage(object):
     In the constructor, you do the following:
 
         1) Call the parent class's constructor
-        2) You define 'path' attribute (default is "", so it didn't need to be specified in this example)
+        2) You define 'path' attribute (default is "", so it didn't need to be specified in this
+           example)
         3) You add a set of WebElements to your Webpage
     """
 
     def __init__(self, driver, url=None):
-        if not seleniumconfig.disable_check_for_selenium_webdriver and not isinstance(driver, WebDriver):
+        if not seleniumconfig.disable_check_for_selenium_webdriver and not isinstance(driver,
+                                                                                      WebDriver):
             raise AttributeError("driver was not an expected RemoteWebdriver type!")
         self.driver = driver
         self.path = ""
@@ -112,7 +115,8 @@ class Webpage(object):
 
         The latter method is the recommended approach.
 
-        :param url: The url to open, but it is recommended that this be specified in constructor - Default: None
+        :param url: (Default: None) The url to open, but it is recommended that this be specified in
+                    constructor
         :return:
         """
         if url:
@@ -188,12 +192,12 @@ class Webpage(object):
 
     def start_timer(self, type=None):
         """
-        This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
-        will "start" the timer and set driver.start_time = time.time().
+        This method is part of the stop-watch set of capabilities for PageObjects and elements. This
+        method will "start" the timer and set driver.start_time = time.time().
 
-        :param type: (Default: None) This is used for capturing different timers. If not None (e.g. 'page' or
-                        'element') then all timer attributes will be prefixed with '<type>_'
-                        (e.g. driver.page_start_time, page_end_time, and page_duration_time)
+        :param type: (Default: None) This is used for capturing different timers. If not None (e.g.
+                     'page' or 'element') then all timer attributes will be prefixed with '<type>_'
+                     (e.g. driver.page_start_time, page_end_time, and page_duration_time)
         :return: The start time
         """
         attr = "start_time" if type is None else "{}_start_time".format(type)
@@ -202,12 +206,12 @@ class Webpage(object):
 
     def stop_timer(self, type=None):
         """
-        This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
-        will "stop" the timer and set driver.end_time = time.time().
+        This method is part of the stop-watch set of capabilities for PageObjects and elements.
+        This method will "stop" the timer and set driver.end_time = time.time().
 
-        :param type: (Default: None) This is used for capturing different timers. If not None (e.g. 'page' or
-                        'element') then all timer attributes will be prefixed with '<type>_'
-                        (e.g. driver.page_start_time, page_end_time, and page_duration_time)
+        :param type: (Default: None) This is used for capturing different timers. If not None (e.g.
+                     'page' or 'element') then all timer attributes will be prefixed with '<type>_'
+                     (e.g. driver.page_start_time, page_end_time, and page_duration_time)
         :return: The end time
         """
         start_attr = "start_time" if type is None else "{}_start_time".format(type)
@@ -226,12 +230,13 @@ class Webpage(object):
 
     def get_split_time(self, type=None):
         """
-        This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
-        will return a duration between driver.start_time and now. If a timer was not started, then return 0.
+        This method is part of the stop-watch set of capabilities for PageObjects and elements. This
+        method will return a duration between driver.start_time and now. If a timer was not started,
+        then return 0.
 
-        :param type: (Default: None) This is used for capturing different timers. If not None (e.g. 'page' or
-                        'element') then all timer attributes will be prefixed with '<type>_'
-                        (e.g. driver.page_start_time, page_end_time, and page_duration_time)
+        :param type: (Default: None) This is used for capturing different timers. If not None (e.g.
+                     'page' or 'element') then all timer attributes will be prefixed with '<type>_'
+                     (e.g. driver.page_start_time, page_end_time, and page_duration_time)
         :return: The duration between driver.start_time and time.time(). Otherwise, 0
         """
         attr = "start_time" if type is None else "{}_start_time".format(type)
@@ -241,14 +246,14 @@ class Webpage(object):
 
     def get_duration(self, type=None):
         """
-        This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
-        will return a duration between driver.start_time and now. This method will also call stop_timer(). If a timer
-        was already stopped, then do not call stop_timer() again; instead return the previous duration. If a timer was
-        not started, then return 0.
+        This method is part of the stop-watch set of capabilities for PageObjects and elements.
+        This method will return a duration between driver.start_time and now. This method will also
+        call stop_timer(). If a timer was already stopped, then do not call stop_timer() again;
+        instead return the previous duration. If a timer was not started, then return 0.
 
-        :param type: (Default: None) This is used for capturing different timers. If not None (e.g. 'page' or
-                        'element') then all timer attributes will be prefixed with '<type>_'
-                        (e.g. driver.page_start_time, page_end_time, and page_duration_time)
+        :param type: (Default: None) This is used for capturing different timers. If not None (e.g.
+                     'page' or 'element') then all timer attributes will be prefixed with '<type>_'
+                     (e.g. driver.page_start_time, page_end_time, and page_duration_time)
         :return: The duration between driver.start_time and driver.end_time. Otherwise, 0
         """
         start_attr = "start_time" if type is None else "{}_start_time".format(type)
@@ -264,12 +269,13 @@ class Webpage(object):
 
     def reset_timer(self, type=None):
         """
-        This method is part of the stop-watch set of capabilities for PageObjects and elements. This method
-        will set driver.start_time = 0, driver.end_time = 0, and driver.duration_time = 0
+        This method is part of the stop-watch set of capabilities for PageObjects and elements. This
+        method will set driver.start_time = 0, driver.end_time = 0, and driver.duration_time = 0
 
-        :param type: (Default: None) This is used for capturing different timers. If not None (e.g. 'page' or
-                        'element') then all timer attributes will be prefixed with '<type>_'
-                        (e.g. driver.page_start_time, page_end_time, and page_duration_time)
+        :param type: (Default: None) This is used for capturing different timers. If not None (e.g.
+                        'page' or 'element') then all timer attributes will be prefixed with
+                        '<type>_' (e.g. driver.page_start_time, page_end_time, and
+                        page_duration_time)
         :return: self
         """
         start_attr = "start_time" if type is None else "{}_start_time".format(type)
@@ -316,8 +322,8 @@ class Webpage(object):
 
     @take_screenshot_on_webpage_error
     def wait_for_title(self, title, timeout=None):
-        """This could be used similar to a wait_for_page_load() if the page title can uniquely identify
-        different pages or states of the page. Google Search works like this.
+        """This could be used similar to a wait_for_page_load() if the page title can uniquely
+        identify different pages or states of the page. Google Search works like this.
 
         :param title: The title to search for (case sensitive)
         :param timeout: The number of seconds to wait - Default: 10s
@@ -330,14 +336,16 @@ class Webpage(object):
     @take_screenshot_on_webpage_error
     def wait_for_page_load(self, timeout=None, force_check_visibility=False):
         """
-        This method "waits for page load" by checking that all expected objects are both present and visible on the
-        page. This is similar to validate() operation except that sometimes certain pages take a long time to load.
-        Typically the threshold is 30sec, but this is configurable.
+        This method "waits for page load" by checking that all expected objects are both present
+        and visible on the page. This is similar to validate() operation except that sometimes
+        certain pages take a long time to load. Typically the threshold is 30sec, but this is
+        configurable.
 
         :param timeout: (Default: 30s) The number of seconds to poll waiting for an element
-        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible (but present) on
-                                       load. The default is to respect this setting and only check for presence. Setting
-                                       this to 'True' means you want to check for both present and visible.
+        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible
+                                       (but present) on load. The default is to respect this setting
+                                       and only check for presence. Setting this to 'True' means you
+                                       want to check for both present and visible.
         :return: self if everything is successful
         :raises TimeoutException: if an element doesn't appear within timeout
         """
@@ -345,17 +353,21 @@ class Webpage(object):
         self.start_timer(type="page_load")
         self.validate(timeout=timeout, force_check_visibility=force_check_visibility)
         self.stop_timer(type="page_load")
+        self.log.debug("Page load for {} took {}sec".format(self.__class__.__name__,
+                                                            self.get_duration("page_load")))
         return self
 
     @take_screenshot_on_webpage_error
     def validate(self, timeout=None, force_check_visibility=False):
         """
-        The intention of validate is to make sure that an already loaded webpage contains these elements.
+        The intention of validate is to make sure that an already loaded webpage contains these
+        elements.
 
         :param timeout: (Default: 10s) The number of seconds to poll waiting for an element
-        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible (but present) on
-                                       load. The default is to respect this setting and only check for presence. Setting
-                                       this to 'True' means you want to check for both present and visible.
+        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible
+                                       (but present) on load. The default is to respect this setting
+                                       and only check for presence. Setting this to 'True' means you
+                                       want to check for both present and visible.
         :raises TimeoutException: if an element doesn't appear within timeout
         """
         timeout = timeout if timeout is not None else self.element_timeout
@@ -365,11 +377,14 @@ class Webpage(object):
                 continue
             # Check for presence and visibility
             if force_check_visibility or element.check_visible:
-                # Print to stderr a WARNING message when force_check_visibility=True and element has been marked 'invisible'
+                # Print to stderr a WARNING message when force_check_visibility=True and element
+                # has been marked 'invisible'
                 if force_check_visibility and not element.check_visible:
                     sys.stderr.write(
-                        "[WARNING] element {}={} ({}) was marked as 'invisible' but force_check_visibility=True".format(
-                            element.locator.by, element.locator.value, self.__class__))
+                        "[WARNING] element {}={} ({}) was marked as 'invisible' "
+                        "but force_check_visibility=True".format(element.locator.by,
+                                                                 element.locator.value,
+                                                                 self.__class__))
                 if isinstance(element, IFrame):
                     element.validate(timeout=timeout, force_check_visibility=force_check_visibility)
                 else:
@@ -380,14 +395,16 @@ class Webpage(object):
 
     def is_page(self, timeout=None, force_check_visibility=False):
         """
-        This is like validate() operation except that it returns a boolean True/False. The idea is to
-        ask whether or not you are on a page; this is an implementation of that idea. There are of course
-        other ways of checking whether you are on the right page or not (e.g. checking the page title).
+        This is like validate() operation except that it returns a boolean True/False. The idea is
+        to ask whether or not you are on a page; this is an implementation of that idea. There are
+        of course other ways of checking whether you are on the right page or not (e.g. checking the
+        page title).
 
         :param timeout: (Default: 30s) The number of seconds to poll waiting for an element
-        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible (but present) on
-                                       load. The default is to respect this setting and only check for presence. Setting
-                                       this to 'True' means you want to check for both present and visible.
+        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible
+                                       (but present) on load. The default is to respect this setting
+                                       and only check for presence. Setting this to 'True' means you
+                                       want to check for both present and visible.
         :return: True if validate() does not throw an exception; False otherwise
         """
         timeout = timeout if timeout is not None else self.page_timeout
@@ -402,16 +419,18 @@ class Webpage(object):
         Allows you to take a screenshot of the current page.
 
         :param screenshot_dir: (Default: './screenshots') The directory path for the screenshots
-        :param screenshot_name: (Default: "screenshot_%s" % time.strftime('%Y_%m_%d-%H_%M_%S')) The file name excluding
-                                the type
-        :param debug_logger_object: (Default: None) Ability to reference your own debugger object. I am assuming there
-                                    is a debug(msg) method, in which this method will write to.
+        :param screenshot_name: (Default: "screenshot_%s" % time.strftime('%Y_%m_%d-%H_%M_%S')) The
+                                file name excluding the type
+        :param debug_logger_object: (Default: None) Ability to reference your own debugger object.
+                                    I am assuming there is a debug(msg) method, in which this method
+                                    will write to.
         :return: screenshot_name
         """
         screenshot_name = "screenshot_%s" % time.strftime(
             '%Y_%m_%d-%H_%M_%S') if screenshot_name is None else screenshot_name
         screenshot_dir = seleniumconfig.screenshot_dir if screenshot_dir is None else screenshot_dir
-        debug_logger_object = seleniumconfig.debug_logger_object if debug_logger_object is None else debug_logger_object
+        debug_logger_object = seleniumconfig.debug_logger_object \
+            if debug_logger_object is None else debug_logger_object
         filename = "%s/%s.png" % (screenshot_dir, screenshot_name)
 
         # Ensure that path exists, otherwise create it
@@ -431,26 +450,34 @@ class Webpage(object):
 
         return screenshot_name
 
-    def get_element_attr(self, type=Element, override_check_visible=False, override_do_not_check=False,
-                         expand_iframe_elements=False, result_type=list):
+    def get_element_attr(self, type=Element, override_check_visible=False,
+                         override_do_not_check=False, expand_iframe_elements=False,
+                         result_type=list):
         """
-        Retrieves a list of WebElements on a Webpage. Optionally, you can pass in a different type (e.g. Button,
-        Link, TextElement) to return only those types associated with a Webpage object.
+        Retrieves a list of WebElements on a Webpage. Optionally, you can pass in a different type
+        (e.g. Button, Link, TextElement) to return only those types associated with a Webpage
+        object.
 
-        :param type: one of the seleniumpm.webelement types (Default: seleniumpm.webelements.Element)
-        :param override_check_visible: (Default: False) This overrides check for visibility. By default, widgets that are
-                                        invisible, means that we assume its elements are also invisible
-        :param override_do_not_check: (Default: False) This overrides check for do_not_check. By default, widgets that are
-                                        marked as do_not_check, means that we assume its elements are not accessible
-        :param expand_iframe_elements: (Default: False) Elements within an iFrame must be kept together in order to execute validate()
-        :param result_type: (Default: list) This value can either be (list|dict). By default, we simply want a list of
-                            available elements on the page. However, the dictionary version is implemented for the ability
-                            to retrieve every element and sub-element on a Webpage directly from the page level
+        :param type: (Default: seleniumpm.webelements.Element) one of the seleniumpm.webelement
+                     types
+        :param override_check_visible: (Default: False) This overrides check for visibility. By
+                                        default, widgets that are invisible, means that we assume
+                                        its elements are also invisible
+        :param override_do_not_check: (Default: False) This overrides check for do_not_check. By
+                                        default, widgets that are marked as do_not_check, means that
+                                        we assume its elements are not accessible
+        :param expand_iframe_elements: (Default: False) Elements within an iFrame must be kept
+                                        together in order to execute validate()
+        :param result_type: (Default: list) This value can either be (list|dict). By default, we
+                            simply want a list of available elements on the page. However, the
+                            dictionary version is implemented for the ability to retrieve every
+                            element and sub-element on a Webpage directly from the page level
         :return: This is a list or dict of attributes of base type seleniumpm.webelements.Element
         """
         if result_type != list and result_type != dict:
             raise AttributeError(
-                "result_type can either be 'list' (default) or 'dict', but was '{}'".format(result_type))
+                "result_type can either be 'list' (default) or "
+                "'dict', but was '{}'".format(result_type))
         elements = [] if result_type == list else {}
         temp_widgets = {}
         for attr in dir(self):
@@ -474,13 +501,14 @@ class Webpage(object):
                             ((isinstance(element, IFrame) and expand_iframe_elements)):
                         if result_type == dict:
                             temp_widgets[attr] = []
-                            for key, value in element.get_element_attr(type=type,
-                                                                       override_check_visible=override_check_visible,
-                                                                       override_do_not_check=override_do_not_check,
-                                                                       expand_iframe_elements=expand_iframe_elements,
-                                                                       result_type=result_type,
-                                                                       check_myself=True,
-                                                                       attr_name=attr).items():
+                            for key, value in element \
+                                    .get_element_attr(type=type,
+                                                      override_check_visible=override_check_visible,
+                                                      override_do_not_check=override_do_not_check,
+                                                      expand_iframe_elements=expand_iframe_elements,
+                                                      result_type=result_type,
+                                                      check_myself=True,
+                                                      attr_name=attr).items():
                                 temp_widgets[attr].append({'key': key, 'value': value})
                         else:
                             for welement in element.get_element_attr(type=type):
@@ -492,14 +520,16 @@ class Webpage(object):
                         else:
                             elements.append(element)
                 # Add the element if it matches the expected type (not a Widget)
-                if type not in (Widget, Panel, IFrame) and isinstance(element, type) and not isinstance(element,
-                                                                                                        Widget):
+                if type not in (Widget, Panel, IFrame) \
+                        and isinstance(element, type) \
+                        and not isinstance(element, Widget):
                     if result_type == dict:
                         elements[attr] = element
                     else:
                         elements.append(element)
 
-        # Give non-widgets priority, hence why there is a separate loop for widgets and their elements
+        # Give non-widgets priority, hence why there is a separate loop for widgets and their
+        # elements
         for attr, values in temp_widgets.items():
             for element in values:
                 if element['key'] not in elements:
@@ -509,22 +539,23 @@ class Webpage(object):
 
         # Ensure that there is only 1 iframe defined on page at this time
         count_iframes = 0
-        # TODO - apparently list(elements.values()) is how this should be implemented if using Python 3
+        # TODO - apparently list(elements.values()) is how this should be implemented if using
+        # TODO - Python 3
         list_elements = elements.values() if result_type == dict else elements
         for element in list_elements:
             if isinstance(element, IFrame) and not element.do_not_check:
                 count_iframes += 1
             if count_iframes > 1 and not expand_iframe_elements:
-                raise AttributeError(
-                    "There was more than 1 IFrame found on this page. This is currently not supported. "
-                    "If necessary, please mark at least 1 of them using 'mark_do_not_check()'")
+                raise AttributeError("There was more than 1 IFrame found on this page. "
+                                     "This is currently not supported. If necessary, "
+                                     "please mark at least 1 of them using 'mark_do_not_check()'")
 
         return elements
 
     def get_element_attr_local(self):
         """
-        This is a much simpler implement of get_element_attr() in that it only returns back the locally defined
-        Elements, and not any elements defined in sub-Widgets and sub-Panels.
+        This is a much simpler implement of get_element_attr() in that it only returns back the
+        locally defined Elements, and not any elements defined in sub-Widgets and sub-Panels.
 
         :return: A dict of Element types
         """
@@ -539,7 +570,8 @@ class Webpage(object):
         """
         Returns only the local methods defined for this class
 
-        :return: a dict containing method names (keys) and a list of parameters for the method (values)
+        :return: a dict containing method names (keys) and a list of parameters for the method
+                 (values)
         """
         results = {}
         for attr in dir(self):
@@ -553,8 +585,8 @@ class Webpage(object):
 
     def get_all_elements_on_page(self):
         """
-        Retrieves all the webelements that have been defined on the page. This includes all sub-elements found on
-        widgets, panels, and iframes.
+        Retrieves all the webelements that have been defined on the page. This includes all
+        sub-elements found on widgets, panels, and iframes.
 
         :return: A dict of all the elements
         """
@@ -565,8 +597,8 @@ class Webpage(object):
 
     def __getattr__(self, name):
         """
-        Overridden method so that we can also be able to directly access all webelements defined at lower level
-        webelements (a.k.a. widgets, panels, and iframes)
+        Overridden method so that we can also be able to directly access all webelements defined at
+        lower level webelements (a.k.a. widgets, panels, and iframes)
 
         :param name: The name of the attribute or webelement that we expect to exist on the Webpage
         :return: The attribute value if found
@@ -580,6 +612,6 @@ class Webpage(object):
         if name in all_elements:
             return all_elements[name]
         else:
-            raise AttributeError(
-                "'{}' webpage and its widgets has no attribute '{}'. The following are valid webelements on the page:\n  - {}".format(
-                    self.__class__.__name__, name, "\n  - ".join(all_elements.keys())))
+            raise AttributeError("'{}' webpage and its widgets has no attribute '{}'. "
+                                 "The following are valid webelements on the page:\n  - {}".format(
+                self.__class__.__name__, name, "\n  - ".join(all_elements.keys())))
