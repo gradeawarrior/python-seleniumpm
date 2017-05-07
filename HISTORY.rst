@@ -22,6 +22,7 @@ FUTURE (UN-RELEASED)
 - Implementing to_json() and to_json_pp() for Element, Widget, Locator, and Webpage types
 - Adding additional wait_for_widget_load() timer to calculate duration of a widget
 - Adding more logging across seleniumpm. Most are WARNING levels, so this will need to be set accordingly
+- Implemented a is_widget_loaded() for all Widget types. This also includes both Panel and IFrame types
 
 **Fixed:**
 

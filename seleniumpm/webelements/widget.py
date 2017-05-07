@@ -212,6 +212,26 @@ class Widget(Clickable):
                 elements[attr] = element
         return elements
 
+    def is_widget_loaded(self, timeout=None, force_check_visibility=False):
+        """
+        This is like validate() operation except that it returns a boolean True/False. The idea is
+        to ask whether or not this widget and all of its sub-elements are present; this is an
+        implementation of that idea.
+
+        :param timeout: (Default: 10s) The number of seconds to poll waiting for an element
+        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible
+                                       (but present) on load. The default is to respect this setting
+                                       and only check for presence. Setting this to 'True' means you
+                                       want to check for both present and visible.
+        :return: True if validate() does not throw an exception; False otherwise
+        """
+        timeout = timeout if timeout is not None else self.element_timeout
+        try:
+            self.validate(timeout=timeout, force_check_visibility=force_check_visibility)
+            return True
+        except:
+            return False
+
     def get_methods_local(self):
         """
         Returns only the local methods defined for this class
