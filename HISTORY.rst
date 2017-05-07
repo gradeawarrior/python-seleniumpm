@@ -24,6 +24,7 @@ FUTURE (UN-RELEASED)
 **Fixed:**
 
 - Element.dict() had an issue if the locator was None
+- Widget.validate() force_check_visibility was accidentally set to True when expected to be False. This ended up causing unexpected conditions in a test where some elemnents were marked as invisible, but validate() was still checking for visibility
 
 2.11.8 (2017-05-05)
 -------------------

@@ -46,7 +46,7 @@ class Widget(Clickable):
         return self.validate(timeout=timeout, force_check_visibility=force_check_visibility,
                              check_myself=check_myself)
 
-    def validate(self, timeout=None, force_check_visibility=True, check_myself=False):
+    def validate(self, timeout=None, force_check_visibility=False, check_myself=False):
         """
         The intention of validate is to make sure that an already loaded widget contains these
         elements.
