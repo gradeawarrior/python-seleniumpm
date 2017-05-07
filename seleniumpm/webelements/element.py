@@ -1,5 +1,6 @@
 from functools import wraps
 import base64
+import json
 import logging
 import os
 import re
@@ -545,6 +546,18 @@ class Element(object):
             'check_visible': self.check_visible,
             'do_not_check': self.do_not_check
         }
+
+    def to_json(self):
+        """
+        Returns a json string
+        """
+        return json.dumps(self.dict())
+
+    def to_json_pp(self):
+        """
+        Returns a pretty-print json string with indent set to 4 spaces
+        """
+        return json.dumps(self.dict(), indent=4)
 
     @property
     def page_timeout(self):

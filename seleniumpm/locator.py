@@ -1,4 +1,6 @@
 import copy
+import json
+
 from selenium.webdriver.common.by import By
 
 class Locator(object):
@@ -37,6 +39,18 @@ class Locator(object):
             'by': self.by,
             'value': self.value
         }
+
+    def to_json(self):
+        """
+        Returns a json string
+        """
+        return json.dumps(self.dict())
+
+    def to_json_pp(self):
+        """
+        Returns a pretty-print json string with indent set to 4 spaces
+        """
+        return json.dumps(self.dict(), indent=4)
 
     @staticmethod
     def by_xpath(value):

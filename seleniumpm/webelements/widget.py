@@ -26,51 +26,59 @@ class Widget(Clickable):
 
     def wait_for_widget_load(self, timeout=None, force_check_visibility=False, check_myself=True):
         """
-        This implementation is the same as Webpage.wait_for_page_load(). This is to support iFrame situations that
-        is a separate page load than the outer page.
+        This implementation is the same as Webpage.wait_for_page_load(). This is to support iFrame
+        situations that is a separate page load than the outer page.
 
         :param timeout: (Default: 30s) The number of seconds to poll waiting for an element
-        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible (but present) on
-                                       load. The default is to respect this setting and only check for presence. Setting
-                                       this to 'True' means you want to check for both present and visible.
-        :param check_myself: (Default: True) Since a Widget/Panel/IFrame is a type of Element, it also has a locator.
-                             This is used for enabling/disabling adding a validation against itself. The scenario
-                             where this could be used is in a situation where you want to validate the elements of this
-                             container, but not the Locator of the container itself.
+        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible
+                                       (but present) on load. The default is to respect this setting
+                                       and only check for presence. Setting this to 'True' means you
+                                       want to check for both present and visible.
+        :param check_myself: (Default: True) Since a Widget/Panel/IFrame is a type of Element, it
+                             also has a locator. This is used for enabling/disabling adding a
+                             validation against itself. The scenario where this could be used is in
+                             a situation where you want to validate the elements of this container,
+                             but not the Locator of the container itself.
         :raises TimeoutException: if an element doesn't appear within timeout
         :return: self
         """
         timeout = timeout if timeout is not None else self.page_timeout
-        return self.validate(timeout=timeout, force_check_visibility=force_check_visibility, check_myself=check_myself)
+        return self.validate(timeout=timeout, force_check_visibility=force_check_visibility,
+                             check_myself=check_myself)
 
     def validate(self, timeout=None, force_check_visibility=True, check_myself=False):
         """
-        The intention of validate is to make sure that an already loaded widget contains these elements.
+        The intention of validate is to make sure that an already loaded widget contains these
+        elements.
 
         :param timeout: (Default: 10s) The number of seconds to poll waiting for an element
-        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible (but present) on
-                                       load. The default is to respect this setting and only check for presence. Setting
-                                       this to 'True' means you want to check for both present and visible.
-        :param check_myself: (Default: True) Since a Widget/Panel/IFrame is a type of Element, it also has a locator.
-                             This is used for enabling/disabling adding a validation against itself. The scenario
-                             where this could be used is in a situation where you want to validate the elements of this
-                             container, but not the Locator of the container itself.
+        :param force_check_visibility: (Default: False) Some elements can mark itself as invisible
+                                       (but present) on load. The default is to respect this setting
+                                       and only check for presence. Setting this to 'True' means you
+                                       want to check for both present and visible.
+        :param check_myself: (Default: True) Since a Widget/Panel/IFrame is a type of Element, it
+                             also has a locator. This is used for enabling/disabling adding a
+                             validation against itself. The scenario where this could be used is in
+                             a situation where you want to validate the elements of this container,
+                             but not the Locator of the container itself.
         :raises TimeoutException: if an element doesn't appear within timeout
         :return: self
         """
         timeout = timeout if timeout is not None else self.element_timeout
         from seleniumpm.iframe import IFrame
-        for element in self.get_element_attr(expand_iframe_elements=False, check_myself=check_myself):
+        for element in self.get_element_attr(expand_iframe_elements=False,
+                                             check_myself=check_myself):
             # Continue if the element has marked itself do_not_check=True or a Locator is not defined
             if element.do_not_check or element.locator is None:
                 continue
             # Check for presence and visibility
             if force_check_visibility or element.check_visible:
-                # Print to stderr a WARNING message when force_check_visibility=True and element has been marked 'invisible'
+                # Print to stderr a WARNING message when force_check_visibility=True
+                # and element has been marked 'invisible'
                 if force_check_visibility and not element.check_visible:
-                    sys.stderr.write(
-                        "[WARNING] element {}={} ({}) was marked as 'invisible' but force_check_visibility=True".format(
-                            element.locator.by, element.locator.value, self.__class__))
+                    self.log.warning("[WARNING] element {}={} ({}) was marked as "
+                                     "'invisible' but force_check_visibility=True".format(
+                        element.locator.by, element.locator.value, self.__class__))
                 if isinstance(element, IFrame):
                     element.validate(timeout=timeout, force_check_visibility=force_check_visibility)
                 else:
@@ -79,38 +87,48 @@ class Widget(Clickable):
                 element.wait_for_present(timeout)
         return self
 
-    def get_element_attr(self, type=Element, override_check_visible=False, override_do_not_check=False,
-                         expand_iframe_elements=False, result_type=list, check_myself=True, attr_name='widget'):
+    def get_element_attr(self, type=Element, override_check_visible=False,
+                         override_do_not_check=False,
+                         expand_iframe_elements=False, result_type=list, check_myself=True,
+                         attr_name='widget'):
         """
-        Retrieves a list of WebElements on a Widget. Optionally, you can pass in a different type (e.g. Button,
-        Link, TextElement) to return only those types associated with a Widget object.
+        Retrieves a list of WebElements on a Widget. Optionally, you can pass in a different type
+        (e.g. Button, Link, TextElement) to return only those types associated with a Widget object.
 
-        :param type: one of the seleniumpm.webelement types (Default: seleniumpm.webelements.Element)
-        :param override_check_visible: (Default: False) This overrides check for visibility. By default, widgets that are
-                                        invisible, means that we assume its elements are also invisible
-        :param override_do_not_check: (Default: False) This overrides check for do_not_check. By default, widgets that are
-                                        marked as do_not_check, means that we assume its elements are not accessible
-        :param expand_iframe_elements: (Default: False) Elements within an iFrame must be kept together in order to execute validate()
-        :param result_type: (Default: list) This value can either be (list|dict). By default, we simply want a list of
-                            available elements on the page. However, the dictionary version is implemented for the ability
-                            to retrieve every element and sub-element on a Webpage directly from the page level
-        :param check_myself: (Default: True) Since a Widget/Panel/IFrame is a type of Element, it also has a locator.
-                             This is used for enabling/disabling adding a validation against itself. The scenario
-                             where this could be used is in a situation where you want to validate the elements of this
-                             container, but not the Locator of the container itself.
-        :param attr_name: (Default: 'widget') This is for passing the attribute name from its parent when recursively
-                            iterating through all of its sub-elements.
+        :param type: (Default: seleniumpm.webelements.Element) one of the seleniumpm.webelement
+                     types
+        :param override_check_visible: (Default: False) This overrides check for visibility. By
+                                        default, widgets that are invisible, means that we assume
+                                        its elements are also invisible
+        :param override_do_not_check: (Default: False) This overrides check for do_not_check. By
+                                        default, widgets that are marked as do_not_check, means that
+                                        we assume its elements are not accessible
+        :param expand_iframe_elements: (Default: False) Elements within an iFrame must be kept
+                                        together in order to execute validate()
+        :param result_type: (Default: list) This value can either be (list|dict). By default, we
+                            simply want a list of available elements on the page. However, the
+                            dictionary version is implemented for the ability to retrieve every
+                            element and sub-element on a Webpage directly from the page level
+        :param check_myself: (Default: True) Since a Widget/Panel/IFrame is a type of Element, it
+                             also has a locator. This is used for enabling/disabling adding a
+                             validation against itself. The scenario where this could be used is in
+                             a situation where you want to validate the elements of this container,
+                             but not the Locator of the container itself.
+        :param attr_name: (Default: 'widget') This is for passing the attribute name from its parent
+                            when recursively iterating through all of its sub-elements.
         :return: This is a list or dict of attributes of base type seleniumpm.webelements.Element
         """
         from seleniumpm.iframe import IFrame
         from seleniumpm.webelements.panel import Panel
         if result_type != list and result_type != dict:
             raise AttributeError(
-                "result_type can either be 'list' (default) or 'dict', but was '{}'".format(result_type))
+                "result_type can either be 'list' (default) or 'dict', but was '{}'".format(
+                    result_type))
         elements = [] if result_type == list else {}
         temp_widgets = {}
         # Add myself if I match the expected type
-        if isinstance(self, type) and (not isinstance(self, IFrame) or expand_iframe_elements) and check_myself:
+        if isinstance(self, type) and (
+                    not isinstance(self, IFrame) or expand_iframe_elements) and check_myself:
             if result_type == dict:
                 elements[attr_name] = self
             else:
@@ -154,8 +172,10 @@ class Widget(Clickable):
                         else:
                             elements.append(element)
                 # Add the element if it matches the expected type (not a Widget)
-                if type not in (Widget, Panel, IFrame) and isinstance(element, type) and not isinstance(element,
-                                                                                                        Widget):
+                if type not in (Widget, Panel, IFrame) and isinstance(element,
+                                                                      type) and not isinstance(
+                    element,
+                    Widget):
                     if result_type == dict:
                         elements[attr] = element
                     else:
@@ -202,8 +222,8 @@ class Widget(Clickable):
 
     def get_all_elements_on_widget(self):
         """
-        Retrieves all the webelements that have been defined on the widget. This includes all sub-elements found on
-        widgets, panels, and iframes.
+        Retrieves all the webelements that have been defined on the widget. This includes all
+        sub-elements found on widgets, panels, and iframes.
 
         :return: A dict of all the elements
         """
@@ -214,8 +234,8 @@ class Widget(Clickable):
 
     def __getattr__(self, name):
         """
-        Overridden method so that we can also be able to directly access all webelements defined at lower level
-        webelements (a.k.a. widgets, panels, and iframes)
+        Overridden method so that we can also be able to directly access all webelements defined at
+        lower level webelements (a.k.a. widgets, panels, and iframes)
 
         :param name: The name of the attribute or webelement that we expect to exist on the Webpage
         :return: The attribute value if found

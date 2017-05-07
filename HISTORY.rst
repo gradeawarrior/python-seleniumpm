@@ -19,7 +19,7 @@ FUTURE (UN-RELEASED)
 
 **New Features:**
 
--
+- Implementing to_json() and to_json_pp() for Element, Widget, Locator, and Webpage types
 
 **Fixed:**
 
