@@ -241,7 +241,7 @@ class Widget(Clickable):
                 elements[attr] = element
         return elements
 
-    def is_widget_loaded(self, timeout=None, force_check_visibility=False):
+    def is_widget_loaded(self, timeout=None, force_check_visibility=False, screenshot_enabled=False):
         """
         This is like validate() operation except that it returns a boolean True/False. The idea is
         to ask whether or not this widget and all of its sub-elements are present; this is an
@@ -252,16 +252,21 @@ class Widget(Clickable):
                                        (but present) on load. The default is to respect this setting
                                        and only check for presence. Setting this to 'True' means you
                                        want to check for both present and visible.
+        :param screenshot_enabled: (Default: False) This temporarily enables/disables screenshots
         :return: True if validate() does not throw an exception; False otherwise
         """
         timeout = timeout if timeout is not None else self.element_timeout
+        screenshot_value = seleniumconfig.screenshot_enabled
         try:
+            seleniumconfig.screenshot_enabled = screenshot_enabled
             self.validate(timeout=timeout,
                           force_check_visibility=force_check_visibility,
                           failfast_check_element=True)
             return True
         except:
             return False
+        finally:
+            seleniumconfig.screenshot_enabled = screenshot_value
 
     def get_methods_local(self):
         """

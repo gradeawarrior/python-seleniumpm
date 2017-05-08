@@ -14,6 +14,15 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
+2.12.1 (2017-05-08)
+-------------------
+
+**New Features:**
+
+**Fixed:**
+
+- Turning off snapshot feature during is_page() and is_widget_loaded() operations. These operations often time trigger TimeoutException but it should not trigger a snapshot to be taken.
+
 2.12.0 (2017-05-07)
 -------------------
 

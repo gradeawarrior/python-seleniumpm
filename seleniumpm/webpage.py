@@ -394,10 +394,10 @@ class Webpage(object):
                 # Print to stderr a WARNING message when force_check_visibility=True and element
                 # has been marked 'invisible'
                 if force_check_visibility and not element.check_visible:
-                    self.log.warn("element {}={} ({}) was marked as 'invisible' "
-                                  "but force_check_visibility=True".format(element.locator.by,
-                                                                           element.locator.value,
-                                                                           self.__class__))
+                    self.log.warning("element {}={} ({}) was marked as 'invisible' "
+                                     "but force_check_visibility=True".format(element.locator.by,
+                                                                              element.locator.value,
+                                                                              self.__class__))
                 try:
                     if isinstance(element, IFrame):
                         element.validate(timeout=timeout,
@@ -423,7 +423,7 @@ class Webpage(object):
             raise TimeoutException("- \n".join(error_msgs))
         return self
 
-    def is_page(self, timeout=None, force_check_visibility=False):
+    def is_page(self, timeout=None, force_check_visibility=False, screenshot_enabled=False):
         """
         This is like validate() operation except that it returns a boolean True/False. The idea is
         to ask whether or not you are on a page; this is an implementation of that idea. There are
@@ -435,16 +435,21 @@ class Webpage(object):
                                        (but present) on load. The default is to respect this setting
                                        and only check for presence. Setting this to 'True' means you
                                        want to check for both present and visible.
+        :param screenshot_enabled: (Default: False) This temporarily enables/disables screenshots
         :return: True if validate() does not throw an exception; False otherwise
         """
         timeout = timeout if timeout is not None else self.page_timeout
+        screenshot_value = seleniumconfig.screenshot_enabled
         try:
+            seleniumconfig.screenshot_enabled = screenshot_enabled
             self.validate(timeout=timeout,
                           force_check_visibility=force_check_visibility,
                           failfast_check_element=True)
             return True
         except:
             return False
+        finally:
+            seleniumconfig.screenshot_enabled = screenshot_value
 
     def take_screenshot(self, screenshot_dir=None, screenshot_name=None, debug_logger_object=None):
         """
@@ -467,6 +472,7 @@ class Webpage(object):
 
         # Ensure that path exists, otherwise create it
         if not os.path.exists(screenshot_dir):
+            self.log.debug("This path '{}' does not exist! Creating it now!".format(screenshot_dir))
             os.makedirs(screenshot_dir)
         # Debugging information
         if debug_logger_object is not None:
