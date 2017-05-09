@@ -107,7 +107,7 @@ class Webpage(object):
         elif url and not isinstance(url, tuple):
             self.url = urlparse(url)
 
-    def open(self, url=None):
+    def open(self, url=None, timeout=None, wait_for_page_load=False):
         """
         This method has two forms of operation:
 
@@ -118,6 +118,10 @@ class Webpage(object):
 
         :param url: (Default: None) The url to open, but it is recommended that this be specified in
                     constructor
+        :param timeout: (Default: 30s) The number of seconds to poll waiting for an element
+        :param wait_for_page_load: (Default: False) Waits for this page load
+        :raises TimeoutException: An exception if there are elements that were expected to be
+                                  present on the page
         :return:
         """
         if url:
@@ -128,20 +132,39 @@ class Webpage(object):
                 self.url.hostname,
                 self.url.port if self.url.port else (80 if self.url.scheme == "http" else 443),
                 self.path)
+            self.start_timer(type="page_load")
             self.driver.get(url)
+            if wait_for_page_load:
+                self.wait_for_page_load(timeout=timeout, start_timer=False)
         else:
             raise AttributeError("Url is not defined!")
         return self
 
-    def refresh(self):
-        """Does a page refresh
+    def refresh(self, timeout=None, wait_for_page_load=False):
         """
-        self.driver.refresh()
+        Does a page refresh
 
-    def reload(self):
-        """Does a page refresh
+        :param timeout: (Default: 30s) The number of seconds to poll waiting for an element
+        :param wait_for_page_load: (Default: False) Waits for this page load
+        :raises TimeoutException: An exception if there are elements that were expected to be
+                                  present on the page
         """
-        self.refresh()
+        self.start_timer(type="page_load")
+        self.driver.refresh()
+        if wait_for_page_load:
+            self.wait_for_page_load(timeout=timeout, start_timer=False)
+        return self
+
+    def reload(self, timeout=None, wait_for_page_load=False):
+        """
+        Does a page refresh
+
+        :param timeout: (Default: 30s) The number of seconds to poll waiting for an element
+        :param wait_for_page_load: (Default: False) Waits for this page load
+        :raises TimeoutException: An exception if there are elements that were expected to be
+                                  present on the page
+        """
+        return self.refresh(timeout=timeout, wait_for_page_load=wait_for_page_load)
 
     def close(self):
         """Closes the browser
@@ -336,7 +359,8 @@ class Webpage(object):
         return self
 
     @take_screenshot_on_webpage_error
-    def wait_for_page_load(self, timeout=None, force_check_visibility=False):
+    def wait_for_page_load(self, timeout=None, force_check_visibility=False, start_timer=True,
+                           stop_timer=True):
         """
         This method "waits for page load" by checking that all expected objects are both present
         and visible on the page. This is similar to validate() operation except that sometimes
@@ -348,13 +372,15 @@ class Webpage(object):
                                        (but present) on load. The default is to respect this setting
                                        and only check for presence. Setting this to 'True' means you
                                        want to check for both present and visible.
+        :param start_timer: (Default: True) This will start the timer for 'page_load'
+        :param stop_timer: (Default: True) This will stop the timer for 'page_load'
         :return: self if everything is successful
         :raises TimeoutException: if an element doesn't appear within timeout
         """
         timeout = timeout if timeout is not None else self.page_timeout
-        self.start_timer(type="page_load")
+        self.start_timer(type="page_load") if start_timer else None
         self.validate(timeout=timeout, force_check_visibility=force_check_visibility)
-        self.stop_timer(type="page_load")
+        self.stop_timer(type="page_load") if stop_timer else None
         self.log.debug("Page load for {} took {}sec".format(self.__class__.__name__,
                                                             self.get_duration("page_load")))
         return self

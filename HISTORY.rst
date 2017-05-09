@@ -14,6 +14,17 @@ FUTURE (UN-RELEASED)
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 
+2.12.2 (2017-05-09)
+-------------------
+
+**New Features:**
+
+- Implementing a *wait_for_page_load* (Default: False) on Webpage *open()*, *refresh()*, and *reload()* operations
+
+**Fixed:**
+
+- Webpage.refresh() and Webpage.reload() did not return self
+
 2.12.1 (2017-05-08)
 -------------------
 
