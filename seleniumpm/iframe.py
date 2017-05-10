@@ -1,7 +1,6 @@
 from seleniumpm.locator import Locator
 from seleniumpm.webelements.element import Element
 from seleniumpm.webelements.panel import Panel
-from seleniumpm.webelements.element import take_screenshot_on_element_error
 
 
 class IFrame(Panel):
@@ -70,7 +69,6 @@ class IFrame(Panel):
             self.switch_out() if check_myself else None
             self.stop_timer(type="iframe_load")
 
-    @take_screenshot_on_element_error
     def switch_in(self):
         """
         This is to support switching to an iFrame for smart validations of all Element's on a page
@@ -83,7 +81,6 @@ class IFrame(Panel):
             self.driver.switch_to.frame(self.driver.find_element(by=self.locator.by, value=self.locator.value))
         return self
 
-    @take_screenshot_on_element_error
     def switch_out(self):
         """
         This is to support switching out of an iFrame for smart validations of all Element's on a page

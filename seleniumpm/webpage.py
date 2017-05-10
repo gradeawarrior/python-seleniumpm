@@ -32,41 +32,6 @@ url_regex = re.compile(
     r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 
-def take_screenshot_on_webpage_error(func):
-    """
-    This is an annotation for automatic screenshot ability for Webpage functions. It leverages
-    "higher-order" operations available through functools library; and as the function implies,
-    allows for automatic taking of a screenshot when there is an error/exception thrown.
-    """
-
-    @wraps(func)
-    def newFunc(*args, **kwargs):
-        try:
-            # Disable Screenshot
-            current_screenshot_enabled = seleniumconfig.screenshot_enabled
-            if current_screenshot_enabled:
-                seleniumconfig.screenshot_enabled = False
-            try:
-                func_response = func(*args, **kwargs)
-            finally:
-                # Reset screenshot
-                seleniumconfig.screenshot_enabled = current_screenshot_enabled
-        except Exception as e:
-            if seleniumconfig.screenshot_enabled:
-                funcObj = args[0]
-                filename = "page_error_%s_%s" % (func.func_name, time.strftime('%Y_%m_%d-%H_%M_%S'))
-                page = Webpage(funcObj.driver)
-                page.take_screenshot(screenshot_name=filename)
-                import sys
-                exc_class, exc, tb = sys.exc_info()
-                new_exc = exc_class("\n%s\nScreenshot file: %s.png" % (exc or exc_class, filename))
-                raise new_exc.__class__, new_exc, tb
-            raise e
-        return func_response
-
-    return newFunc
-
-
 class Webpage(object):
     """
     The Webpage class is intended to be the parent class for all Webpages. In principle, a Webpage
@@ -335,7 +300,6 @@ class Webpage(object):
     def get_element_timeout(self):
         return seleniumconfig.element_timeout_in_sec
 
-    @take_screenshot_on_webpage_error
     def get_html(self):
         """
         Retrieves the html of the entire webpage
@@ -344,7 +308,6 @@ class Webpage(object):
         """
         return Element(self.driver, Locator.by_xpath("//html")).get_html()
 
-    @take_screenshot_on_webpage_error
     def wait_for_title(self, title, timeout=None):
         """
         This could be used similarly to a wait_for_page_load() if the page title can uniquely
@@ -358,7 +321,6 @@ class Webpage(object):
         WebDriverWait(driver=self.driver, timeout=timeout).until(EC.title_contains(title))
         return self
 
-    @take_screenshot_on_webpage_error
     def wait_for_page_load(self, timeout=None, force_check_visibility=False, start_timer=True,
                            stop_timer=True):
         """
@@ -385,7 +347,6 @@ class Webpage(object):
                                                             self.get_duration("page_load")))
         return self
 
-    @take_screenshot_on_webpage_error
     def validate(self, timeout=None, force_check_visibility=False, failfast_check_element=None):
         """
         The intention of validate is to make sure that an already loaded webpage contains these

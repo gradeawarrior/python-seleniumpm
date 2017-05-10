@@ -55,5 +55,5 @@ class TestScreenshotTestAnnotation(UiTestWrapper):
     def test_failed_validation(self):
         time.sleep(3)
         num_files_after = self.count_files(seleniumconfig.screenshot_dir)
-        assert num_files_after == (self.num_files_before + 2), "Expecting there to be the 2-more screenshots taken"
+        assert num_files_after == (self.num_files_before + 1), "Expecting there to be the 1-more screenshots taken"
 

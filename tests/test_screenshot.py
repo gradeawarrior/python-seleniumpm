@@ -9,10 +9,13 @@ import seleniumpm.config as seleniumconfig
 import logging
 import os
 import time
+import pytest
 
 logging.basicConfig()
 log = logging.getLogger()
 
+
+@pytest.skip("disabled behavior")
 class TestScreenshot(UiTestWrapper):
     @staticmethod
     def create_screenshot_dir(screenshot_dir=seleniumconfig.screenshot_dir):
@@ -68,6 +71,7 @@ class TestScreenshot(UiTestWrapper):
         assert os.path.exists(filepath), "Expecting that a screenshot was taken and saved here: {}".format(filepath)
         assert num_files_after == (num_files_before + 1), "Expecting there to be 1-more screenshot taken"
 
+    @pytest.mark.skip("disabled behavior")
     def test_take_implicit_webpage_screenshot_enabled_validate(self):
         page = GooglePage(driver=self.driver, url="http://www.google.com")
         page.open().wait_for_page_load()
@@ -79,6 +83,7 @@ class TestScreenshot(UiTestWrapper):
             num_files_after = self.count_files(seleniumconfig.screenshot_dir)
             assert num_files_after == (num_files_before + 1), "Expecting there to be 1-more screenshot taken"
 
+    @pytest.mark.skip("disabled behavior")
     def test_take_implicit_webpage_screenshot_enabled_wait_for_page_load(self):
         page = GooglePage(driver=self.driver, url="http://www.google.com")
         page.open().wait_for_page_load()
@@ -90,6 +95,7 @@ class TestScreenshot(UiTestWrapper):
             num_files_after = self.count_files(seleniumconfig.screenshot_dir)
             assert num_files_after == (num_files_before + 1), "Expecting there to be 1-more screenshot taken"
 
+    @pytest.mark.skip("disabled behavior")
     def test_take_implicit_webpage_screenshot_disabled(self):
         page = GooglePage(driver=self.driver, url="http://www.google.com")
         page.open().wait_for_page_load()
@@ -136,6 +142,7 @@ class TestScreenshot(UiTestWrapper):
         assert os.path.exists(filepath), "Expecting that a screenshot was taken and saved here: {}".format(filepath)
         assert num_files_after == (num_files_before + 1), "Expecting there to be 1-more screenshot taken"
 
+    @pytest.mark.skip("disabled behavior")
     def test_take_implicit_element_screenshot_enabled_get_web_element(self):
         page = GooglePage(driver=self.driver, url="http://www.google.com")
         page.open().wait_for_page_load()
@@ -152,6 +159,7 @@ class TestScreenshot(UiTestWrapper):
         num_files_after = self.count_files(seleniumconfig.screenshot_dir)
         assert num_files_after == (num_files_before + 1), "Expecting there to be 1-more screenshot taken"
 
+    @pytest.mark.skip("disabled behavior")
     def test_take_implicit_element_screenshot_disabled(self):
         page = GooglePage(driver=self.driver, url="http://www.google.com")
         page.open().wait_for_page_load()
@@ -173,6 +181,7 @@ class TestScreenshot(UiTestWrapper):
         num_files_after = self.count_files(seleniumconfig.screenshot_dir)
         assert num_files_after == num_files_before, "Expecting there to be the same number of screenshots taken"
 
+    @pytest.mark.skip("disabled behavior")
     def test_take_implicit_element_screenshot_enabled_wait_for_present(self):
         page = GooglePage(driver=self.driver, url="http://www.google.com")
         page.open().wait_for_page_load()
@@ -189,6 +198,7 @@ class TestScreenshot(UiTestWrapper):
         num_files_after = self.count_files(seleniumconfig.screenshot_dir)
         assert num_files_after == (num_files_before + 1), "Expecting there to be 1-more screenshot taken"
 
+    @pytest.mark.skip("disabled behavior")
     def test_take_implicit_element_screenshot_enabled_wait_for_present_and_visible(self):
         page = GooglePage(driver=self.driver, url="http://www.google.com")
         page.open().wait_for_page_load()
@@ -205,6 +215,7 @@ class TestScreenshot(UiTestWrapper):
         num_files_after = self.count_files(seleniumconfig.screenshot_dir)
         assert num_files_after == (num_files_before + 1), "Expecting there to be 1-more screenshot taken"
 
+    @pytest.mark.skip("disabled behavior")
     def test_take_implicit_element_screenshot_enabled_is_present(self):
         page = GooglePage(driver=self.driver, url="http://www.google.com")
         page.open().wait_for_page_load()
@@ -221,6 +232,7 @@ class TestScreenshot(UiTestWrapper):
         num_files_after = self.count_files(seleniumconfig.screenshot_dir)
         assert num_files_after == num_files_before, "Expecting there to be the same number of screenshots taken"
 
+    @pytest.mark.skip("disabled behavior")
     def test_take_implicit_element_screenshot_enabled_is_visible(self):
         page = GooglePage(driver=self.driver, url="http://www.google.com")
         page.open().wait_for_page_load()
@@ -237,6 +249,7 @@ class TestScreenshot(UiTestWrapper):
         num_files_after = self.count_files(seleniumconfig.screenshot_dir)
         assert num_files_after == num_files_before, "Expecting there to be the same number of screenshots taken"
 
+    @pytest.mark.skip("disabled behavior")
     def test_take_implicit_element_screenshot_enabled_is_present_and_visible(self):
         page = GooglePage(driver=self.driver, url="http://www.google.com")
         page.open().wait_for_page_load()

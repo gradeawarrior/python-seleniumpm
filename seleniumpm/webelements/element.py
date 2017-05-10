@@ -17,33 +17,6 @@ from seleniumpm.locator import Locator
 # Regular expression to find numbers (both int and float) in a string
 number_re = r'([\-]*\d+\.\d+|[\-]*\d+)'
 
-def take_screenshot_on_element_error(func):
-    @wraps(func)
-    def newFunc(*args, **kwargs):
-        try:
-            # Disable Screenshot
-            current_screenshot_enabled = seleniumconfig.screenshot_enabled
-            if current_screenshot_enabled:
-                seleniumconfig.screenshot_enabled = False
-            try:
-                func_response = func(*args, **kwargs)
-            finally:
-                # Reset screenshot
-                seleniumconfig.screenshot_enabled = current_screenshot_enabled
-        except Exception as e:
-            if seleniumconfig.screenshot_enabled:
-                funcObj = args[0]
-                filename = "element_error_%s_%s" % (func.func_name, time.strftime('%Y_%m_%d-%H_%M_%S'))
-                page = Element(funcObj.driver, Locator.by_xpath("//placeholder"))
-                page.take_screenshot(screenshot_name=filename)
-                import sys
-                exc_class, exc, tb = sys.exc_info()
-                new_exc = exc_class("\n%s\nScreenshot file: %s.png" % (exc or exc_class, filename))
-                raise new_exc.__class__, new_exc, tb
-            raise e
-        return func_response
-
-    return newFunc
 
 class Element(object):
 
@@ -78,7 +51,6 @@ class Element(object):
         self.do_not_check = False
         return self
 
-    @take_screenshot_on_element_error
     def get_webelement(self):
         """
         This method basically does a driver.find_element(by, value) call
@@ -89,7 +61,6 @@ class Element(object):
             raise AttributeError("locator was not specified!")
         return self.driver.find_element(self.locator.by, self.locator.value)
 
-    @take_screenshot_on_element_error
     def get_webelements(self):
         """
         This method basically does a driver.find_elements(by, value) call
@@ -100,7 +71,6 @@ class Element(object):
             raise AttributeError("locator was not specified!")
         return self.driver.find_elements(self.locator.by, self.locator.value)
 
-    @take_screenshot_on_element_error
     def wait_for_webelements(self, expected_min_length=None, timeout=10, polling=0.5):
         """
         This method does a driver.find_elements(by, value) call, but has an optional expected_min_length
@@ -132,7 +102,6 @@ class Element(object):
     def get_action_chains(self):
         return ActionChains(self.driver)
 
-    @take_screenshot_on_element_error
     def get_text(self):
         """
         This method does a driver.find_elements(by, value).txt call.
@@ -141,7 +110,6 @@ class Element(object):
         """
         return self.get_webelement().text
 
-    @take_screenshot_on_element_error
     def wait_for_text(self, expected_txt=None, timeout=10, polling=0.5):
         """
         This method does a driver.find_elements(by, value).txt call, but has an optional expected_txt parameter.
@@ -166,7 +134,6 @@ class Element(object):
             current_time = time.time()
         return result_txt
 
-    @take_screenshot_on_element_error
     def get_texts(self):
         """
         This method does a driver.find_elements(by, value).txt call
@@ -179,7 +146,6 @@ class Element(object):
             result_txts.append(element.text)
         return result_txts
 
-    @take_screenshot_on_element_error
     def wait_for_texts(self, expected_txt=None, timeout=10, polling=0.5):
         """
         This method does a driver.find_elements(by, value).txt call, but has an optional expected_txt parameter. This
@@ -242,7 +208,6 @@ class Element(object):
                     index, len(elements)))
             elements[index].click()
 
-    @take_screenshot_on_element_error
     def get_number(self, string=None, result_index=0):
         """
         This simplifies getting a number from an element
@@ -274,7 +239,6 @@ class Element(object):
             results.append(self.get_number(web_element.text))
         return results
 
-    @take_screenshot_on_element_error
     def get_int(self, string=None, result_index=0):
         """
         This simplifies getting an integer from an element
@@ -290,7 +254,6 @@ class Element(object):
         results = map(int, re.findall(number_re, string))
         return results[result_index] if len(results) > 0 else None
 
-    @take_screenshot_on_element_error
     def get_float(self, string=None, result_index=0):
         """
         This simplifies getting an float from an element
@@ -306,7 +269,6 @@ class Element(object):
         results = map(float, re.findall(number_re, string))
         return results[result_index] if len(results) > 0 else None
 
-    @take_screenshot_on_element_error
     def get_attribute(self, name):
         """
         Performs a Webelement.get_attribute() and thus returns back a string
@@ -339,19 +301,15 @@ class Element(object):
         """
         return True if self.get_attribute(name) == value else False
 
-    @take_screenshot_on_element_error
     def is_displayed(self):
         return self.get_webelement().is_displayed()
 
-    @take_screenshot_on_element_error
     def is_enabled(self):
         return self.get_webelement().is_enabled()
 
-    @take_screenshot_on_element_error
     def is_selected(self):
         return self.get_webelement().is_selected()
 
-    @take_screenshot_on_element_error
     def is_present(self, timeout=None):
         timeout = timeout if timeout is not None else self.element_timeout
         try:
@@ -360,7 +318,6 @@ class Element(object):
         except:
             return False
 
-    @take_screenshot_on_element_error
     def is_visible(self, timeout=None):
         timeout = timeout if timeout is not None else self.element_timeout
         try:
@@ -369,31 +326,25 @@ class Element(object):
         except:
             return False
 
-    @take_screenshot_on_element_error
     def is_present_and_visible(self, timeout=None, present_timeout=None, visible_timeout=None):
         present_timeout = present_timeout if present_timeout is not None else self.element_timeout
         visible_timeout = visible_timeout if visible_timeout is not None else self.element_timeout
         return self.is_present(timeout if timeout is not None else present_timeout) and \
                self.is_visible(timeout if timeout is not None else visible_timeout)
 
-    @take_screenshot_on_element_error
     def set_focus(self):
         return self.scroll_into_view()
 
-    @take_screenshot_on_element_error
     def scroll_into_view(self):
         self.driver.execute_script("arguments[0].scrollIntoView();", self.get_webelement())
         return self
 
-    @take_screenshot_on_element_error
     def move_to_element(self):
         return self.get_action_chains().move_to_element(self.get_webelement()).build().perform()
 
-    @take_screenshot_on_element_error
     def hover_over(self):
         self.move_to_element()
 
-    @take_screenshot_on_element_error
     def get_html(self):
         """
         Retrieves the inner-html of an element
@@ -402,7 +353,6 @@ class Element(object):
         """
         return self.get_webelement().get_attribute("innerHTML").encode("utf-8")
 
-    @take_screenshot_on_element_error
     def wait_for_selected(self, timeout=None):
         if self.locator is None:
             raise AttributeError("locator was not specified!")
@@ -427,7 +377,6 @@ class Element(object):
             raise e
         return self
 
-    @take_screenshot_on_element_error
     def wait_for_present(self, timeout=None):
         if self.locator is None:
             raise AttributeError("locator was not specified!")
@@ -452,7 +401,6 @@ class Element(object):
             raise e
         return self
 
-    @take_screenshot_on_element_error
     def wait_for_visible(self, timeout=None):
         if self.locator is None:
             raise AttributeError("locator was not specified!")
@@ -477,7 +425,6 @@ class Element(object):
             raise e
         return self
 
-    @take_screenshot_on_element_error
     def wait_for_present_and_visible(self, timeout=None, present_timeout=None, visible_timeout=None):
         present_timeout = present_timeout if present_timeout is not None else self.element_timeout
         visible_timeout = visible_timeout if visible_timeout is not None else self.element_timeout
