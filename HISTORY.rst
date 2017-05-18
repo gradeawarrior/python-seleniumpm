@@ -9,19 +9,19 @@ FUTURE (UN-RELEASED)
 - Added highlight() feature to all Element types
 - Support defining locators as tuples
 - Adding utility for scanning a path and generating json output of all the PageObject structures in the project
-- Added get_webelement_by_text() to Element Types
+- Added get_webelement_by_text() to Element types
 
 **Fixed:**
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 - Fixed issue with validating a Widget with locator = None on a Webpage
 
-2.13.0 (UN-RELEASED)
---------------------
+2.13.0 (2017-05-18)
+-------------------
 
 **New Features:**
 
-- Disable snapshot feature
+- Removed snapshot feature
 
 **Fixed:**
 
