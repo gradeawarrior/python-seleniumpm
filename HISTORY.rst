@@ -161,13 +161,12 @@ FUTURE (UN-RELEASED)
 - Added a get_attribute_contains() and a get_attribute_is() on Element type. The intention is to implement an all-in-one solution for both retrieving an attribute and validating whether something contains or is something. This operation is useful for dynamic elements that use css classes for changing the state of a page (e.g. <div class='svgOverviewView-status-icon fa fa-exclamation-triangle svg-status-warning'>); One could define a generic reference to this element, and then use get_attribute_contains() to check if it now contains 'fa-exclamation-triangle' css class.
 - Implementation of seleniumpm.config module. This module can be imported via *import seleniumpm.config as seleniumconfig*; and variables can be changed like so: *seleniumconfig.page_timeout_in_sec = 60*
 - Added a global *element_timeout_in_ms* and *page_timeout_in_ms* to seleniumpm.config module. Defaults are still 10s for element timeout and 30s for page timeout.
-- Added a global *screenshot_dir*, *screenshot_enabled*, and *test_screenshot_enabled* to selenium.config module. The default values are './screenshots' and True respectively
 - Added a global *debug_logging_function* to selenium.config module
 - Added a refresh() operation on a Webpage (a.k.a. a page refresh). This of course is simply a driver.refresh() operation on an opened page.
 - Added a get_current_url() operation on a Webpage
 - Added get_number(), get_numbers(), get_int(), and get_float() to an Element. This is so that you can quickly and easily get numbers from element(s) text that represent numbers
 - Added an "access element" abstraction layer so that you can retrieve any element defined any levels deep (e.g. A button defined within a Panel that is under an IFrame). The idea is simple: If I want to click a button 2-levels-deep, this can be done either by (1) page.iframe.panel1.login_button.click(), or (2) directly from the top-level page as if it was a local attribute via page.login_button.click()
-- Added take_screenshot() feature to both a Webpage and Element types. The screenshot capability is controlled by *seleniumpm.config.screenshot_enabled* and is set to True by default.
+- Added take_screenshot() feature to both a Webpage and Element types.
 - Added a take_screenshot_on_test_error annotation for annotating tests. The screenshot capability for a test is controlled by *seleniumpm.config.test_screenshot_enabled* and is set to True by default.
 - Added pretty-print way of visualizing all attributes and methods for a Webpage. This is useful for documentation as well as for debugging
 
