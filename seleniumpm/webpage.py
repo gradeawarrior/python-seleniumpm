@@ -438,23 +438,18 @@ class Webpage(object):
         finally:
             seleniumconfig.screenshot_enabled = screenshot_value
 
-    def take_screenshot(self, screenshot_dir=None, screenshot_name=None, debug_logger_object=None):
+    def take_screenshot(self, screenshot_dir=None, screenshot_name=None):
         """
         Allows you to take a screenshot of the current page.
 
         :param screenshot_dir: (Default: './screenshots') The directory path for the screenshots
         :param screenshot_name: (Default: "screenshot_%s" % time.strftime('%Y_%m_%d-%H_%M_%S')) The
                                 file name excluding the type
-        :param debug_logger_object: (Default: None) Ability to reference your own debugger object.
-                                    I am assuming there is a debug(msg) method, in which this method
-                                    will write to.
         :return: screenshot_name
         """
         screenshot_name = "screenshot_%s" % time.strftime(
             '%Y_%m_%d-%H_%M_%S') if screenshot_name is None else screenshot_name
         screenshot_dir = seleniumconfig.screenshot_dir if screenshot_dir is None else screenshot_dir
-        debug_logger_object = seleniumconfig.debug_logger_object \
-            if debug_logger_object is None else debug_logger_object
         filename = "%s/%s.png" % (screenshot_dir, screenshot_name)
 
         # Ensure that path exists, otherwise create it
@@ -462,10 +457,7 @@ class Webpage(object):
             self.log.debug("This path '{}' does not exist! Creating it now!".format(screenshot_dir))
             os.makedirs(screenshot_dir)
         # Debugging information
-        if debug_logger_object is not None:
-            debug_logger_object.debug("Saving ScreenShot at %s" % filename)
-        else:
-            self.log.warning("Saving Screenshot at %s" % filename)
+        self.log.warning("Saving Screenshot at %s" % filename)
 
         base64_data = self.driver.get_screenshot_as_base64()
         screenshot_data = base64.decodestring(base64_data)

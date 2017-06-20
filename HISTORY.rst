@@ -10,11 +10,23 @@ FUTURE (UN-RELEASED)
 - Support defining locators as tuples
 - Adding utility for scanning a path and generating json output of all the PageObject structures in the project
 - Added get_webelement_by_text() to Element types
+- Taking snapshots on error
 
 **Fixed:**
 
 - Moving upload of wheel to use twine instead of setup.py. See the following link for why: https://packaging.python.org/distributing/#wheels
 - Fixed issue with validating a Widget with locator = None on a Webpage
+
+2.14.0 (UN-RELEASED)
+--------------------
+
+**New Features:**
+
+- More capabilities removal
+
+**Fixed:**
+
+- There was a change to Wikipedia and thus the PageObject had to be updated
 
 2.13.0 (2017-05-18)
 -------------------

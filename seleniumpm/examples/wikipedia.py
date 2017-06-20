@@ -12,10 +12,14 @@ class Wikipedia(Webpage):
     def __init__(self, driver, url):
         super(Wikipedia, self).__init__(driver, url)
         self.path = self.url.path
-        self.headingText = TextElement(driver, Locator(By.ID, "firstHeading"))
-        self.bodyText = TextElement(driver, Locator(By.ID, "bodyContent"))
-        self.bodyTexts = TextElement(driver, Locator(By.XPATH, "//div[@id='bodyContent']/div/p"))
-        self.bogus_element = Element(driver, Locator.by_xpath("//foo")).mark_do_not_check()
+        self.headingText = TextElement(driver, Locator.by_id(
+            "firstHeading"))
+        self.bodyText = TextElement(driver, Locator.by_id(
+            "bodyContent"))
+        self.bodyTexts = TextElement(driver, Locator.by_css_selector(
+            "div#mw-content-text > div > p"))
+        self.bogus_element = Element(driver, Locator.by_xpath(
+            "//foo")).mark_do_not_check()
 
     def get_text(self):
         """Retrieves all the words in the body
