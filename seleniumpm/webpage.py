@@ -374,7 +374,7 @@ class Webpage(object):
         error_msgs = []
         for element in self.get_element_attr():
             # Continue if the element has marked itself do_not_check=True
-            if element.do_not_check:
+            if element.do_not_check or element.locator is None:
                 continue
             # Check for presence and visibility
             if force_check_visibility or element.check_visible:
@@ -410,7 +410,7 @@ class Webpage(object):
             raise TimeoutException("- \n".join(error_msgs))
         return self
 
-    def is_page(self, timeout=None, force_check_visibility=False, screenshot_enabled=False):
+    def is_page(self, timeout=None, force_check_visibility=False):
         """
         This is like validate() operation except that it returns a boolean True/False. The idea is
         to ask whether or not you are on a page; this is an implementation of that idea. There are
@@ -422,21 +422,16 @@ class Webpage(object):
                                        (but present) on load. The default is to respect this setting
                                        and only check for presence. Setting this to 'True' means you
                                        want to check for both present and visible.
-        :param screenshot_enabled: (Default: False) This temporarily enables/disables screenshots
         :return: True if validate() does not throw an exception; False otherwise
         """
         timeout = timeout if timeout is not None else self.page_timeout
-        screenshot_value = seleniumconfig.screenshot_enabled
         try:
-            seleniumconfig.screenshot_enabled = screenshot_enabled
             self.validate(timeout=timeout,
                           force_check_visibility=force_check_visibility,
                           failfast_check_element=True)
             return True
         except:
             return False
-        finally:
-            seleniumconfig.screenshot_enabled = screenshot_value
 
     def take_screenshot(self, screenshot_dir=None, screenshot_name=None):
         """
