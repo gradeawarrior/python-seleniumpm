@@ -1,7 +1,11 @@
 Selenium-PageModel
 ==================
 
-This project helps **Test Engineers** by abstracting out the implementation -- in this case Selenium -- from the actual set of **Actions** necessary to perform a single **Test Scenario**. The Selenium-PageModel_ library does this by defining a set of well defined *PageModel* constructs that **Test Engineers** can extend/implement to describe a Website. These *PageModel* constructs includes the following:
+This project helps **Test Engineers** by abstracting out the implementation -- in this case Selenium
+-- from the actual set of **Actions** necessary to perform a single **Test Scenario**. The
+Selenium-PageModel_ library does this by defining a set of well defined *PageModel* constructs that
+**Test Engineers** can extend/implement to describe a Website. These *PageModel* constructs includes
+the following:
 
 1. WebPage
 2. Button
@@ -101,14 +105,18 @@ The GooglePage used in the above example looks like the following::
                 links.append(element.get_attribute("href"))
             return links
 
-You should notice that most of the operations except for get_result_links() are not visible on the GooglePage class. That is because the basic behaviors are either part of the Webpage or the TextField (aka an Element) type.
+You should notice that most of the operations except for get_result_links() are not visible on the
+GooglePage class. That is because the basic behaviors are either part of the Webpage or the
+TextField (aka an Element) type.
 
-For more information about writing your PageObject's in SeleniumPM, please direct your attention to Creating-your-PageObject-with-SeleniumPM_
+For more information about writing your PageObject's in SeleniumPM, please direct your attention to
+Creating-your-PageObject-with-SeleniumPM_
 
 Language Support
 ----------------
 
-The Selenium PageModel implementation is not limited to just one language. Here are other language implementations:
+The Selenium PageModel implementation is not limited to just one language. Here are other language
+implementations:
 
 * **Java** - Java-SeleniumPM_
 * **Ruby** - In consideration depending on needs and popularity.
@@ -117,22 +125,31 @@ The Selenium PageModel implementation is not limited to just one language. Here 
 Contributing to SeleniumPM
 --------------------------
  
-* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet.
-* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it.
+* Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't
+  been fixed yet.
+* Check out the issue tracker to make sure someone already hasn't requested it and/or contributed
+  it.
 * Fork the project.
 * Start a feature/bugfix branch.
 * Commit and push until you are happy with your contribution.
-* Make sure to add tests for it. This is important so I don't break it in a future version unintentionally.
-* Please try not to mess with the version or history. If you want to have your own version, or is otherwise necessary, that is fine, but please isolate to its own commit so that I can cherry-pick around it.
+* Make sure to add tests for it. This is important so I don't break it in a future version
+  unintentionally.
+* Please try not to mess with the version or history. If you want to have your own version, or is
+  otherwise necessary, that is fine, but please isolate to its own commit so that I can cherry-pick
+  around it.
 
 References
 ----------
 
-A huge shoutout to Peter Downs for his very easy-to-follow instructions for submitting a Python package to the community. See `first time with pypi <http://peterdowns.com/posts/first-time-with-pypi.html>`_ for his instructions.
+A huge shoutout to Peter Downs for his very easy-to-follow instructions for submitting a Python
+package to the community. See
+`first time with pypi <http://peterdowns.com/posts/first-time-with-pypi.html>`_
+for his instructions.
 
 Also see the following:
 
-- selenium-server-runner_ - If you're running on a Mac, this project helps you setup and run the *standalone-selenium-server* on your laptop
+- selenium-server-runner_ - If you're running on a Mac, this project helps you setup and run the
+  *standalone-selenium-server* on your laptop
 - Java-SeleniumPM_ - The Java version of SeleniumPM_
 - requestests_ - An API testing library
 
@@ -153,5 +170,4 @@ Package Dependencies:
 Copyright
 ---------
 
-Copyright (c) 2017 Peter Salas. See LICENSE for
-further details.
+Copyright (c) 2017 Peter Salas. See LICENSE for further details.
