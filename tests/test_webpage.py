@@ -13,7 +13,10 @@ from seleniumpm.webelements.element import Element
 from seleniumpm.webelements.widget import Widget
 from seleniumpm.webelements.panel import Panel
 from seleniumpm.iframe import IFrame
-from urlparse import urlparse
+try:
+    from urlparse import urlparse
+except ImportError:
+    from urllib.parse import urlparse
 import tests.pages.testingwebpages as testingwebpages
 import pytest
 

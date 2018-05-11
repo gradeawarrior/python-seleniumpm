@@ -15,7 +15,7 @@ logging.basicConfig()
 log = logging.getLogger()
 
 
-@pytest.skip("disabled behavior")
+#@pytest.skip("disabled behavior")
 class TestScreenshot(UiTestWrapper):
     @staticmethod
     def create_screenshot_dir(screenshot_dir=seleniumconfig.screenshot_dir):
@@ -43,6 +43,7 @@ class TestScreenshot(UiTestWrapper):
     @classmethod
     def teardown_class(self):
         log.setLevel(logging.WARNING)
+        super(TestScreenshot, self).teardown_class()
 
     def test_take_explicit_webpage_screenshot(self):
         page = GooglePage(driver=self.driver, url="http://www.google.com")

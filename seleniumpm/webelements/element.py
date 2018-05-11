@@ -1,9 +1,9 @@
 from functools import wraps
-import base64
 import json
 import logging
 import os
 import re
+import sys
 import time
 
 from selenium.webdriver.remote.webdriver import WebDriver
@@ -13,6 +13,14 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from selenium.webdriver.common.action_chains import ActionChains
 import seleniumpm.config as seleniumconfig
 from seleniumpm.locator import Locator
+
+if sys.version_info[0] < 3:
+    import base64
+    base64_decodestring = base64.decodestring
+else:
+    import binascii
+    base64_decodestring = binascii.a2b_base64
+
 
 # Regular expression to find numbers (both int and float) in a string
 number_re = r'([\-]*\d+\.\d+|[\-]*\d+)'
@@ -251,7 +259,7 @@ class Element(object):
         :raises ValueError: if the element text is not an integer
         """
         string = self.get_text() if string == None else string
-        results = map(int, re.findall(number_re, string))
+        results = list(map(int, re.findall(number_re, string)))
         return results[result_index] if len(results) > 0 else None
 
     def get_float(self, string=None, result_index=0):
@@ -266,7 +274,7 @@ class Element(object):
         :raises ValueError: if the element text is not an float
         """
         string = self.get_text() if string == None else string
-        results = map(float, re.findall(number_re, string))
+        results = list(map(float, re.findall(number_re, string)))
         return results[result_index] if len(results) > 0 else None
 
     def get_attribute(self, name):
@@ -446,7 +454,7 @@ class Element(object):
         screenshot_name = "screenshot_%s" % time.strftime(
             '%Y_%m_%d-%H_%M_%S') if screenshot_name is None else screenshot_name
         screenshot_dir = seleniumconfig.screenshot_dir if screenshot_dir is None else screenshot_dir
-        debug_logger_object = seleniumconfig.debug_logger_object if debug_logger_object is None else debug_logger_object
+        # debug_logger_object = seleniumconfig.debug_logger_object if debug_logger_object is None else debug_logger_object
         filename = "%s/%s.png" % (screenshot_dir, screenshot_name)
 
         # Ensure that path exists, otherwise create it
@@ -459,8 +467,8 @@ class Element(object):
             self.log.warning("Saving Screenshot at %s" % filename)
 
         base64_data = self.driver.get_screenshot_as_base64()
-        screenshot_data = base64.decodestring(base64_data)
-        screenshot_file = open(filename, "w")
+        screenshot_data = base64_decodestring(base64_data)
+        screenshot_file = open(filename, "wb")
         screenshot_file.write(screenshot_data)
         screenshot_file.close()
 

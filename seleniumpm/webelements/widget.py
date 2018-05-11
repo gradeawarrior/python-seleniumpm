@@ -3,6 +3,7 @@ import types
 
 from selenium.common.exceptions import TimeoutException
 import seleniumpm.config as seleniumconfig
+from seleniumpm.internal_utils import get_local_methods_of
 from seleniumpm.webelements.clickable import Clickable
 from seleniumpm.webelements.element import Element
 
@@ -20,7 +21,7 @@ class Widget(Clickable):
         dictionary = super(Widget, self).dict()
         elements = self.get_element_attr_local()
         dictionary['elements'] = {}
-        for key, element in elements.iteritems():
+        for key, element in elements.items():
             dictionary['elements'][key] = element.dict()
         dictionary['methods'] = self.get_methods_local()
         return dictionary
@@ -275,15 +276,7 @@ class Widget(Clickable):
         :return: a dict containing method names (keys) and a list of parameters for the method
                  (values)
         """
-        results = {}
-        for attr in dir(self):
-            method = getattr(self, attr)
-            if type(method) == types.MethodType and \
-                            method.__name__ not in ('__init__') and \
-                            method.__func__ in method.im_class.__dict__.values():
-                args = inspect.getargspec(method)[0][1:]
-                results[method.__name__] = args
-        return results
+        return get_local_methods_of(self)
 
     def get_all_elements_on_widget(self):
         """
