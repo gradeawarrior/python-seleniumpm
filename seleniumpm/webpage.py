@@ -5,6 +5,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 import seleniumpm.config as seleniumconfig
 
+from seleniumpm.internal_utils import get_local_methods_of
 from seleniumpm.iframe import IFrame
 from seleniumpm.locator import Locator
 from seleniumpm.webelements.element import Element
@@ -12,8 +13,10 @@ from seleniumpm.webelements.widget import Widget
 from seleniumpm.webelements.panel import Panel
 
 from functools import wraps
-from urlparse import urlparse
-import base64
+try:
+    from urlparse import urlparse
+except ImportError:
+    from urllib.parse import urlparse
 import inspect
 import json
 import logging
@@ -22,6 +25,15 @@ import re
 import sys
 import time
 import types
+
+
+if sys.version_info[0] < 3:
+    import base64
+    base64_decodestring = base64.decodestring
+else:
+    import binascii
+    base64_decodestring = binascii.a2b_base64
+
 
 url_regex = re.compile(
     r'^(?:http|ftp)s?://'  # http:// or https://
@@ -162,7 +174,7 @@ class Webpage(object):
             dictionary['path'] = self.path
             elements = self.get_element_attr_local()
             dictionary['elements'] = {}
-            for key, element in elements.iteritems():
+            for key, element in elements.items():
                 dictionary['elements'][key] = element.dict()
         methods = self.get_methods_local()
         dictionary['methods'] = methods.keys() if simple else methods
@@ -172,12 +184,12 @@ class Webpage(object):
     def to_json(self, simple=False):
         """Returns a json string
         """
-        return json.dumps(self.dict(simple=simple))
+        return json.dumps(list(self.dict(simple=simple)))
 
     def to_json_pp(self, simple=False):
         """Returns a pretty-print json string
         """
-        return json.dumps(self.dict(simple=simple), indent=4)
+        return json.dumps(list(self.dict(simple=simple)), indent=4)
 
     def start_timer(self, type=None):
         """
@@ -455,8 +467,8 @@ class Webpage(object):
         self.log.warning("Saving Screenshot at %s" % filename)
 
         base64_data = self.driver.get_screenshot_as_base64()
-        screenshot_data = base64.decodestring(base64_data)
-        screenshot_file = open(filename, "w")
+        screenshot_data = base64_decodestring(base64_data)
+        screenshot_file = open(filename, "wb")
         screenshot_file.write(screenshot_data)
         screenshot_file.close()
 
@@ -585,15 +597,7 @@ class Webpage(object):
         :return: a dict containing method names (keys) and a list of parameters for the method
                  (values)
         """
-        results = {}
-        for attr in dir(self):
-            method = getattr(self, attr)
-            if type(method) == types.MethodType and \
-                            method.__name__ not in ('__init__') and \
-                            method.__func__ in method.im_class.__dict__.values():
-                args = inspect.getargspec(method)[0][1:]
-                results[method.__name__] = args
-        return results
+        return get_local_methods_of(self)
 
     def get_all_elements_on_page(self):
         """

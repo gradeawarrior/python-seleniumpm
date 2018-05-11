@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from tests.uitestwrapper import UiTestWrapper
 from seleniumpm.examples.google_page import GooglePage
 from seleniumpm.examples.wikipedia import Wikipedia
@@ -59,13 +61,13 @@ class TestGoogle(UiTestWrapper):
         expected_url = 'https://www.google.com/'
 
         # Should see: "cheese! - Google Search"
-        print "Page title is: {}".format(title)
-        print "Url: '{}'".format(url)
+        print("Page title is: {}".format(title))
+        print("Url: '{}'".format(url))
         assert url == expected_url, "Expecting url to be '{}'".format(expected_url)
 
         # Enter something to search for
         inner_html = self.google.search_field.get_html()
-        print "search_field inner-html: '{}'".format(inner_html)
+        print("search_field inner-html: '{}'".format(inner_html))
         assert len(inner_html) == 0, "Expecting there to be no html in the search_field element"
         self.google.search_field.clear().type(search_term)
 
@@ -75,11 +77,14 @@ class TestGoogle(UiTestWrapper):
         # Check the title of the page
         title = self.google.wait_for_title(search_term).get_title()
         url = self.google.current_url
-        expected_url = 'https://www.google.com/search?hl=en&source=hp&biw=&bih=&q=Cheese%21&gbv=2&oq=&gs_l='
-        print "Page title is: {}".format(title)
-        print "Url: '{}'".format(url)
+        expected_url_start = 'https://www.google.com/search?source=hp&'
+        expected_url_end = '&q=Cheese%21&oq=&gs_l='
+
+        print("Page title is: {}".format(title))
+        print("Url: '{}'".format(url))
         assert search_term in title, "Expected '{}' in '{}'".format(search_term, title)
-        assert url == expected_url, "Expecting url to be '{}'".format(expected_url)
+        assert url.startswith(expected_url_start), "Expecting url to start with '{}'".format(expected_url_start)
+        assert url.endswith(expected_url_end), "Expecting url to end with '{}'".format(expected_url_end)
         self.google.validate()
 
     def test_get_result_links(self):
@@ -92,9 +97,9 @@ class TestGoogle(UiTestWrapper):
         self.google.wait_for_title(search_term)
         links = self.google.get_result_links()
         assert len(links) > 5
-        print "found {} links".format(len(links))
+        print("found {} links".format(len(links)))
         for link in links:
-            print "- '{}'".format(link)
+            print("- '{}'".format(link))
 
     def test_search_for_10_words_from_wikipedia(self):
         """
@@ -137,4 +142,4 @@ class TestGoogle(UiTestWrapper):
             links = self.google.get_result_links()
             assert len(links) >= 5
             for i, link in enumerate(links[0:5]):
-                print "[{}] '{}' - {}".format(i, search_term, link)
+                print("[{}] '{}' - {}".format(i, search_term, link))
